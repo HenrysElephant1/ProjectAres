@@ -24,8 +24,9 @@ endif
 
 
 Main.o: Main.cpp
+GameManager.o: GameManager.cpp GameManager.h
 State.o: State.cpp State.h
-GameState.o: GameState.cpp GameState.h
+ActiveGameState.o: ActiveGameState.cpp ActiveGameState.h
 
 
 .c.o:
@@ -34,7 +35,7 @@ GameState.o: GameState.cpp GameState.h
 	g++ -std=c++11 -c $(CFLG) $<
 
 
-Ares: Main.o State.o GameState.o
+Ares: Main.o GameManager.o State.o ActiveGameState.o
 	g++ -O3 -o $@ $^ $(LIBS)
 
 clean:

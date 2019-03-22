@@ -1,0 +1,8 @@
+.DS_Store
+*
+!*.cpp
+!*.h
+!*.png
+!README.md
+!*.fbx
+!.gitignore
