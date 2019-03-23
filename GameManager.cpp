@@ -36,7 +36,8 @@ bool GameManager::init() {
 				if( SDL_GL_SetSwapInterval( 1 ) < 0 )
 					printf( "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError() );
 
-				gs = new ActiveGameState(SCREEN_WIDTH, SCREEN_HEIGHT);
+				g = new GLManager( SCREEN_WIDTH, SCREEN_HEIGHT, 55 );
+				gs = new ActiveGameState(g);
 			}
 		}
 	}
@@ -72,7 +73,7 @@ void GameManager::run() {
             	// Resize the window
                 SCREEN_WIDTH = e.window.data1;
                 SCREEN_HEIGHT = e.window.data2;
-                gs->reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
+                g->reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
             }
 			else if( e.type == SDL_KEYDOWN ) {
 				// Handle a key press
@@ -111,6 +112,13 @@ void GameManager::run() {
 		// Render and update the game
 		gs->render();
 		gs->update( getElapsedTime() );
+
+		// Test there is a new state to be used
+		State* newState = gs->getNextState();
+		if( newState != NULL ) {
+			// delete gs;
+			gs = newState;
+		}
 		
 		// Swap double-buffered window
 		SDL_GL_SwapWindow( gWindow );

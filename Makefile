@@ -25,8 +25,14 @@ endif
 
 Main.o: Main.cpp
 GameManager.o: GameManager.cpp GameManager.h
+GLManager.o: GLManager.cpp GLManager.h
 State.o: State.cpp State.h
 ActiveGameState.o: ActiveGameState.cpp ActiveGameState.h
+PausedGameState.o: PausedGameState.cpp PausedGameState.h
+MenuState.o: MenuState.cpp MenuState.h
+MainMenu.o: MainMenu.cpp MainMenu.h
+MapMenu.o: MapMenu.cpp MapMenu.h
+PlayerMenu.o: PlayerMenu.cpp PlayerMenu.h
 
 
 .c.o:
@@ -35,7 +41,7 @@ ActiveGameState.o: ActiveGameState.cpp ActiveGameState.h
 	g++ -std=c++11 -c $(CFLG) $<
 
 
-Ares: Main.o GameManager.o State.o ActiveGameState.o
+Ares: Main.o GameManager.o GLManager.o State.o ActiveGameState.o PausedGameState.o MenuState.o MainMenu.o MapMenu.o PlayerMenu.o
 	g++ -O3 -o $@ $^ $(LIBS)
 
 clean:

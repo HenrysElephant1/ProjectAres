@@ -13,18 +13,26 @@
 #include <string>
 #include <iostream>
 
+#include "GLManager.h"
+
 // Trig functions for degrees
 #define Cos(x) cos(3.1415926535/180*(x))
 #define Sin(x) sin(3.1415926535/180*(x))
 
 class State {
 protected:
-	float th = 0, ph = 20, asp = 0, fov = 55; // View settings
+	GLManager* g;
+
+	float th = 0, ph = 20; // View settings
+	bool mouseDown = false;
+
+	State* nextState = NULL;
+
 	void debug( std::string loc ); // Print a basic GL error message
-	void Project(); // Set GL projection matrices
+	void setNextState( State* newState ); // Set the state for main to use
 
 public:
-	State( int width, int height );
+	State( GLManager* gm );
 	~State();
 
 	// Functions to be implemented by derived class
@@ -40,7 +48,9 @@ public:
 
 	// Window controls
 	void setView( float th, float ph );
-	void reshape( int width, int height );
+
+	// Function to allow main to get the next state
+	State* getNextState();
 };
 
 #endif

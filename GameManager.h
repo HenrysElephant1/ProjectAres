@@ -6,6 +6,7 @@
 #include <string>
 
 #include "ActiveGameState.h"
+#include "GLManager.h"
 
 class GameManager {
 private:
@@ -21,6 +22,7 @@ private:
 
 	// The gamestate
 	State* gs;
+	GLManager* g;
 
 	bool init(); // Initialize SDL and OpenGL context
 	void close(); // Close the window
