@@ -33,6 +33,7 @@ MenuState.o: MenuState.cpp MenuState.h
 MainMenu.o: MainMenu.cpp MainMenu.h
 MapMenu.o: MapMenu.cpp MapMenu.h
 PlayerMenu.o: PlayerMenu.cpp PlayerMenu.h
+Button.o: Button.cpp Button.h
 
 
 .c.o:
@@ -41,7 +42,7 @@ PlayerMenu.o: PlayerMenu.cpp PlayerMenu.h
 	g++ -std=c++11 -c $(CFLG) $<
 
 
-Ares: Main.o GameManager.o GLManager.o State.o ActiveGameState.o PausedGameState.o MenuState.o MainMenu.o MapMenu.o PlayerMenu.o
+Ares: Main.o GameManager.o GLManager.o State.o ActiveGameState.o PausedGameState.o MenuState.o MainMenu.o MapMenu.o PlayerMenu.o Button.o
 	g++ -O3 -o $@ $^ $(LIBS)
 
 clean:

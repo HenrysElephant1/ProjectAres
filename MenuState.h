@@ -4,6 +4,7 @@
 #include "State.h"
 #include "ActiveGameState.h"
 #include "PausedGameState.h"
+#include "Button.h"
 
 class MenuState: public State {
 private:
