@@ -13,5 +13,8 @@ void MenuState::displayOverlay() {
 	for( int i=0; i<buttons.size(); i++ ) {
 		buttons[i]->display();
 	}
+	for( int i=0; i<labels.size(); i++ ) {
+		labels[i]->display();
+	}
 	GLManager::switchTo3D();
 }

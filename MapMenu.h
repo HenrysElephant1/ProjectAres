@@ -2,12 +2,16 @@
 #define MAPMENU_H
 
 #include "MenuState.h"
+#include "MainMenu.h"
 
+class MainMenu;
 class MapMenu: public MenuState {
 private:
+	Button* backButton;
+	MainMenu* mm;
 
 public:
-	MapMenu(/* GLManager* gm */);
+	MapMenu( MainMenu* upMenu );
 	~MapMenu();
 
 	// Functions inherited from State

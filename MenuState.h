@@ -3,13 +3,12 @@
 
 #include <vector>
 #include "State.h"
-#include "ActiveGameState.h"
-#include "PausedGameState.h"
 #include "Button.h"
 
 class MenuState: public State {
-private:
+protected:
 	std::vector<Button*> buttons;
+	std::vector<Button*> labels; // "Buttons" that will be displayed only
 
 public:
 	MenuState(/* GLManager* gm */);

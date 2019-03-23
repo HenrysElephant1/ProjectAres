@@ -2,9 +2,17 @@
 #define MAINMENU_H
 
 #include "MenuState.h"
+#include "MapMenu.h"
+#include "PlayerMenu.h"
+#include "ActiveGame.h"
 
+class MapMenu;
+class PlayerMenu;
 class MainMenu: public MenuState {
 private:
+	Button *playButton, *mapMenuButton, *playerMenuButton, *quitButton;
+	PlayerMenu* pm;
+	MapMenu* mm;
 
 public:
 	MainMenu(/* GLManager* gm */);
@@ -20,6 +28,8 @@ public:
 	void mousePressed( int x, int y );
 	void mouseReleased( int x, int y );
 	void mouseMoved( int dx, int dy );
+
+	void createGame();
 };
 
 #endif

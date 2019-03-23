@@ -39,7 +39,8 @@ bool GameManager::init() {
 				// g = new GLManager( SCREEN_WIDTH, SCREEN_HEIGHT, 55 );
 				GLManager::setFOV(55);
 				GLManager::reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
-				gs = new ActiveGameState(/*g*/);
+				// gs = new ActiveGameState(/*g*/);
+				gs = new MainMenu();
 			}
 		}
 	}
@@ -122,6 +123,8 @@ void GameManager::run() {
 			// delete gs;
 			gs = newState;
 		}
+		if( GLManager::QUIT )
+			quit = true;
 		
 		// Swap double-buffered window
 		SDL_GL_SwapWindow( gWindow );

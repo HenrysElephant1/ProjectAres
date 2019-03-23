@@ -28,5 +28,7 @@ void State::setNextState( State* newState ) {
 }
 
 State* State::getNextState() {
-	return nextState;
+	State* toReturn = nextState;
+	nextState = NULL;
+	return toReturn;
 }

@@ -1,16 +1,16 @@
-#ifndef PAUSEDGAMESTATE_H
-#define PAUSEDGAMESTATE_H
+#ifndef ACTIVEGAME_H
+#define ACTIVEGAME_H
 
 #include "State.h"
-#include "ActiveGameState.h"
 #include "MenuState.h"
+#include "PauseMenu.h"
 
-class PausedGameState: public State {
+class ActiveGame: public State {
 private:
 
 public:
-	PausedGameState(/* GLManager* gm */);
-	~PausedGameState();
+	ActiveGame();
+	~ActiveGame();
 
 	// Functions inherited from State
 	void render();

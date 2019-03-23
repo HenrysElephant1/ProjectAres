@@ -2,12 +2,16 @@
 #define PLAYERMENU_H
 
 #include "MenuState.h"
+#include "MainMenu.h"
 
+class MainMenu;
 class PlayerMenu: public MenuState {
 private:
+	Button* backButton;
+	MainMenu* mm;
 
 public:
-	PlayerMenu(/* GLManager* gm */);
+	PlayerMenu( MainMenu* upMenu );
 	~PlayerMenu();
 
 	// Functions inherited from State
