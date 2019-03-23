@@ -1,6 +1,6 @@
 #include "MainMenu.h"
 
-MainMenu::MainMenu( GLManager* gm ): MenuState(gm) {
+MainMenu::MainMenu(/* GLManager* gm ): MenuState(gm*/) {
 
 }
 

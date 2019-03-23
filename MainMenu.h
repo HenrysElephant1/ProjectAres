@@ -7,7 +7,7 @@ class MainMenu: public MenuState {
 private:
 
 public:
-	MainMenu( GLManager* gm );
+	MainMenu(/* GLManager* gm */);
 	~MainMenu();
 
 	// Functions inherited from State

@@ -9,7 +9,7 @@ class PausedGameState: public State {
 private:
 
 public:
-	PausedGameState( GLManager* gm );
+	PausedGameState(/* GLManager* gm */);
 	~PausedGameState();
 
 	// Functions inherited from State

@@ -7,7 +7,7 @@ class MapMenu: public MenuState {
 private:
 
 public:
-	MapMenu( GLManager* gm );
+	MapMenu(/* GLManager* gm */);
 	~MapMenu();
 
 	// Functions inherited from State

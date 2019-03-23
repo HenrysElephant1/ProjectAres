@@ -1,6 +1,6 @@
 #include "PlayerMenu.h"
 
-PlayerMenu::PlayerMenu( GLManager* gm ): MenuState(gm) {
+PlayerMenu::PlayerMenu(/* GLManager* gm ): MenuState(gm*/) {
 
 }
 

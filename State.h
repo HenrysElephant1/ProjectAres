@@ -21,7 +21,7 @@
 
 class State {
 protected:
-	GLManager* g;
+	// GLManager* g;
 
 	float th = 0, ph = 20; // View settings
 	bool mouseDown = false;
@@ -32,7 +32,7 @@ protected:
 	void setNextState( State* newState ); // Set the state for main to use
 
 public:
-	State( GLManager* gm );
+	State(/* GLManager* gm */);
 	~State();
 
 	// Functions to be implemented by derived class

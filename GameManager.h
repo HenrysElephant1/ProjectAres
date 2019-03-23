@@ -22,7 +22,7 @@ private:
 
 	// The gamestate
 	State* gs;
-	GLManager* g;
+	// GLManager* g;
 
 	bool init(); // Initialize SDL and OpenGL context
 	void close(); // Close the window

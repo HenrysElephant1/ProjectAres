@@ -1,6 +1,6 @@
 #include "PausedGameState.h"
 
-PausedGameState::PausedGameState( GLManager* gm ): State(gm) {
+PausedGameState::PausedGameState(/* GLManager* gm ): State(gm*/) {
 
 }
 
@@ -11,7 +11,6 @@ PausedGameState::~PausedGameState() {
 void PausedGameState::render() {
 	GLManager::clear();
 	glPushMatrix();
-
 	double Ex = -10*Sin(th)*Cos(ph);
 	double Ey = +10*Sin(ph);
 	double Ez = +10*Cos(th)*Cos(ph);

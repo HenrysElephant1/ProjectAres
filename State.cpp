@@ -1,7 +1,7 @@
 #include "State.h"
 
-State::State( GLManager* gm ) {
-	g = gm;
+State::State() {
+	
 }
 
 State::~State() {

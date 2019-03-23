@@ -1,8 +1,20 @@
 #include "GLManager.h"
 
-GLManager::GLManager( int sw, int sh, int f ) {
-	fov = f;
-	reshape(sw,sh);
+GLManager::GLManager(){}
+
+int GLManager::screenWidth;
+int GLManager::screenHeight;
+int GLManager::fov;
+float GLManager::asp;
+
+// GLManager::GLManager( int sw, int sh, int f ) {
+// 	fov = f;
+// 	reshape(sw,sh);
+// }
+
+void GLManager::setFOV( int newFOV ) {
+	fov = newFOV;
+	project();
 }
 
 void GLManager::reshape( int width, int height ) {
@@ -24,11 +36,6 @@ void GLManager::project() {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void GLManager::setFOV( int newFOV ) {
-	fov = newFOV;
-	project();
-}
-
 int GLManager::getScreenWidth() {
 	return screenWidth;
 }
@@ -42,4 +49,25 @@ void GLManager::clear() {
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void GLManager::switchTo2D() {
+	// Save projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(-asp,asp,-1,1,-1,1); // Create orthogonal view with coordinates -asp <= x <= asp, -1 <= y <= 1
+	// Save modelview matrix
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+}
+
+void GLManager::switchTo3D() {
+	// Return to previously saved projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	// Return to previously saved modelview matrix
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }

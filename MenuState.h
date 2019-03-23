@@ -1,6 +1,7 @@
 #ifndef MENUSTATE_H
 #define MENUSTATE_H
 
+#include <vector>
 #include "State.h"
 #include "ActiveGameState.h"
 #include "PausedGameState.h"
@@ -8,10 +9,14 @@
 
 class MenuState: public State {
 private:
+	std::vector<Button*> buttons;
 
 public:
-	MenuState( GLManager* gm );
+	MenuState(/* GLManager* gm */);
 	~MenuState();
+
+	// Display all buttons (and labels)
+	void displayOverlay();
 
 	// Functions inherited from State
 	virtual void render() = 0;

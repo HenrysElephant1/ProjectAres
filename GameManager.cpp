@@ -36,8 +36,10 @@ bool GameManager::init() {
 				if( SDL_GL_SetSwapInterval( 1 ) < 0 )
 					printf( "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError() );
 
-				g = new GLManager( SCREEN_WIDTH, SCREEN_HEIGHT, 55 );
-				gs = new ActiveGameState(g);
+				// g = new GLManager( SCREEN_WIDTH, SCREEN_HEIGHT, 55 );
+				GLManager::setFOV(55);
+				GLManager::reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
+				gs = new ActiveGameState(/*g*/);
 			}
 		}
 	}
@@ -73,7 +75,8 @@ void GameManager::run() {
             	// Resize the window
                 SCREEN_WIDTH = e.window.data1;
                 SCREEN_HEIGHT = e.window.data2;
-                g->reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
+                // g->reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
+                GLManager::reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
             }
 			else if( e.type == SDL_KEYDOWN ) {
 				// Handle a key press

@@ -15,18 +15,22 @@
 
 class GLManager {
 private:
-	int screenWidth, screenHeight, fov;
-	float asp;
+	static int screenWidth, screenHeight, fov;
+	static float asp;
 
-	void project(); // Set GL projection matrices
+	static void project(); // Set GL projection matrices
+	GLManager();
+
 public:
-	GLManager( int sh, int sw, int f );
-	void reshape( int width, int height ); // Window changed size
+	// GLManager( int sh, int sw, int f );
+	static void setFOV( int newFOV );
+	static void reshape( int width, int height ); // Window changed size
 
-	int getScreenWidth();
-	int getScreenHeight();
+	static int getScreenWidth();
+	static int getScreenHeight();
 
-	void setFOV( int newFOV );
+	static void switchTo2D();
+	static void switchTo3D();
 
 	static void clear();
 };

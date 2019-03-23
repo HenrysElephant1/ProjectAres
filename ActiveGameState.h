@@ -9,7 +9,7 @@ class ActiveGameState: public State {
 private:
 
 public:
-	ActiveGameState( GLManager* gm );
+	ActiveGameState(/* GLManager* gm */);
 	~ActiveGameState();
 
 	// Functions inherited from State

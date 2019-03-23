@@ -1,6 +1,6 @@
 #include "ActiveGameState.h"
 
-ActiveGameState::ActiveGameState( GLManager* gm ): State(gm) {
+ActiveGameState::ActiveGameState(/* GLManager* gm ): State(gm*/) {
 
 }
 

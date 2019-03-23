@@ -7,7 +7,7 @@ class PlayerMenu: public MenuState {
 private:
 
 public:
-	PlayerMenu( GLManager* gm );
+	PlayerMenu(/* GLManager* gm */);
 	~PlayerMenu();
 
 	// Functions inherited from State

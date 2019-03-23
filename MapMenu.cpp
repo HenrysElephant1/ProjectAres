@@ -1,6 +1,6 @@
 #include "MapMenu.h"
 
-MapMenu::MapMenu( GLManager* gm ): MenuState(gm) {
+MapMenu::MapMenu(/* GLManager* gm ): MenuState(gm*/) {
 
 }
 
