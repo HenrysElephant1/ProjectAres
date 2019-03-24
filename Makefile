@@ -34,6 +34,13 @@ MapMenu.o: MapMenu.cpp MapMenu.h
 PlayerMenu.o: PlayerMenu.cpp PlayerMenu.h
 PauseMenu.o: PauseMenu.cpp PauseMenu.h
 Button.o: Button.cpp Button.h
+Player.o: Player.cpp Player.h
+Hitbox.o: Hitbox.cpp Hitbox.h
+Weapon.o: Weapon.cpp Weapon.h
+Projectile.o: Projectile.cpp Projectile.h
+Model.o: Model.cpp Model.h
+Map.o: Map.cpp Map.h
+Tile.o: Tile.cpp Tile.h
 
 
 .c.o:
@@ -42,7 +49,7 @@ Button.o: Button.cpp Button.h
 	g++ -std=c++11 -c $(CFLG) $<
 
 
-Ares: Main.o GameManager.o GLManager.o State.o ActiveGame.o MenuState.o MainMenu.o MapMenu.o PlayerMenu.o PauseMenu.o Button.o
+Ares: Main.o GameManager.o GLManager.o State.o ActiveGame.o MenuState.o MainMenu.o MapMenu.o PlayerMenu.o PauseMenu.o Button.o Player.o Hitbox.o Weapon.o Projectile.o Model.o Map.o Tile.o
 	g++ -O3 -o $@ $^ $(LIBS)
 
 clean:

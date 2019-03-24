@@ -15,10 +15,6 @@
 
 #include "GLManager.h"
 
-// Trig functions for degrees
-#define Cos(x) cos(3.1415926535/180*(x))
-#define Sin(x) sin(3.1415926535/180*(x))
-
 class State {
 protected:
 	// GLManager* g;

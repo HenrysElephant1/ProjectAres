@@ -8,10 +8,15 @@
 #include "GLManager.h"
 #include "MainMenu.h"
 
+#define DEFAULT_SCREEN_WIDTH 1400
+#define DEFAULT_SCREEN_HEIGHT 900
+
 class GameManager {
 private:
+	// The gamestate
+	State* gs;
+
 	// Window management variables
-	int SCREEN_WIDTH = 1400, SCREEN_HEIGHT = 900;
 	SDL_Window* gWindow = NULL;
 	SDL_GLContext gContext;
 
@@ -19,9 +24,6 @@ private:
 	Uint64 previousTime = 0;
 	int prevMouseX = 0, prevMouseY = 0;
 	bool quit = false;
-
-	// The gamestate
-	State* gs;
 
 	bool init(); // Initialize SDL and OpenGL context
 	void close(); // Close the window

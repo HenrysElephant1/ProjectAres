@@ -14,6 +14,10 @@
 #include <map>
 #include <iostream>
 
+// Trig functions for degrees
+#define Cos(x) cos(3.1415926535/180*(x))
+#define Sin(x) sin(3.1415926535/180*(x))
+
 typedef struct location_struct { float x; float y; } Loc;
 
 class GLManager {

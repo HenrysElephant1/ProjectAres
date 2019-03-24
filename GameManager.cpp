@@ -21,7 +21,7 @@ bool GameManager::init() {
 		SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
 		SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
 
-		gWindow = SDL_CreateWindow( "Project Ares", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE ); // SDL_WINDOW_FULLSCREEN_DESKTOP
+		gWindow = SDL_CreateWindow( "Project Ares", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE ); // SDL_WINDOW_FULLSCREEN_DESKTOP
 		if( gWindow == NULL ) {
 			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
 			success = false;
@@ -36,10 +36,8 @@ bool GameManager::init() {
 				if( SDL_GL_SetSwapInterval( 1 ) < 0 )
 					printf( "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError() );
 
-				// g = new GLManager( SCREEN_WIDTH, SCREEN_HEIGHT, 55 );
 				GLManager::setFOV(55);
-				GLManager::reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
-				// gs = new ActiveGameState(/*g*/);
+				GLManager::reshape(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
 				gs = new MainMenu();
 			}
 		}
@@ -74,10 +72,9 @@ void GameManager::run() {
 				quit = true;
             else if( e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED ) {
             	// Resize the window
-                SCREEN_WIDTH = e.window.data1;
-                SCREEN_HEIGHT = e.window.data2;
-                // g->reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
-                GLManager::reshape(SCREEN_WIDTH, SCREEN_HEIGHT);
+            	int sw = e.window.data1;
+                int sh = e.window.data2;
+                GLManager::reshape(sw, sh);
             }
 			else if( e.type == SDL_KEYDOWN ) {
 				// Handle a key press
