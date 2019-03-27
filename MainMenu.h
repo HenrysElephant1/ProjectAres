@@ -5,14 +5,19 @@
 #include "MapMenu.h"
 #include "PlayerMenu.h"
 #include "ActiveGame.h"
+#include "Player.h"
+#include "Map.h"
 
 class MapMenu;
 class PlayerMenu;
 class MainMenu: public MenuState {
 private:
 	Button *playButton, *mapMenuButton, *playerMenuButton, *quitButton;
-	PlayerMenu* pm;
-	MapMenu* mm;
+	PlayerMenu *pm;
+	MapMenu *mm;
+
+	Map *map;
+	Player *p1, *p2;
 
 public:
 	MainMenu(/* GLManager* gm */);

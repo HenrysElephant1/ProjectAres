@@ -29,13 +29,22 @@ MainMenu::MainMenu() {
 	quitButton->setTexture(buttonsTex,0,1,0,.25);
 	buttons.push_back(quitButton);
 
+	p1 = new Player();
+	p1->reset(-5,0,25);
+	p1->setRGB(0,1,0);
+	p2 = new Player();
+	p2->reset( 5,0,-25);
+	p2->setRGB(1,0,1);
+	map = new Map();
+
 	// Create other menus with a reference back to self
-	pm = new PlayerMenu(this);
+	pm = new PlayerMenu(this, p1, p2);
 	mm = new MapMenu(this);
 }
 
 MainMenu::~MainMenu() {
-
+	delete pm;
+	delete mm;
 }
 
 void MainMenu::render() {
@@ -55,6 +64,9 @@ void MainMenu::render() {
 	glVertex3d(-1,0,1);
 	glEnd();
 
+	p1->display();
+	p2->display();
+
 	glPopMatrix();
 
 	displayOverlay();
@@ -63,7 +75,7 @@ void MainMenu::render() {
 }
 
 void MainMenu::update( float dt ) {
-	th += dt*45;
+	// th += dt*45;
 }
 
 
@@ -96,10 +108,10 @@ void MainMenu::mouseReleased( int x, int y ) {
 		createGame();
 	}
 	else if( mapMenuButton->isActive() && mapMenuButton->testClick(mc.x, mc.y) ) {
-		setNextState(mm);
+		setNextState(mm, false);
 	}
 	else if( playerMenuButton->isActive() && playerMenuButton->testClick(mc.x, mc.y) ) {
-		setNextState(pm);
+		setNextState(pm, false);
 	}
 	else if( quitButton->isActive() && quitButton->testClick(mc.x, mc.y) ) {
 		GLManager::QUIT = true;
@@ -107,10 +119,10 @@ void MainMenu::mouseReleased( int x, int y ) {
 }
 
 void MainMenu::mouseMoved( int dx, int dy ) {
-	if( mouseDown ) setView(dx, dy);
+	// if( mouseDown ) setView(dx, dy);
 }
 
 void MainMenu::createGame() {
-	State* nextState = new ActiveGame();
-	setNextState( nextState );
+	State* nextState = new ActiveGame( p1, p2, map );
+	setNextState( nextState, true );
 }

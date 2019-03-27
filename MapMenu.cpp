@@ -40,13 +40,13 @@ void MapMenu::render() {
 }
 
 void MapMenu::update( float dt ) {
-	th += dt*45;
+	// th += dt*45;
 }
 
 
 void MapMenu::keyPressed( SDL_Keycode key ) {
 	switch( key ) {
-		case SDLK_ESCAPE: setNextState(mm); break;
+		case SDLK_ESCAPE: setNextState(mm, false); break;
 	}
 }
 
@@ -70,10 +70,10 @@ void MapMenu::mouseReleased( int x, int y ) {
 	Loc mc = GLManager::getMenuCoords(x,y);
 
 	if( backButton->isActive() && backButton->testClick(mc.x, mc.y) ) {
-		setNextState(mm);
+		setNextState(mm, false);
 	}
 }
 
 void MapMenu::mouseMoved( int dx, int dy ) {
-	if( mouseDown ) setView(dx, dy);
+	// if( mouseDown ) setView(dx, dy);
 }

@@ -3,6 +3,18 @@
 
 #include "MenuState.h"
 #include "MainMenu.h"
+#include "Player.h"
+
+const float COLOR_OPTIONS[][3] = {
+	{1.0, 0.0, 0.0},
+	{1.0, 0.5, 0.0},
+	{1.0, 1.0, 0.0},
+	{0.0, 1.0, 0.0},
+	{0.0, 1.0, 1.0},
+	{0.0, 0.0, 1.0},
+	{1.0, 0.0, 1.0},
+};
+const int N_COLORS = sizeof(COLOR_OPTIONS)/sizeof(float)/3;
 
 class MainMenu;
 class PlayerMenu: public MenuState {
@@ -10,8 +22,10 @@ private:
 	Button* backButton;
 	MainMenu* mm;
 
+	Player *p1, *p2;
+
 public:
-	PlayerMenu( MainMenu* upMenu );
+	PlayerMenu( MainMenu* upMenu, Player* play1, Player* play2 );
 	~PlayerMenu();
 
 	// Functions inherited from State

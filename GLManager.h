@@ -52,6 +52,9 @@ public:
 
 	// Get coordinates in appropriate range for menu
 	static Loc getMenuCoords( int x, int y );
+
+
+	static void debug( std::string loc ); // Print a basic GL error message
 };
 
 #endif

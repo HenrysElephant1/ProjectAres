@@ -4,10 +4,10 @@
 
 GLManager::GLManager(){}
 
-int GLManager::screenWidth;
-int GLManager::screenHeight;
-int GLManager::fov;
-float GLManager::asp;
+int GLManager::screenWidth = 1;
+int GLManager::screenHeight = 1;
+int GLManager::fov = 55;
+float GLManager::asp = 1;
 bool GLManager::QUIT = false;
 std::map<const char*, GLuint> GLManager::textures;
 
@@ -30,7 +30,7 @@ void GLManager::project() {
     // Undo previous transformations
     glLoadIdentity();
     // Perspective transformation
-    gluPerspective(fov,asp,.1,100);
+    gluPerspective(fov,asp,1,500);
     // Switch to manipulating the model matrix
     glMatrixMode(GL_MODELVIEW);
 }
@@ -109,4 +109,12 @@ Loc GLManager::getMenuCoords( int x, int y ) {
 	retStruct.x = x/(float)screenHeight * 2 - asp;
 	retStruct.y = y/(float)screenHeight * -2 + 1;
 	return retStruct;
+}
+
+
+void GLManager::debug( std::string loc ) { 
+	GLenum err;
+	int i = 0;
+	while((err = glGetError()) != GL_NO_ERROR)
+		std::cout << "Error #" << ++i << " at " << loc << ": " << err << std::endl;
 }

@@ -23,13 +23,13 @@ protected:
 	bool mouseDown = false;
 
 	State* nextState = NULL;
+	bool deleteCurrent = false;
 
-	void debug( std::string loc ); // Print a basic GL error message
-	void setNextState( State* newState ); // Set the state for main to use
+	void setNextState( State* newState, bool deleteSelf ); // Set the state for main to use
 
 public:
 	State(/* GLManager* gm */);
-	~State();
+	virtual ~State();
 
 	// Functions to be implemented by derived class
 	virtual void render() = 0;
@@ -47,6 +47,7 @@ public:
 
 	// Function to allow main to get the next state
 	State* getNextState();
+	bool getDeleteCurrent();
 };
 
 #endif

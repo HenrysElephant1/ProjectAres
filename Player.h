@@ -19,11 +19,11 @@ private:
 	Model *model;
 	bool alive = true;
 
-	// Player location and direction in degrees (0deg is vector i or {1,0})
-	float locx, locy, dir;
+	// Player location and direction in degrees (0deg is vector j or {0,1})
+	float locx, locz, dir;
 
 	// Player control booleans
-	bool forward, backward, left, right;
+	bool forward = false, backward = false, left = false, right = false;
 	
 	// Called in update
 	void turn( float dt );
@@ -52,7 +52,7 @@ public:
 	void setSpeeds( float ms, float rs );
 
 	// Reset on new game
-	void reset( float newX, float newY, float newDir );
+	void reset( float newX, float newZ, float newDir );
 };
 
 #endif

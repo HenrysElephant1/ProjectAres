@@ -1,10 +1,12 @@
 #include "Player.h"
 
 Player::Player() {
-	weapon1 = new Weapon();
-	weapon2 = new Weapon();
-	hitbox = new Hitbox(1,1);
+	weapon1 = new BasicWeapon(.3, .5, 0);
+	weapon2 = new BasicWeapon(-.3, .5, 0);
+	hitbox = new Hitbox(2,4);
 	model = new Model();
+	moveSpeed = 20;
+	rotationSpeed = 180;
 }
 
 Player::~Player() {
@@ -16,23 +18,63 @@ Player::~Player() {
 
 void Player::display() {
 	glPushMatrix();
-	glLoadIdentity();
-	glTranslatef(locx,locy,0);
+	glTranslatef(locx,0,locz);
 	glRotatef(dir,0,1,0);
 	model->display();
+
+	glColor3d(colr, colg, colb);
+	glBegin(GL_QUADS);
+	glNormal3f(  0, -1,  0);
+	glVertex3f( -1,  0, -2);
+	glVertex3f(  1,  0, -2);
+	glVertex3f(  1,  0,  2);
+	glVertex3f( -1,  0,  2);
+
+	glNormal3f(  0,  1,  0);
+	glVertex3f( -1, .5, -2);
+	glVertex3f(  1, .5, -2);
+	glVertex3f(  1, .5,  2);
+	glVertex3f( -1, .5,  2);
+
+	glNormal3f(  0,  0, -1);
+	glVertex3f( -1, .5, -2);
+	glVertex3f(  1, .5, -2);
+	glVertex3f(  1,  0, -2);
+	glVertex3f( -1,  0, -2);
+
+	glNormal3f(  0,  0,  1);
+	glVertex3f( -1, .5,  2);
+	glVertex3f(  1, .5,  2);
+	glVertex3f(  1,  0,  2);
+	glVertex3f( -1,  0,  2);
+
+	glNormal3f( -1,  0,  0);
+	glVertex3f( -1, .5, -2);
+	glVertex3f( -1, .5,  2);
+	glVertex3f( -1,  0,  2);
+	glVertex3f( -1,  0, -2);
+
+	glNormal3f(  1,  0,  0);
+	glVertex3f(  1, .5, -2);
+	glVertex3f(  1, .5,  2);
+	glVertex3f(  1,  0,  2);
+	glVertex3f(  1,  0, -2);
+	glEnd();
+
 	weapon1->display();
 	weapon2->display();
+	
 	glPopMatrix();
 }
 
 void Player::update( float dt, std::vector<Projectile*> ) {
 	turn(dt);
 	move(dt);
-	hitbox->update(locx, locy, dir);
+	hitbox->update(locx, locz, dir);
 }
 
-Projectile* Player::fireWeapon1() { return weapon1->fire(); }
-Projectile* Player::fireWeapon2() { return weapon2->fire(); }
+Projectile* Player::fireWeapon1() { return weapon1->fire(locx,0,locz,dir); }
+Projectile* Player::fireWeapon2() { return weapon2->fire(locx,0,locz,dir); }
 
 void Player::setForward( bool newVal ) { forward = newVal; }
 void Player::setBackward( bool newVal ) { backward = newVal; }
@@ -52,13 +94,13 @@ void Player::turn( float dt ) {
 
 void Player::move( float dt ) {
 	int moveVal = forward - backward;
-	locx += moveVal*Cos(dir)*moveSpeed*dt;
-	locy += moveVal*Sin(dir)*moveSpeed*dt;
+	locx += moveVal*Sin(dir)*moveSpeed*dt;
+	locz += moveVal*Cos(dir)*moveSpeed*dt;
 }
 
-void Player::reset( float newX, float newY, float newDir ){ 
+void Player::reset( float newX, float newZ, float newDir ){ 
 	locx = newX;
-	locy = newY;
+	locz = newZ;
 	dir = newDir;
 	alive = true;
 }

@@ -38,7 +38,7 @@ void PauseMenu::update( float dt ) {
 
 void PauseMenu::keyPressed( SDL_Keycode key ) {
 	switch( key ) {
-		case SDLK_ESCAPE: setNextState(game); break;
+		case SDLK_ESCAPE: setNextState(game, false); break;
 	}
 }
 
@@ -62,11 +62,11 @@ void PauseMenu::mouseReleased( int x, int y ) {
 	Loc mc = GLManager::getMenuCoords(x,y);
 
 	if( resumeButton->isActive() && resumeButton->testClick(mc.x, mc.y) ) {
-		setNextState(game);
+		setNextState(game, false);
 	}
 	else if( exitButton->isActive() && exitButton->testClick(mc.x, mc.y) ) {
 		State* nextState = new MainMenu();
-		setNextState( nextState );
+		setNextState( nextState, true );
 	}
 }
 

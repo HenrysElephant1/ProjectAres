@@ -1,6 +1,6 @@
 #include "PlayerMenu.h"
 
-PlayerMenu::PlayerMenu( MainMenu* upMenu ) {
+PlayerMenu::PlayerMenu( MainMenu* upMenu, Player* play1, Player* play2 ) {
 	GLuint labelsTex = GLManager::loadTexture("textures/OtherMenuItems.png");
 
 	backButton = new Button(0,.7,1,.25);
@@ -8,6 +8,8 @@ PlayerMenu::PlayerMenu( MainMenu* upMenu ) {
 	buttons.push_back(backButton);
 
 	mm = upMenu;
+	p1 = play1;
+	p2 = play2;
 }
 
 PlayerMenu::~PlayerMenu() {
@@ -32,6 +34,9 @@ void PlayerMenu::render() {
 	glVertex3d(-1,0,1);
 	glEnd();
 
+	p1->display();
+	p2->display();
+
 	glPopMatrix();
 
 	displayOverlay();
@@ -40,13 +45,13 @@ void PlayerMenu::render() {
 }
 
 void PlayerMenu::update( float dt ) {
-	th += dt*45;
+	// th += dt*45;
 }
 
 
 void PlayerMenu::keyPressed( SDL_Keycode key ) {
 	switch( key ) {
-		case SDLK_ESCAPE: setNextState(mm); break;
+		case SDLK_ESCAPE: setNextState(mm, false); break;
 	}
 }
 
@@ -70,10 +75,10 @@ void PlayerMenu::mouseReleased( int x, int y ) {
 	Loc mc = GLManager::getMenuCoords(x,y);
 
 	if( backButton->isActive() && backButton->testClick(mc.x, mc.y) ) {
-		setNextState(mm);
+		setNextState(mm, false);
 	}
 }
 
 void PlayerMenu::mouseMoved( int dx, int dy ) {
-	if( mouseDown ) setView(dx, dy);
+	// if( mouseDown ) setView(dx, dy);
 }

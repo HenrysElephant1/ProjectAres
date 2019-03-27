@@ -9,16 +9,16 @@ Hitbox::~Hitbox() {
 
 }
 
-void Hitbox::update( float x, float y, float d ) {
+void Hitbox::update( float x, float z, float d ) {
 	locx = x;
-	locy = y;
+	locz = z;
 	dir = d;
 }
 
-bool Hitbox::testPointHit( float x, float y ) {
+bool Hitbox::testPointHit( float x, float z ) {
 	return true;
 }
 
-bool Hitbox::testAreaHit( float x, float y, float radius ) {
+bool Hitbox::testAreaHit( float x, float z, float radius ) {
 	return true;
 }

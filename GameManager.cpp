@@ -112,13 +112,16 @@ void GameManager::run() {
 
 		// Render and update the game
 		gs->render();
+		GLManager::debug("Game loop");
 		gs->update( getElapsedTime() );
 
 		// Test there is a new state to be used
 		State* newState = gs->getNextState();
 		if( newState != NULL ) {
-			// delete gs;
+			if( gs->getDeleteCurrent() )
+				delete gs;
 			gs = newState;
+
 		}
 		if( GLManager::QUIT )
 			quit = true;
