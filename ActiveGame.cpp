@@ -37,8 +37,14 @@ void ActiveGame::render() {
 }
 
 void ActiveGame::update( float dt ) {
-	p1->update(dt, projectiles);
-	p2->update(dt, projectiles);
+	p1->update(dt);
+	p2->update(dt);
+
+	std::vector<Projectile*> p1Proj = p1->getProjectiles();
+	std::vector<Projectile*> p2Proj = p2->getProjectiles();
+	projectiles.insert( projectiles.end(), p1Proj.begin(), p1Proj.end() );
+	projectiles.insert( projectiles.end(), p2Proj.begin(), p2Proj.end() );
+
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->update(dt);
 		if( projectiles[i]->destroy() ) {
@@ -59,16 +65,16 @@ void ActiveGame::keyPressed( SDL_Keycode key ) {
 		case SDLK_f: p1->setBackward(true); break;
 		case SDLK_d: p1->setLeft(true); break;
 		case SDLK_g: p1->setRight(true); break;
-		case SDLK_q: projectiles.push_back( p1->fireWeapon1() ); break;
-		case SDLK_w: projectiles.push_back( p1->fireWeapon2() ); break;
+		case SDLK_q: p1->triggerWeapon1(); break;
+		case SDLK_w: p1->triggerWeapon2(); break;
 
 		// P2 controls
 		case SDLK_o: p2->setForward(true); break;
 		case SDLK_l: p2->setBackward(true); break;
 		case SDLK_k: p2->setLeft(true); break;
 		case SDLK_SEMICOLON: p2->setRight(true); break;
-		case SDLK_RIGHTBRACKET: projectiles.push_back( p2->fireWeapon1() ); break;
-		case SDLK_BACKSLASH: projectiles.push_back( p2->fireWeapon2() ); break;
+		case SDLK_RIGHTBRACKET: p2->triggerWeapon1(); break;
+		case SDLK_BACKSLASH: p2->triggerWeapon2(); break;
 
 		case SDLK_UP:    camZ++; break;
 		case SDLK_DOWN:  camZ--; break;
@@ -84,12 +90,16 @@ void ActiveGame::keyReleased( SDL_Keycode key ) {
 		case SDLK_f: p1->setBackward(false); break;
 		case SDLK_d: p1->setLeft(false); break;
 		case SDLK_g: p1->setRight(false); break;
+		case SDLK_q: p1->releaseWeapon1(); break;
+		case SDLK_w: p1->releaseWeapon2(); break;
 
 		// P2 controls
 		case SDLK_o: p2->setForward(false); break;
 		case SDLK_l: p2->setBackward(false); break;
 		case SDLK_k: p2->setLeft(false); break;
 		case SDLK_SEMICOLON: p2->setRight(false); break;
+		case SDLK_RIGHTBRACKET: p2->releaseWeapon1(); break;
+		case SDLK_BACKSLASH: p2->releaseWeapon2(); break;
 	}
 }
 

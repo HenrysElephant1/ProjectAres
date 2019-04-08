@@ -28,7 +28,7 @@ private:
 	// Called in update
 	void turn( float dt );
 	void move( float dt );
-	void testHit(std::vector<Projectile*>);
+	bool testHit( Projectile* proj );
 
 public:
 	Player();
@@ -36,9 +36,12 @@ public:
 
 	// Game loop functions
 	void display();
-	void update( float dt, std::vector<Projectile*> );
-	Projectile* fireWeapon1();
-	Projectile* fireWeapon2();
+	void update( float dt );
+	void triggerWeapon1();
+	void triggerWeapon2();
+	void releaseWeapon1();
+	void releaseWeapon2();
+	std::vector<Projectile*> getProjectiles();
 
 	// Contols
 	void setForward( bool newVal );

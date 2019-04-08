@@ -32,6 +32,13 @@ void Weapon::getFireCoords( float x, float y, float z, float dir, float &retx, f
 	retz = z + Cos(dir) * (offz + firez) - Sin(dir) * (offx + firex);
 }
 
+std::vector<Projectile*> Weapon::getProjectiles() {
+	std::vector<Projectile*> toReturn = justFired;
+	justFired.clear();
+	return toReturn;
+}
+
+
 
 BasicWeapon::BasicWeapon( float ox, float oy, float oz ): Weapon(ox,oy,oz,0,0,4) {
 
@@ -41,14 +48,10 @@ BasicWeapon::~BasicWeapon() {
 
 }
 
-Projectile* BasicWeapon::fire( float x, float y, float z, float dir ) {
+void BasicWeapon::fire( float x, float y, float z, float dir ) {
 	float initx, inity, initz;
 	getFireCoords(x, y, z, dir, initx, inity, initz);
-	// std::cout << "Firing at " << initx << ", " << inity << ", " << initz << std::endl;
-	// if( timer < .001 ) // Avoid rounding errors
-		return new BasicProjectile( initx, inity, initz, dir );
-	// else 
-		// return NULL;
+	justFired.push_back( new BasicProjectile( initx, inity, initz, dir ) );
 }
 
 void BasicWeapon::display() {
@@ -64,4 +67,13 @@ void BasicWeapon::display() {
 	glEnd();
 
 	glPopMatrix();
+}
+
+void BasicWeapon::trigger( float x, float y, float z, float dir ) {
+	if( !triggered ) fire(x,y,z,dir); // Single fire behavior
+	triggered = true;
+}
+
+void BasicWeapon::release() {
+	triggered = false;
 }

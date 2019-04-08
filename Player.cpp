@@ -26,21 +26,37 @@ void Player::display() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	weapon1->display();
 	weapon2->display();
-	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glPopMatrix();
 
 	hitbox->display();
 }
 
-void Player::update( float dt, std::vector<Projectile*> ) {
+void Player::update( float dt ) {
 	turn(dt);
 	move(dt);
 	hitbox->update(locx, locz, dir);
 }
 
-Projectile* Player::fireWeapon1() { return weapon1->fire(locx,0,locz,dir); }
-Projectile* Player::fireWeapon2() { return weapon2->fire(locx,0,locz,dir); }
+bool Player::testHit( Projectile* proj ) {
+	// if( proj->test )
+	return false;
+}
+
+void Player::triggerWeapon1() { weapon1->trigger(locx,0,locz,dir); }
+void Player::triggerWeapon2() { weapon2->trigger(locx,0,locz,dir); }
+void Player::releaseWeapon1() { weapon1->release(); }
+void Player::releaseWeapon2() { weapon2->release(); }
+
+std::vector<Projectile*> Player::getProjectiles() {
+	std::vector<Projectile*> toReturn;
+	std::vector<Projectile*> w1Proj = weapon1->getProjectiles();
+	std::vector<Projectile*> w2Proj = weapon2->getProjectiles();
+	toReturn.insert( toReturn.begin(), w1Proj.begin(), w1Proj.end() );
+	toReturn.insert( toReturn.begin(), w2Proj.begin(), w2Proj.end() );
+	return toReturn;
+}
 
 void Player::setForward( bool newVal ) { forward = newVal; }
 void Player::setBackward( bool newVal ) { backward = newVal; }
