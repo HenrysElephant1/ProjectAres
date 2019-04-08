@@ -23,14 +23,6 @@ void ActiveGame::render() {
 	// gluLookAt(Ex,Ey,Ez, 0,0,0, 0,Cos(ph),0);
 	gluLookAt(camX, camY, camZ, 0,0,0, 0,0,-1);
 
-	// glColor3d(1,0,0);
-	// glBegin(GL_QUADS);
-	// glVertex3d(1,0,1);
-	// glVertex3d(1,0,-1);
-	// glVertex3d(-1,0,-1);
-	// glVertex3d(-1,0,1);
-	// glEnd();
-
 	map->display();
 	p1->display();
 	p2->display();
@@ -50,9 +42,11 @@ void ActiveGame::update( float dt ) {
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->update(dt);
 		if( projectiles[i]->destroy() ) {
+			delete projectiles[i];
 			projectiles.erase(projectiles.begin() + i--);
 		}
 	}
+	testHitboxCollision( p1->getHitbox(), p2->getHitbox() );
 }
 
 

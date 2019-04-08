@@ -53,6 +53,9 @@ public:
 
 	// Reset on new game
 	void reset( float newX, float newZ, float newDir );
+
+	// Accessors
+	Hitbox* getHitbox();
 };
 
 #endif

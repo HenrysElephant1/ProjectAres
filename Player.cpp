@@ -17,54 +17,20 @@ Player::~Player() {
 }
 
 void Player::display() {
+	glColor3d(colr, colg, colb);
 	glPushMatrix();
 	glTranslatef(locx,0,locz);
 	glRotatef(dir,0,1,0);
 	model->display();
 
-	glColor3d(colr, colg, colb);
-	glBegin(GL_QUADS);
-	glNormal3f(  0, -1,  0);
-	glVertex3f( -1,  0, -2);
-	glVertex3f(  1,  0, -2);
-	glVertex3f(  1,  0,  2);
-	glVertex3f( -1,  0,  2);
-
-	glNormal3f(  0,  1,  0);
-	glVertex3f( -1, .5, -2);
-	glVertex3f(  1, .5, -2);
-	glVertex3f(  1, .5,  2);
-	glVertex3f( -1, .5,  2);
-
-	glNormal3f(  0,  0, -1);
-	glVertex3f( -1, .5, -2);
-	glVertex3f(  1, .5, -2);
-	glVertex3f(  1,  0, -2);
-	glVertex3f( -1,  0, -2);
-
-	glNormal3f(  0,  0,  1);
-	glVertex3f( -1, .5,  2);
-	glVertex3f(  1, .5,  2);
-	glVertex3f(  1,  0,  2);
-	glVertex3f( -1,  0,  2);
-
-	glNormal3f( -1,  0,  0);
-	glVertex3f( -1, .5, -2);
-	glVertex3f( -1, .5,  2);
-	glVertex3f( -1,  0,  2);
-	glVertex3f( -1,  0, -2);
-
-	glNormal3f(  1,  0,  0);
-	glVertex3f(  1, .5, -2);
-	glVertex3f(  1, .5,  2);
-	glVertex3f(  1,  0,  2);
-	glVertex3f(  1,  0, -2);
-	glEnd();
-
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	weapon1->display();
 	weapon2->display();
-	
+	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+
 	glPopMatrix();
+
+	hitbox->display();
 }
 
 void Player::update( float dt, std::vector<Projectile*> ) {
@@ -102,5 +68,8 @@ void Player::reset( float newX, float newZ, float newDir ){
 	locx = newX;
 	locz = newZ;
 	dir = newDir;
+	hitbox->update(locx, locz, dir);
 	alive = true;
 }
+
+Hitbox* Player::getHitbox() { return hitbox; }

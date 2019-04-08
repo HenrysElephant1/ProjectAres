@@ -14,6 +14,13 @@
 #include <map>
 #include <iostream>
 
+#include <glm/vec3.hpp>
+#include <glm/mat3x3.hpp> 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#define GLM_SWIZZLE
+
 // Trig functions for degrees
 #define Cos(x) cos(3.1415926535/180*(x))
 #define Sin(x) sin(3.1415926535/180*(x))
