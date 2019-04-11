@@ -1,31 +1,26 @@
 #include "Projectile.h"
 
-Projectile::Projectile( float x, float y, float z ) {
-	locx = x;
-	locy = y;
-	locz = z;
-	prevx = x;
-	prevy = y;
-	prevz = z;
+Projectile::Projectile( glm::vec3 initLoc ) {
+	loc = initLoc;
+	prev = initLoc;
 }
 
 Projectile::~Projectile() {
 
 }
 
-bool Projectile::destroy() {
-	return timer <= 0;
+bool Projectile::shouldDestroy() {
+	return destroy;
 }
 
-bool Projectile::testHit( Hitbox* toTest ) {
-	glm::vec3 bVec = glm::vec3(prevx, prevy, prevz);
-	glm::vec3 mVec = glm::vec3(locx, locy, locz) - bVec;
-	return toTest->testVectorHit( bVec, mVec );
+bool Projectile::testHitboxIntersection( Hitbox* toTest, bool destroyOnContact ) {
+	bool ret = toTest->testVectorHit( prev, loc-prev );
+	if( ret && destroyOnContact ) destroy = true;
+	return ret;
 }
 
-BasicProjectile::BasicProjectile( float x, float y, float z, float dir ): Projectile(x,y,z) {
-	velx = Sin(dir) * BASIC_PROJECTILE_SPEED;
-	velz = Cos(dir) * BASIC_PROJECTILE_SPEED;
+BasicProjectile::BasicProjectile( glm::vec3 initLoc, float dir ): Projectile(initLoc) {
+	vel = glm::vec3( Sin(dir) * BASIC_PROJECTILE_SPEED, 0, Cos(dir) * BASIC_PROJECTILE_SPEED );
 	timer = 2;
 }
 
@@ -33,7 +28,7 @@ BasicProjectile::~BasicProjectile() {}
 
 void BasicProjectile::display() {
 	glPushMatrix();
-	glTranslatef(locx, locy, locz);
+	glTranslatef(loc.x, loc.y, loc.z);
 	glColor3d(1,0,0);
 	glBegin(GL_QUADS);
 	glVertex3d( .2, .5, .2);
@@ -47,12 +42,10 @@ void BasicProjectile::display() {
 
 void BasicProjectile::update( float dt ) {
 	timer -= dt;
-	prevx = locx;
-	prevy = locy;
-	prevz = locz;
-	locx += velx * dt;
-	locz += velz * dt;
+	destroy = timer <= 0;
+	prev = loc;
+	loc += vel * dt;
 }
 
-float BasicProjectile::getDamage( float prox ) { return 10; }
-bool BasicProjectile::testPlayerHit() { return true;}
+float BasicProjectile::getDamage( bool contact, glm::vec3 pLoc ) { return (contact?10:0); }
+bool BasicProjectile::shouldTestPlayerHit() { return true; }

@@ -1,8 +1,8 @@
 #include "Player.h"
 
 Player::Player() {
-	weapon1 = new BasicWeapon(.3, .5, 0);
-	weapon2 = new BasicWeapon(-.3, .5, 0);
+	weapon1 = new BasicWeapon(glm::vec3(.3, .5, 0));
+	weapon2 = new BasicWeapon(glm::vec3(-.3, .5, 0));
 	hitbox = new Hitbox(2,4);
 	model = new Model();
 	moveSpeed = 20;
@@ -19,7 +19,7 @@ Player::~Player() {
 void Player::display() {
 	glColor3d(colr, colg, colb);
 	glPushMatrix();
-	glTranslatef(locx,0,locz);
+	glTranslatef(loc.x,loc.y,loc.z);
 	glRotatef(dir,0,1,0);
 	model->display();
 
@@ -36,18 +36,16 @@ void Player::display() {
 void Player::update( float dt ) {
 	turn(dt);
 	move(dt);
-	hitbox->update(locx, locz, dir);
+	hitbox->update(loc, dir);
+	weapon1->update(loc, dir, dt);
+	weapon2->update(loc, dir, dt);
 }
 
 bool Player::testHit( Projectile* proj ) {
-	// if( proj->test )
-	return false;
+	bool contact = proj->testHitboxIntersection( hitbox, true );
+	float damageDone = proj->getDamage( contact, loc );
+	return contact;
 }
-
-void Player::triggerWeapon1() { weapon1->trigger(locx,0,locz,dir); }
-void Player::triggerWeapon2() { weapon2->trigger(locx,0,locz,dir); }
-void Player::releaseWeapon1() { weapon1->release(); }
-void Player::releaseWeapon2() { weapon2->release(); }
 
 std::vector<Projectile*> Player::getProjectiles() {
 	std::vector<Projectile*> toReturn;
@@ -62,6 +60,10 @@ void Player::setForward( bool newVal ) { forward = newVal; }
 void Player::setBackward( bool newVal ) { backward = newVal; }
 void Player::setLeft( bool newVal ) { left = newVal; }
 void Player::setRight( bool newVal ) { right = newVal; }
+void Player::triggerWeapon1() { weapon1->trigger(); }
+void Player::triggerWeapon2() { weapon2->trigger(); }
+void Player::releaseWeapon1() { weapon1->release(); }
+void Player::releaseWeapon2() { weapon2->release(); }
 
 void Player::setRGB( float r, float g, float b ) { colr = r; colg = g; colb = b; }
 void Player::setHealth( int h ) { health = h; }
@@ -76,15 +78,16 @@ void Player::turn( float dt ) {
 
 void Player::move( float dt ) {
 	int moveVal = forward - backward;
-	locx += moveVal*Sin(dir)*moveSpeed*dt;
-	locz += moveVal*Cos(dir)*moveSpeed*dt;
+	loc.x += moveVal*Sin(dir)*moveSpeed*dt;
+	loc.z += moveVal*Cos(dir)*moveSpeed*dt;
 }
 
-void Player::reset( float newX, float newZ, float newDir ){ 
-	locx = newX;
-	locz = newZ;
+void Player::reset( glm::vec3 newLoc, float newDir ){ 
+	loc = newLoc;
 	dir = newDir;
-	hitbox->update(locx, locz, dir);
+	hitbox->update(loc, dir);
+	weapon1->update(loc, dir, 0);
+	weapon2->update(loc, dir, 0);
 	alive = true;
 }
 

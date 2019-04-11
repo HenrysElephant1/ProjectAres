@@ -47,7 +47,15 @@ void ActiveGame::update( float dt ) {
 
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->update(dt);
-		if( projectiles[i]->destroy() ) {
+
+		// Only test a player hit if appropriate
+		if( projectiles[i]->shouldTestPlayerHit() ) {
+			p1->testHit( projectiles[i] );
+			p2->testHit( projectiles[i] );
+		}
+
+		// Delete projectile if necessary
+		if( projectiles[i]->shouldDestroy() ) {
 			delete projectiles[i];
 			projectiles.erase(projectiles.begin() + i--);
 		}

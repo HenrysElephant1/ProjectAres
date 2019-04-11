@@ -1,8 +1,7 @@
 #include "Hitbox.h"
 
-Hitbox::Hitbox( float w, float l, float x, float z, float d ) {
-	locx = x;
-	locz = z;
+Hitbox::Hitbox( float w, float l, glm::vec3 initLoc, float d ) {
+	loc = initLoc;
 	dir = d;
 	width = w;
 	length = l;
@@ -18,24 +17,18 @@ Hitbox::~Hitbox() {
 }
 
 void Hitbox::calcCBMat() {
-	// // glm::vec3 translate = glm::vec3(locx, 0, locz);
-	// glm::vec3 l = glm::vec3( Cos(dir)*width/2, 0, Sin(dir)*width/2 );
-	// glm::vec3 m = glm::vec3( -Sin(dir)*length/2, 0, Cos(dir)*length/2 );
-	// glm::vec3 n = glm::vec3( 0, height, 0 );
-
+	// Create basis vectors for hitbox coordinate system
 	glm::vec3 l = bbr - bbl;
 	glm::vec3 m = tbl - bbl;
 	glm::vec3 n = bfl - bbl;
 
-	cbMat = glm::mat3(l, m, n);
-	cbMat = glm::inverse(cbMat);
+	// Create  change of basis matrix and its inverse to use for transformations
+	invCBMat = glm::mat3(l, m, n);
+	cbMat = glm::inverse(invCBMat);
 }
 
 void Hitbox::calcVecs() {
-	glm::vec3 loc = glm::vec3(locx, 0, locz);
-
-	// Hitbox corner points
-	// Naming - t/b: Top/Bottom, b/f: Back/Front: l/r: Left/Right
+	// Calculate hitbox corner points
 	bbl = loc + glm::vec3( +width/2*Cos(dir) -length/2*Sin(dir),       0, -width/2*Sin(dir) -length/2*Cos(dir) );
 	bbr = loc + glm::vec3( -width/2*Cos(dir) -length/2*Sin(dir),       0, +width/2*Sin(dir) -length/2*Cos(dir) );
 	tbr = loc + glm::vec3( -width/2*Cos(dir) -length/2*Sin(dir),  height, +width/2*Sin(dir) -length/2*Cos(dir) );
@@ -64,17 +57,16 @@ void Hitbox::calcVecs() {
 	bVecs[11] = bfl;   mVecs[11] = bfr - bfl;
 }
 
-void Hitbox::update( float x, float z, float d ) {
-	locx = x;
-	locz = z;
+void Hitbox::update( glm::vec3 newLoc, float d ) {
+	loc = newLoc;
 	dir = d;
 	calcVecs();
 	calcCBMat();
 	colliding = false;
 }
 
-bool Hitbox::testPointHit( float x, float y, float z ) {
-	glm::vec3 pointPos = glm::vec3(x-locx,y,z-locz);
+bool Hitbox::testPointHit( glm::vec3 testLoc ) {
+	glm::vec3 pointPos = testLoc - loc;
 	glm::vec3 transformedPos = cbMat * pointPos;
 	if( abs(transformedPos.x) <= 1 && abs(transformedPos.y) <= 1 && abs(transformedPos.z) <= 1 )
 		return true;
@@ -82,84 +74,94 @@ bool Hitbox::testPointHit( float x, float y, float z ) {
 		return false;
 }
 
-bool Hitbox::testVolumeHit( float x, float y, float z, float radius ) {
-	return true;
-}
-
-bool Hitbox::testVectorHit( glm::vec3 pos, glm::vec3 vec ) {
+bool Hitbox::testVectorHit( glm::vec3 pos, glm::vec3 vec, glm::vec3 *retPos, glm::vec3 *retVec ) {
 	// Transform input vector to coordinate space formed by hitbox
 	glm::vec3 transPos = cbMat * (pos - bbl);
 	glm::vec3 transVec = cbMat * vec;
 
-	float t;
-	glm::vec3 newVec;
+	float t; // "time" of intersection
+	glm::vec3 collisionPos; // Location of intersection
+	glm::vec3 collisionNormal; // Normal of face intersection with
 
 	// Test intersection with plane x=1
 	t = (1 - transPos.x) / transVec.x;
-	if( t >= 0 && t <=1 ) {
-		newVec = transPos + (transVec * t);
-		if( newVec.y >= 0 && newVec.y <=1 && newVec.z >= 0 && newVec.z <=1 ) {
-			colliding = true;
-			return true;
+	if( t >= 0 && t <= 1 ) {
+		collisionPos = transPos + (transVec * t);
+		if( collisionPos.y >= 0 && collisionPos.y <= 1 && collisionPos.z >= 0 && collisionPos.z <= 1 ) {
+			collisionNormal = glm::vec3(1,0,0);
+			goto handle_collision;
 		}
 	}
 
 	// Test intersection with plane x=0
 	t = (0 - transPos.x) / transVec.x;
-	if( t >= 0 && t <=1 ) {
-		newVec = transPos + (transVec * t);
-		if( newVec.y >= 0 && newVec.y <=1 && newVec.z >= 0 && newVec.z <=1 ) {
-			colliding = true;
-			return true;
+	if( t >= 0 && t <= 1 ) {
+		collisionPos = transPos + (transVec * t);
+		if( collisionPos.y >= 0 && collisionPos.y <= 1 && collisionPos.z >= 0 && collisionPos.z <= 1 ) {
+			collisionNormal = glm::vec3(-1,0,0);
+			goto handle_collision;
 		}
 	}
 
 	// Test intersection with plane y=1
 	t = (1 - transPos.y) / transVec.y;
-	if( t >= 0 && t <=1 ) {
-		newVec = transPos + (transVec * t);
-		if( newVec.x >= 0 && newVec.x <=1 && newVec.z >= 0 && newVec.z <=1 ) {
-			colliding = true;
-			return true;
+	if( t >= 0 && t <= 1 ) {
+		collisionPos = transPos + (transVec * t);
+		if( collisionPos.x >= 0 && collisionPos.x <= 1 && collisionPos.z >= 0 && collisionPos.z <= 1 ) {
+			collisionNormal = glm::vec3(0,1,0);
+			goto handle_collision;
 		}
 	}
 
 	// Test intersection with plane y=0
 	t = (0 - transPos.y) / transVec.y;
-	if( t >= 0 && t <=1 ) {
-		newVec = transPos + (transVec * t);
-		if( newVec.x >= 0 && newVec.x <=1 && newVec.z >= 0 && newVec.z <=1 ) {
-			colliding = true;
-			return true;
+	if( t >= 0 && t <= 1 ) {
+		collisionPos = transPos + (transVec * t);
+		if( collisionPos.x >= 0 && collisionPos.x <= 1 && collisionPos.z >= 0 && collisionPos.z <= 1 ) {
+			collisionNormal = glm::vec3(0,-1,0);
+			goto handle_collision;
 		}
 	}
 
 	// Test intersection with plane z=1
 	t = (1 - transPos.z) / transVec.z;
-	if( t >= 0 && t <=1 ) {
-		newVec = transPos + (transVec * t);
-		if( newVec.x >= 0 && newVec.x <=1 && newVec.y >= 0 && newVec.y <=1 ) {
-			colliding = true;
-			return true;
+	if( t >= 0 && t <= 1 ) {
+		collisionPos = transPos + (transVec * t);
+		if( collisionPos.x >= 0 && collisionPos.x <= 1 && collisionPos.y >= 0 && collisionPos.y <= 1 ) {
+			collisionNormal = glm::vec3(0,0,1);
+			goto handle_collision;
 		}
 	}
 
 	// Test intersection with plane z=0
 	t = (0 - transPos.z) / transVec.z;
-	if( t >= 0 && t <=1 ) {
-		newVec = transPos + (transVec * t);
-		if( newVec.x >= 0 && newVec.x <=1 && newVec.y >= 0 && newVec.y <=1 ) {
-			colliding = true;
-			return true;
+	if( t >= 0 && t <= 1 ) {
+		collisionPos = transPos + (transVec * t);
+		if( collisionPos.x >= 0 && collisionPos.x <= 1 && collisionPos.y >= 0 && collisionPos.y <= 1 ) {
+			collisionNormal = glm::vec3(0,0,-1);
+			goto handle_collision;
 		}
 	}
 
+	// Haven't jumped to label below, so we haven't detected a collision
 	return false;
+
+	handle_collision:
+	if( retPos != NULL && retVec != NULL ) {
+		*retPos = collisionPos;
+		// Get normal of collided face in world space coordinates
+		collisionNormal = glm::normalize( invCBMat * collisionNormal );
+		// Return a vector approprately reflected and scaled to calculate the final point.
+		*retVec = glm::reflect( vec, collisionNormal ) * (1 - t);
+	}
+	colliding = true;
+	return true;
 }
 
 bool testHitboxCollision( Hitbox *h1, Hitbox *h2 ) {
+	// Test all vectors of the first hitbox
 	for( int i=0; i<12; i++ ) {
-		if( h1->testVectorHit( h2->bVecs[i], h2->mVecs[i]) ) {
+		if( h1->testVectorHit( h2->bVecs[i], h2->mVecs[i] ) ) {
 			h1->colliding = true;
 			h2->colliding = true;
 			return true;
@@ -191,6 +193,9 @@ void Hitbox::display() {
 	// }
 	// glEnd();
 
+	// glVertex3d(0,0,-5);
+	// glVertex3d(0,0,5);
+
 	if( colliding )
 		glColor3d(1,0,0);
 	else
@@ -200,8 +205,6 @@ void Hitbox::display() {
 		glVertex3d(bVecs[i].x, bVecs[i].y, bVecs[i].z);
 		glVertex3d(bVecs[i].x + mVecs[i].x, bVecs[i].y + mVecs[i].y, bVecs[i].z + mVecs[i].z);
 	}
-	// glVertex3d(0,0,-5);
-	// glVertex3d(0,0,5);
 	glEnd();
 
 	glPopMatrix();

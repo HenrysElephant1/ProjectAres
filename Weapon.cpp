@@ -1,12 +1,8 @@
 #include "Weapon.h"
 
-Weapon::Weapon( float ox, float oy, float oz, float fx, float fy, float fz ) {
-	offx = ox;
-	offy = oy;
-	offz = oz;
-	firex = fx;
-	firey = fy;
-	firez = fz;
+Weapon::Weapon( glm::vec3 base, glm::vec3 fire ) {
+	baseOffset = base;
+	fireOffset = fire;
 }
 
 Weapon::~Weapon() {
@@ -15,21 +11,25 @@ Weapon::~Weapon() {
 
 // void Weapon::display() {
 // 	glPushMatrix();
-// 	glTranslatef(offx,offy,offz);
+// 	glTranslatef(baseOffset.x,baseOffset.y,baseOffset.z);
 // 	model->display();
 // 	glPopMatrix();
 // }
 
-void Weapon::update( float dt ) {
+void Weapon::update( glm::vec3 newLoc, float newDir, float dt ) {
+	loc = newLoc;
+	dir = newDir;
 	timer -= dt;
 	if( timer < 0 )
 		timer = 0;
 }
 
-void Weapon::getFireCoords( float x, float y, float z, float dir, float &retx, float &rety, float &retz ) {
-	retx = x + Cos(dir) * (offx + firex) + Sin(dir) * (offz + firez);
-	rety = y + offy + firey;
-	retz = z + Cos(dir) * (offz + firez) - Sin(dir) * (offx + firex);
+glm::vec3 Weapon::getFireCoords() {
+	return glm::vec3(
+		loc.x + Cos(dir) * (baseOffset.x + fireOffset.x) + Sin(dir) * (baseOffset.z + fireOffset.z),
+		loc.y + baseOffset.y + fireOffset.y,
+		loc.z + Cos(dir) * (baseOffset.z + fireOffset.z) - Sin(dir) * (baseOffset.x + fireOffset.x)
+	);
 }
 
 std::vector<Projectile*> Weapon::getProjectiles() {
@@ -40,7 +40,7 @@ std::vector<Projectile*> Weapon::getProjectiles() {
 
 
 
-BasicWeapon::BasicWeapon( float ox, float oy, float oz ): Weapon(ox,oy,oz,0,0,4) {
+BasicWeapon::BasicWeapon( glm::vec3 offset ): Weapon(offset,glm::vec3(0,0,4)) {
 
 }
 
@@ -48,15 +48,9 @@ BasicWeapon::~BasicWeapon() {
 
 }
 
-void BasicWeapon::fire( float x, float y, float z, float dir ) {
-	float initx, inity, initz;
-	getFireCoords(x, y, z, dir, initx, inity, initz);
-	justFired.push_back( new BasicProjectile( initx, inity, initz, dir ) );
-}
-
 void BasicWeapon::display() {
 	glPushMatrix();
-	glTranslatef(offx,offy,offz);
+	glTranslatef(baseOffset.x,baseOffset.y,baseOffset.z);
 
 	glBegin(GL_QUADS);
 	glNormal3f(  0,  1,  0);
@@ -69,8 +63,8 @@ void BasicWeapon::display() {
 	glPopMatrix();
 }
 
-void BasicWeapon::trigger( float x, float y, float z, float dir ) {
-	if( !triggered ) fire(x,y,z,dir); // Single fire behavior
+void BasicWeapon::trigger() {
+	if( !triggered ) justFired.push_back( new BasicProjectile( getFireCoords(), dir ) ); // Single fire behavior
 	triggered = true;
 }
 
