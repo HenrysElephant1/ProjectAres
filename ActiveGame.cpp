@@ -7,6 +7,9 @@ ActiveGame::ActiveGame( Player *play1, Player *play2, Map *m ) {
 	camX = 0;
 	camY = 100;
 	camZ = 0;
+	ph = 90;
+
+	testHitbox = new Hitbox(10,5);
 }
 
 ActiveGame::~ActiveGame() {
@@ -17,11 +20,11 @@ void ActiveGame::render() {
 	GLManager::beginRender();
 	
 	glPushMatrix();
-	// double Ex = -10*Sin(th)*Cos(ph);
-	// double Ey = +10*Sin(ph);
-	// double Ez = +10*Cos(th)*Cos(ph);
-	// gluLookAt(Ex,Ey,Ez, 0,0,0, 0,Cos(ph),0);
-	gluLookAt(camX, camY, camZ, 0,0,0, 0,0,-1);
+	double Ex = camY*Sin(th)*Cos(ph);
+	double Ey = camY*Sin(ph);
+	double Ez = camY*Cos(th)*Cos(ph);
+	gluLookAt(Ex,Ey,Ez, 0,0,0, 0,Cos(ph),0);
+	// gluLookAt(camX, camY, camZ, 0,0,0, 0,0,-1);
 
 	map->display();
 	p1->display();
@@ -29,6 +32,7 @@ void ActiveGame::render() {
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->display();
 	}
+	testHitbox->display();
 
 	glPopMatrix();
 
@@ -39,7 +43,9 @@ void ActiveGame::render() {
 void ActiveGame::update( float dt ) {
 	p1->update(dt);
 	p2->update(dt);
+	testHitbox->update( glm::vec3(0,0,0), 0 );
 
+	// Get projectiles fired and add them to vector
 	std::vector<Projectile*> p1Proj = p1->getProjectiles();
 	std::vector<Projectile*> p2Proj = p2->getProjectiles();
 	projectiles.insert( projectiles.end(), p1Proj.begin(), p1Proj.end() );
@@ -47,6 +53,8 @@ void ActiveGame::update( float dt ) {
 
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->update(dt);
+
+		projectiles[i]->testMapHit( testHitbox );
 
 		// Only test a player hit if appropriate
 		if( projectiles[i]->shouldTestPlayerHit() ) {
@@ -60,6 +68,8 @@ void ActiveGame::update( float dt ) {
 			projectiles.erase(projectiles.begin() + i--);
 		}
 	}
+
+	// Test player hitbox collision
 	testHitboxCollision( p1->getHitbox(), p2->getHitbox() );
 }
 

@@ -39,7 +39,7 @@ public:
 	~Hitbox();
 
 	void update( glm::vec3 newLoc, float d ); // Update the hitbox with new coords and dir
-	bool testPointHit( glm::vec3 testLoc ); // Test if point is in the hitbox
+	bool testPointHit( glm::vec3 pos ); // Test if point is in the hitbox
 	bool testVectorHit( glm::vec3 pos, glm::vec3 vec, glm::vec3 *contactPos = NULL, glm::vec3 *contactVec = NULL ); // Test collision with a vector vec originating from point pos
 	void display();
 

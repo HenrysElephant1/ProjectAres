@@ -48,4 +48,17 @@ public:
 	void release();
 };
 
+// Weapon that bounces off of walls
+class ReboundWeapon: public Weapon {
+private:
+
+public:
+	ReboundWeapon( glm::vec3 base );
+	~ReboundWeapon();
+
+	void display(); // Temporary - will just display model from superclass in future
+	void trigger();
+	void release();
+};
+
 #endif
