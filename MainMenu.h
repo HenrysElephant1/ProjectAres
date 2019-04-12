@@ -8,6 +8,9 @@
 #include "Player.h"
 #include "Map.h"
 
+#define P1_DEFAULT_COLOR 0
+#define P2_DEFAULT_COLOR 1
+
 class MapMenu;
 class PlayerMenu;
 class MainMenu: public MenuState {

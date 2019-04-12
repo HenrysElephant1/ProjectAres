@@ -3,6 +3,7 @@
 Weapon::Weapon( glm::vec3 base, glm::vec3 fire ) {
 	baseOffset = base;
 	fireOffset = fire;
+	triggered = false;
 }
 
 Weapon::~Weapon() {

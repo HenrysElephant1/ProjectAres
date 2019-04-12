@@ -62,7 +62,7 @@ void BasicProjectile::testMapHit( Hitbox *toTest ) {
 ReboundProjectile::ReboundProjectile( glm::vec3 initLoc, float dir ): Projectile(initLoc) {
 	vel = glm::vec3( Sin(dir) * REBOUND_PROJECTILE_SPEED, 0, Cos(dir) * REBOUND_PROJECTILE_SPEED );
 	timer = 2;
-}
+}  
 
 ReboundProjectile::~ReboundProjectile() {}
 

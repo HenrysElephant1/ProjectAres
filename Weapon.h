@@ -18,7 +18,7 @@ protected:
 	glm::vec3 baseOffset; // Offset for weapon base
 	glm::vec3 fireOffset; // Offset from weapon base for projectile initial position
 
-	std::vector<Projectile*> justFired;
+	std::vector<Projectile*> justFired; // Projectiles fired since last frame
 
 	// Get initialization position for projectile - x,y,z,dir are player coords and dir
 	glm::vec3 getFireCoords();
