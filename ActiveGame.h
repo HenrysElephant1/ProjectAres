@@ -10,12 +10,14 @@
 #include "Player.h"
 #include "Map.h"
 #include "Projectile.h"
+#include "Hitbox.h"
 
 class ActiveGame: public State {
 private:
 	Player *p1, *p2;
 	Map *map;
 	std::vector<Projectile*> projectiles;
+	Hitbox* testHitbox;
 
 	float camX, camY, camZ; // Camera coordinates - static for now
 

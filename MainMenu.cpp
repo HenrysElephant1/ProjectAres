@@ -30,10 +30,10 @@ MainMenu::MainMenu() {
 	buttons.push_back(quitButton);
 
 	p1 = new Player();
-	p1->reset(glm::vec3(-5,0,0),25);
+	p1->reset(glm::vec3(-10,0,0),25);
 	p1->setRGB(0,1,0);
 	p2 = new Player();
-	p2->reset(glm::vec3(5,0,0),-25);
+	p2->reset(glm::vec3(10,0,0),-25);
 	p2->setRGB(1,0,1);
 	map = new Map();
 

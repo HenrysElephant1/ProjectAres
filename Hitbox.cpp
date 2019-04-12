@@ -65,11 +65,13 @@ void Hitbox::update( glm::vec3 newLoc, float d ) {
 	colliding = false;
 }
 
-bool Hitbox::testPointHit( glm::vec3 testLoc ) {
-	glm::vec3 pointPos = testLoc - loc;
-	glm::vec3 transformedPos = cbMat * pointPos;
-	if( abs(transformedPos.x) <= 1 && abs(transformedPos.y) <= 1 && abs(transformedPos.z) <= 1 )
+bool Hitbox::testPointHit( glm::vec3 pos ) {
+	glm::vec3 transPos = cbMat * (pos - bbl);
+	if( transPos.x >= 0 && transPos.y >= 0 && transPos.z >= 0 &&
+		transPos.x <= 1 && transPos.y <= 1 && transPos.z <= 1 ) {
+		colliding = true;
 		return true;
+	}
 	else
 		return false;
 }
@@ -148,7 +150,7 @@ bool Hitbox::testVectorHit( glm::vec3 pos, glm::vec3 vec, glm::vec3 *retPos, glm
 
 	handle_collision:
 	if( retPos != NULL && retVec != NULL ) {
-		*retPos = collisionPos;
+		*retPos = pos + vec * t;
 		// Get normal of collided face in world space coordinates
 		collisionNormal = glm::normalize( invCBMat * collisionNormal );
 		// Return a vector approprately reflected and scaled to calculate the final point.
@@ -159,7 +161,7 @@ bool Hitbox::testVectorHit( glm::vec3 pos, glm::vec3 vec, glm::vec3 *retPos, glm
 }
 
 bool testHitboxCollision( Hitbox *h1, Hitbox *h2 ) {
-	// Test all vectors of the first hitbox
+	// Test all vectors of the first hitbox against the second hitbox
 	for( int i=0; i<12; i++ ) {
 		if( h1->testVectorHit( h2->bVecs[i], h2->mVecs[i] ) ) {
 			h1->colliding = true;
@@ -173,28 +175,6 @@ bool testHitboxCollision( Hitbox *h1, Hitbox *h2 ) {
 void Hitbox::display() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glPushMatrix();
-
-	// // Test - display transformed hitbox and vector
-	// glm::vec3 transPos = cbMat * (glm::vec3(0,0,-5) - bbl);
-	// glm::vec3 transVec = cbMat * glm::vec3(0,0,10);
-	// glColor3d(0,0,1);
-	// glBegin(GL_LINES);
-	// glVertex3d(transPos.x, transPos.y, transPos.z);
-	// glVertex3d(transPos.x+transVec.x, transPos.y+transVec.y, transPos.z+transVec.z);
-	// glEnd();
-
-	// glColor3d(1,0,1);
-	// glBegin(GL_LINES);
-	// for(int i=0; i<12; i++) {
-	// 	glm::vec3 curPos = cbMat * (bVecs[i] - bbl);
-	// 	glm::vec3 curVec = cbMat * mVecs[i];
-	// 	glVertex3d(curPos.x, curPos.y, curPos.z);
-	// 	glVertex3d(curPos.x + curVec.x, curPos.y + curVec.y, curPos.z + curVec.z);
-	// }
-	// glEnd();
-
-	// glVertex3d(0,0,-5);
-	// glVertex3d(0,0,5);
 
 	if( colliding )
 		glColor3d(1,0,0);

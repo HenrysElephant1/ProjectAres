@@ -2,7 +2,7 @@
 
 Player::Player() {
 	weapon1 = new BasicWeapon(glm::vec3(.3, .5, 0));
-	weapon2 = new BasicWeapon(glm::vec3(-.3, .5, 0));
+	weapon2 = new ReboundWeapon(glm::vec3(-.3, .5, 0));
 	hitbox = new Hitbox(2,4);
 	model = new Model(std::string("TestTank.fbx"));
 	moveSpeed = 20;
