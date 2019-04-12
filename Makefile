@@ -12,11 +12,11 @@ else
 #  OSX
 ifeq "$(shell uname)" "Darwin"
 CFLG=-O3 -Wall -Wno-deprecated-declarations
-LIBS=-framework GLUT -framework OpenGL -F /Library/Frameworks -framework SDL2
+LIBS=-framework GLUT -framework OpenGL -F /Library/Frameworks -framework SDL2 -lassimp
 #  Linux/Unix/Solaris
 else
 CFLG=-O3 -Wall
-LIBS=-lglut -lGLU -lGL -lm -lSDL2
+LIBS=-lglut -lGLU -lGL -lm -lSDL2 -lassimp
 endif
 #  OSX/Linux/Unix/Solaris
 CLEAN=rm -f $(EXE) *.o *.a
@@ -41,6 +41,8 @@ Projectile.o: Projectile.cpp Projectile.h
 Model.o: Model.cpp Model.h
 Map.o: Map.cpp Map.h
 Tile.o: Tile.cpp Tile.h
+AssimpAdaptor.o: AssimpAdaptor.cpp AssimpAdaptor.h
+Model.o: Model.cpp Model.h
 
 
 .c.o:
@@ -49,7 +51,7 @@ Tile.o: Tile.cpp Tile.h
 	g++ -std=c++11 -c $(CFLG) $<
 
 
-Ares: Main.o GameManager.o GLManager.o State.o ActiveGame.o MenuState.o MainMenu.o MapMenu.o PlayerMenu.o PauseMenu.o Button.o Player.o Hitbox.o Weapon.o Projectile.o Model.o Map.o Tile.o
+Ares: Main.o GameManager.o GLManager.o State.o ActiveGame.o MenuState.o MainMenu.o MapMenu.o PlayerMenu.o PauseMenu.o Button.o Player.o Hitbox.o Weapon.o Projectile.o Model.o Map.o Tile.o AssimpAdaptor.o Model.o
 	g++ -O3 -o $@ $^ $(LIBS)
 
 clean:
