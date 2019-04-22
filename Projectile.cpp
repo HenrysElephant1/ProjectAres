@@ -93,10 +93,12 @@ bool ReboundProjectile::shouldTestPlayerHit() { return true; }
 void ReboundProjectile::testMapHit( Hitbox *toTest ) {
 	glm::vec3 contactPos, contactVec;
 	bool collision = testHitboxIntersection( toTest, false, &contactPos, &contactVec );
-	while( collision ) {
+	int i=0;
+	while( collision && i<2 ) {
 		prev = contactPos + contactVec * (float).01;
 		loc = contactPos + contactVec;
 		vel = glm::normalize( contactVec ) * (float)REBOUND_PROJECTILE_SPEED;
 		collision = testHitboxIntersection( toTest, false, &contactPos, &contactVec );
+		i++;
 	}
 }

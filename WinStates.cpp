@@ -1,9 +1,9 @@
-#include "PauseMenu.h"
+#include "WinStates.h"
 
-PauseMenu::PauseMenu( ActiveGame* g ) {
+WinState::WinState( ActiveGame* g ) {
 	GLuint labelsTex = GLManager::loadTexture("textures/OtherMenuItems.png");
 
-	// Game to return to
+	// Game to display in background
 	game = g;
 
 	// Resume button
@@ -17,35 +17,38 @@ PauseMenu::PauseMenu( ActiveGame* g ) {
 	buttons.push_back(exitButton);
 }
 
-PauseMenu::~PauseMenu() {
+WinState::~WinState() {
 
 }
 
-void PauseMenu::render() {
+void WinState::render() {
 	GLManager::beginRender();
+
 	game->render();
+
 	displayOverlay();
+
 	GLManager::endRender();
 }
 
-void PauseMenu::update( float dt ) {
+void WinState::update( float dt ) {
 
 }
 
 
-void PauseMenu::keyPressed( SDL_Keycode key ) {
+void WinState::keyPressed( SDL_Keycode key ) {
 	switch( key ) {
-		case SDLK_ESCAPE: setNextState(game, false); break;
+		// case SDLK_ESCAPE: setNextState(game, false); break;
 	}
 }
 
-void PauseMenu::keyReleased( SDL_Keycode key ) {
+void WinState::keyReleased( SDL_Keycode key ) {
 	// switch( key ) {
 	// 	case SDLK_- : break;
 	// }
 }
 
-void PauseMenu::mousePressed( int x, int y ) {
+void WinState::mousePressed( int x, int y ) {
 	mouseDown = true;
 	Loc mc = GLManager::getMenuCoords(x,y);
 
@@ -54,7 +57,7 @@ void PauseMenu::mousePressed( int x, int y ) {
 	}
 }
 
-void PauseMenu::mouseReleased( int x, int y ) {
+void WinState::mouseReleased( int x, int y ) {
 	mouseDown = false;
 	Loc mc = GLManager::getMenuCoords(x,y);
 
@@ -67,6 +70,6 @@ void PauseMenu::mouseReleased( int x, int y ) {
 	}
 }
 
-void PauseMenu::mouseMoved( int dx, int dy ) {
+void WinState::mouseMoved( int dx, int dy ) {
 
 }

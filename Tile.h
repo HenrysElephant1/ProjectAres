@@ -3,6 +3,8 @@
 
 #include "Hitbox.h"
 #include "GLManager.h"
+#include "Player.h"
+#include "Projectile.h"
 
 #define TILE_SIZE 6
 
@@ -20,21 +22,23 @@ protected:
 
 public:
 	Tile( int x, int y );
-	~Tile();
+	virtual ~Tile();
 	
 	virtual void display() = 0;
 	static Tile* createTile(int x, int y, int tileType);
+	void testPlayerCollision( Player *p );
+	void testProjectileCollision( Projectile *p );
 };
 
 class FloorTile : public Tile {
 	public:
-		FloorTile( int x, int y ) : Tile(x, y) {}
+		FloorTile( int x, int y );
 		void display();
 };
 
 class WallTile : public Tile {
 	public:
-		WallTile( int x, int y ) : Tile(x, y) {}
+		WallTile( int x, int y );
 		void display();
 };
 

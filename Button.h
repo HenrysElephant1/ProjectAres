@@ -14,7 +14,7 @@ private:
 	bool active = false;
 
 public:
-	Button( float x, float y, float w, float h, float r = 1.0, float g = 1.0, float b = 1.0 );
+	Button( float x, float y, float w, float h, float r = 0.20, float g = 0.40, float b = 0.10 );
 	~Button();
 
 	void display();

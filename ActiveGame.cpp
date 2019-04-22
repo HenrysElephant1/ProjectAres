@@ -8,15 +8,6 @@ ActiveGame::ActiveGame( Player *play1, Player *play2, Map *m ) {
 	camY = 50;
 	camZ = 0;
 	ph = 90;
-
-	walls[0] = new Hitbox(1,50);
-	walls[0]->update(glm::vec3(-60/2,0,0),0);
-	walls[1] = new Hitbox(1,50);
-	walls[1]->update(glm::vec3(60/2,0,0),0);
-	walls[2] = new Hitbox(60,1);
-	walls[2]->update(glm::vec3(0,0,50/2),0);
-	walls[3] = new Hitbox(60,1);
-	walls[3]->update(glm::vec3(0,0,-50/2),0);
 }
 
 ActiveGame::~ActiveGame() {
@@ -26,21 +17,24 @@ ActiveGame::~ActiveGame() {
 void ActiveGame::render() {
 	GLManager::beginRender();
 	
+	glm::vec3 mapLoc = map->getCenter();
+	glm::vec3 eyeLoc = mapLoc + glm::vec3(0,camY,0);
+
 	glPushMatrix();
-	double Ex = camY*Sin(th)*Cos(ph);
-	double Ey = camY*Sin(ph);
-	double Ez = camY*Cos(th)*Cos(ph);
-	gluLookAt(Ex,Ey,Ez, 0,0,0, 0,Cos(ph),0);
+	double Mx = mapLoc.x;
+	double My = mapLoc.y;
+	double Mz = mapLoc.z;
+	double Ex = Mx + eyeLoc.y*Sin(th)*Cos(ph);
+	double Ey = My + eyeLoc.y*Sin(ph);
+	double Ez = Mz + eyeLoc.y*Cos(th)*Cos(ph);
+	gluLookAt(Ex,Ey,Ez, Mx,My,Mz, 0,Cos(ph),0);
 	// gluLookAt(camX, camY, camZ, 0,0,0, 0,0,-1);
 
-	// map->display();
+	map->display();
 	p1->display();
 	p2->display();
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->display();
-	}
-	for( int i=0; i<4; i++ ) {
-		walls[i]->display();
 	}
 
 	glPopMatrix();
@@ -53,6 +47,13 @@ void ActiveGame::update( float dt ) {
 	p1->update(dt);
 	p2->update(dt);
 
+	// Test player hitbox collision
+	// Must test both to prevent both from moving
+	p1->testWorldCollision( p2->getHitbox() );
+	p2->testWorldCollision( p1->getHitbox() );
+	map->testPlayerCollision( p1 );
+	map->testPlayerCollision( p2 );
+
 	// Get projectiles fired and add them to vector
 	std::vector<Projectile*> p1Proj = p1->getProjectiles();
 	std::vector<Projectile*> p2Proj = p2->getProjectiles();
@@ -61,10 +62,7 @@ void ActiveGame::update( float dt ) {
 
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->update(dt);
-
-		for( int j=0; j<4; j++ ) {
-			projectiles[i]->testMapHit( walls[j] );
-		}
+		map->testProjectileCollision( projectiles[i] );
 
 		// Only test a player hit if appropriate
 		if( projectiles[i]->shouldTestPlayerHit() ) {
@@ -77,16 +75,6 @@ void ActiveGame::update( float dt ) {
 			delete projectiles[i];
 			projectiles.erase(projectiles.begin() + i--);
 		}
-	}
-
-	// Test player hitbox collision
-	// Must test both to prevent both from moving
-	p1->testWorldCollision( p2->getHitbox() );
-	p2->testWorldCollision( p1->getHitbox() );
-
-	for( int i=0; i<4; i++ ) {
-		p1->testWorldCollision( walls[i] );
-		p2->testWorldCollision( walls[i] );
 	}
 }
 

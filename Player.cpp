@@ -1,10 +1,10 @@
 #include "Player.h"
 
 Player::Player() {
-	weapon1 = new BasicWeapon(glm::vec3(.3, .5, 0));
-	weapon2 = new ReboundWeapon(glm::vec3(-.3, .5, 0));
-	hitbox = new Hitbox(2,4);
-	model = new Model(std::string("TestTank.fbx"));
+	weapon1 = new BasicWeapon(glm::vec3(.3, 1, 1));
+	weapon2 = new ReboundWeapon(glm::vec3(-.3, 1, 1));
+	hitbox = new Hitbox(2,3.5);
+	model = new Model(std::string("models/TestTank.fbx"));
 	moveSpeed = 20;
 	rotationSpeed = 180;
 }
@@ -21,12 +21,14 @@ void Player::display() {
 	glPushMatrix();
 	glTranslatef(loc.x,loc.y,loc.z);
 	glRotatef(dir,0,1,0);
+	glPushMatrix();
+	glScaled(.01,.01,.01);
+	glRotated(90,0,1,0);
 	model->display();
+	glPopMatrix();
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	weapon1->display();
 	weapon2->display();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glPopMatrix();
 
@@ -45,6 +47,14 @@ bool Player::testHit( Projectile* proj ) {
 	bool contact = proj->testHitboxIntersection( hitbox, true );
 	float damageDone = proj->getDamage( contact, loc );
 	return contact;
+}
+
+void Player::testWorldCollision( Hitbox* toTest ) {
+	if( testHitboxCollision( hitbox, toTest ) ) {
+		loc = prevloc;
+		dir = prevdir;
+		update(0); // Update hitboxes and weapons but don't move or turn
+	}
 }
 
 std::vector<Projectile*> Player::getProjectiles() {
@@ -70,6 +80,7 @@ void Player::setHealth( int h ) { health = h; }
 void Player::setSpeeds( float ms, float rs ) { moveSpeed = ms; rotationSpeed = rs; }
 
 void Player::turn( float dt ) {
+	prevdir = dir;
 	int rotVal = left - right;
 	dir += rotVal*rotationSpeed*dt;
 	if(dir < 0) dir += 360;
@@ -77,14 +88,17 @@ void Player::turn( float dt ) {
 }
 
 void Player::move( float dt ) {
+	prevloc = loc;
 	int moveVal = forward - backward;
 	loc.x += moveVal*Sin(dir)*moveSpeed*dt;
 	loc.z += moveVal*Cos(dir)*moveSpeed*dt;
 }
 
 void Player::reset( glm::vec3 newLoc, float newDir ){ 
-	loc = newLoc;
+	loc = newLoc; 
+	prevloc = newLoc;
 	dir = newDir;
+	prevdir = newDir;
 	hitbox->update(loc, dir);
 	weapon1->update(loc, dir, 0);
 	weapon2->update(loc, dir, 0);

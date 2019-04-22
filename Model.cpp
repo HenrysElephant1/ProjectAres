@@ -31,14 +31,9 @@ void Mesh::setMaterial(GLuint texture, float shininess)
 
 void Mesh::display()
 {
-	//glScaled(5.0,5.0,5.0);
-	glColor3f(1.0,0.0,0.0);
-	glBegin(GL_TRIANGLES);
-	//std::cout << "displaying model: " << vertices.size() <<  std::endl;
-	
+	glBegin(GL_TRIANGLES);	
 	for(int i = 0; i < vertices.size(); i++)
 	{
-		
 		glVertex3d(vertices[i].x,vertices[i].y,vertices[i].z);
 		glNormal3d(normals[i].x,normals[i].y,normals[i].z);
 		glTexCoord2d(uvCoords[i].x,uvCoords[i].y);

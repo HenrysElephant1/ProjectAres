@@ -35,8 +35,8 @@ void AssimpAdaptor::processNodes(aiNode * node, const aiScene* scene)
 	//std::cout << "Node name: " << node->mName.C_Str() << ", Number of Meshes: " << node->mNumMeshes << std::endl;
 	std::string nodeName = std::string(node->mName.C_Str());
 	for(int i = 0; i < node->mNumMeshes; i++)
-	{
-		createMesh(scene->mMeshes[node->mMeshes[i]],nodeName, scene);
+	{	
+		createMesh(scene->mMeshes[node->mMeshes[i]], nodeName, scene);
 	}
 	for(int i = 0; i < node->mNumChildren; i++)
 	{
@@ -53,7 +53,6 @@ void AssimpAdaptor::createMesh(const aiMesh* m, std::string &name, const aiScene
 	aiMatrix4x4 transform = getTransformation(scene, name);
 	aiMatrix4x4 normalMatrix = transform;
 	normalMatrix.Inverse().Transpose();
-
 
 
 	for(unsigned int i = 0; i < m->mNumFaces; i++)

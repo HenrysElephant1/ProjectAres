@@ -30,7 +30,8 @@ public:
 	void update( glm::vec3 newLoc, float newDir, float dt );
 	std::vector<Projectile*> getProjectiles(); // Get projectiles that have been fired since last cycle
 
-	virtual void display() = 0;
+	// virtual void display() = 0;
+	void display();
 	virtual void trigger() = 0; // Handle behavior when fire key is pressed
 	virtual void release() = 0; // Handle behavior when fire key is released
 };
@@ -43,7 +44,7 @@ public:
 	BasicWeapon( glm::vec3 base );
 	~BasicWeapon();
 
-	void display(); // Temporary - will just display model from superclass in future
+	// void display(); // Temporary - will just display model from superclass in future
 	void trigger();
 	void release();
 };
@@ -56,7 +57,7 @@ public:
 	ReboundWeapon( glm::vec3 base );
 	~ReboundWeapon();
 
-	void display(); // Temporary - will just display model from superclass in future
+	// void display(); // Temporary - will just display model from superclass in future
 	void trigger();
 	void release();
 };
