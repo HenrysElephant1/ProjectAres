@@ -9,7 +9,7 @@ ActiveGame::ActiveGame( Player *play1, Player *play2, Map *m ) {
 	camZ = 0;
 	ph = 90;
 
-	testHitbox = new Hitbox(10,5);
+	testHitbox = new Hitbox(5,5);
 }
 
 ActiveGame::~ActiveGame() {

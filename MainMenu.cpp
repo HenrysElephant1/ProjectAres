@@ -35,7 +35,8 @@ MainMenu::MainMenu() {
 	p2 = new Player();
 	p2->reset(glm::vec3(10,0,0),-25);
 	p2->setRGB(1,0,1);
-	map = new Map();
+	//map = new Map();
+	map = Map::loadMap(0);
 
 	// Create other menus with a reference back to self
 	pm = new PlayerMenu(this, p1, p2);

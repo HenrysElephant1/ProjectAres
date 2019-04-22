@@ -17,6 +17,7 @@ private:
 	MapMenu *mm;
 
 	Map *map;
+
 	Player *p1, *p2;
 
 public:
@@ -34,6 +35,7 @@ public:
 	void mouseReleased( int x, int y );
 	void mouseMoved( int dx, int dy );
 
+	void setMap(int newMap);
 	void createGame();
 };
 

@@ -3,6 +3,7 @@
 
 #include "Tile.h"
 #include "GLManager.h"
+#include "fstream"
 
 class Map {
 private:
@@ -10,10 +11,13 @@ private:
 	Tile** tiles;
 
 public:
-	Map();
+	Map(int x, int y);
 	~Map();
 
+	static Map* loadMap(int mapNum);
 	void display();
+	Tile* getTile(int x, int y);
+	void setTile(int tilesInd, Tile* tile);
 };
 
 #endif

@@ -7,7 +7,7 @@
 class MainMenu;
 class MapMenu: public MenuState {
 private:
-	Button* backButton;
+	Button* backButton, *createMapButton, *loadMapButton, *editMapButton;
 	MainMenu* mm;
 
 public:
