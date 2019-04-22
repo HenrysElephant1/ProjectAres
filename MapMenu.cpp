@@ -7,6 +7,18 @@ MapMenu::MapMenu( MainMenu* upMenu ) {
 	backButton->setTexture(labelsTex,0,1,.5,.75);
 	buttons.push_back(backButton);
 
+	createMapButton = new Button(0,.7,1,.25);
+	createMapButton->setTexture(labelsTex,0,1,.5,.75);
+	buttons.push_back(createMapButton);
+
+	loadMapButton = new Button(0,.7,1,.25);
+	loadMapButton->setTexture(labelsTex,0,1,.5,.75);
+	buttons.push_back(loadMapButton);
+
+	editMapButton = new Button(0,.7,1,.25);
+	editMapButton->setTexture(labelsTex,0,1,.5,.75);
+	buttons.push_back(editMapButton);
+
 	mm = upMenu;
 }
 

@@ -33,7 +33,7 @@ void ActiveGame::render() {
 	gluLookAt(Ex,Ey,Ez, 0,0,0, 0,Cos(ph),0);
 	// gluLookAt(camX, camY, camZ, 0,0,0, 0,0,-1);
 
-	map->display();
+	// map->display();
 	p1->display();
 	p2->display();
 	for( int i=0; i<projectiles.size(); i++ ) {

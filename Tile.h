@@ -4,15 +4,38 @@
 #include "Hitbox.h"
 #include "GLManager.h"
 
+#define TILE_SIZE 6
+
 class Tile {
-private:
+protected:
+	enum Type {
+		FLOOR,
+		WALL
+	};
+
+	int x, y;
+	int hitbox_count;
 	Hitbox** hitboxes; // Tile may have multiple hitboxes
+	int texture;
 
 public:
-	Tile();
+	Tile( int x, int y );
 	~Tile();
 	
-	void display();
+	virtual void display() = 0;
+	static Tile* createTile(int x, int y, int tileType);
+};
+
+class FloorTile : public Tile {
+	public:
+		FloorTile( int x, int y ) : Tile(x, y) {}
+		void display();
+};
+
+class WallTile : public Tile {
+	public:
+		WallTile( int x, int y ) : Tile(x, y) {}
+		void display();
 };
 
 #endif
