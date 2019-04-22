@@ -30,6 +30,7 @@ Map* Map::loadMap(int mapNum) {
 	int x_size, y_size;
 	int p1StartTileInd, p2StartTileInd;
 
+	// parsing each token from the map file
 	mapFile >> x_size;
 	mapFile >> y_size;
 	mapFile >> p1StartTileInd;
@@ -38,13 +39,15 @@ Map* Map::loadMap(int mapNum) {
 	Map* loadedMap = new Map(x_size, y_size);
 	unsigned int tileType;
 	int i = 0;
-	for( int row=-y_size/2; row<y_size/2; row++ ) {
-		for( int col=-x_size/2; col<x_size/2; col++ ) {
+	
+	double yBound = y_size*1.0/2;
+	double xBound = x_size*1.0/2;
+	for( int row=-floor(yBound); row<ceil(yBound); row++ ) {
+		for( int col=-floor(xBound); col<ceil(xBound); col++ ) {
 			mapFile >> tileType;
 			loadedMap->setTile(i++, Tile::createTile(col, row, tileType));
 		}
 	}
-	
 	return loadedMap;
 }
 

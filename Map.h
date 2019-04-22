@@ -4,6 +4,7 @@
 #include "Tile.h"
 #include "GLManager.h"
 #include "fstream"
+#include <math.h>
 
 class Map {
 private:

@@ -29,7 +29,9 @@ Tile* Tile::createTile(int x, int y, int tileType) {
 }
 
 void FloorTile::display() {
-
+	// for( int i=0; i<hitbox_count; i++ ) {
+	// 	hitboxes[i]->display();
+	// }
 }
 
 void WallTile::display() {
