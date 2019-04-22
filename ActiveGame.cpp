@@ -5,11 +5,18 @@ ActiveGame::ActiveGame( Player *play1, Player *play2, Map *m ) {
 	p2 = play2;
 	map = m;
 	camX = 0;
-	camY = 100;
+	camY = 50;
 	camZ = 0;
 	ph = 90;
 
-	testHitbox = new Hitbox(10,5);
+	walls[0] = new Hitbox(1,50);
+	walls[0]->update(glm::vec3(-60/2,0,0),0);
+	walls[1] = new Hitbox(1,50);
+	walls[1]->update(glm::vec3(60/2,0,0),0);
+	walls[2] = new Hitbox(60,1);
+	walls[2]->update(glm::vec3(0,0,50/2),0);
+	walls[3] = new Hitbox(60,1);
+	walls[3]->update(glm::vec3(0,0,-50/2),0);
 }
 
 ActiveGame::~ActiveGame() {
@@ -32,7 +39,9 @@ void ActiveGame::render() {
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->display();
 	}
-	testHitbox->display();
+	for( int i=0; i<4; i++ ) {
+		walls[i]->display();
+	}
 
 	glPopMatrix();
 
@@ -43,7 +52,6 @@ void ActiveGame::render() {
 void ActiveGame::update( float dt ) {
 	p1->update(dt);
 	p2->update(dt);
-	testHitbox->update( glm::vec3(0,0,0), 0 );
 
 	// Get projectiles fired and add them to vector
 	std::vector<Projectile*> p1Proj = p1->getProjectiles();
@@ -54,7 +62,9 @@ void ActiveGame::update( float dt ) {
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->update(dt);
 
-		projectiles[i]->testMapHit( testHitbox );
+		for( int j=0; j<4; j++ ) {
+			projectiles[i]->testMapHit( walls[j] );
+		}
 
 		// Only test a player hit if appropriate
 		if( projectiles[i]->shouldTestPlayerHit() ) {
@@ -70,7 +80,14 @@ void ActiveGame::update( float dt ) {
 	}
 
 	// Test player hitbox collision
-	testHitboxCollision( p1->getHitbox(), p2->getHitbox() );
+	// Must test both to prevent both from moving
+	p1->testWorldCollision( p2->getHitbox() );
+	p2->testWorldCollision( p1->getHitbox() );
+
+	for( int i=0; i<4; i++ ) {
+		p1->testWorldCollision( walls[i] );
+		p2->testWorldCollision( walls[i] );
+	}
 }
 
 
