@@ -27,8 +27,8 @@ Map* Map::loadMap(int mapNum) {
 	std::string mapFilePath = "maps/map" + std::to_string(mapNum) + ".txt";
 	std::ifstream mapFile {mapFilePath, std::ifstream::in};
 
-	unsigned int x_size, y_size;
-	unsigned int p1StartTileInd, p2StartTileInd;
+	int x_size, y_size;
+	int p1StartTileInd, p2StartTileInd;
 
 	mapFile >> x_size;
 	mapFile >> y_size;

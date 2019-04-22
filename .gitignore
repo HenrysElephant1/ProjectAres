@@ -6,6 +6,9 @@
 !textures
 !textures/*.png
 
+!maps
+!maps/*.txt
+
 !models
 !models/*.fbx
 
