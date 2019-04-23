@@ -38,6 +38,9 @@ private:
 	static void project(); // Set GL projection matrices
 	GLManager();
 
+
+	GLuint loadShaderFromFile(GLenum type, std::string & filename);
+
 public:
 	static bool QUIT;
 
@@ -63,6 +66,8 @@ public:
 
 
 	static void debug( std::string loc ); // Print a basic GL error message
+	GLuint createProgram(std::string & vertexShader, std::string & fragShader);
+
 };
 
 #endif
