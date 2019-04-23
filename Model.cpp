@@ -24,19 +24,24 @@ void Mesh::addVertex(glm::vec3 &vertex, glm::vec3 &normal, glm::vec2 &uv)
 	uvCoords.push_back(uv);
 }
 
-void Mesh::setMaterial(GLuint texture, float shininess)
+void Mesh::setMaterial(GLuint texture, float shininess_in)
 {
-
+	colorTexture = texture;
+	shininess = shininess_in;
 }
 
 void Mesh::display()
 {
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, colorTexture);
 	glBegin(GL_TRIANGLES);	
 	for(int i = 0; i < vertices.size(); i++)
 	{
-		glVertex3d(vertices[i].x,vertices[i].y,vertices[i].z);
 		glNormal3d(normals[i].x,normals[i].y,normals[i].z);
 		glTexCoord2d(uvCoords[i].x,uvCoords[i].y);
+		glVertex3d(vertices[i].x,vertices[i].y,vertices[i].z);
+		
+		//std::cout << "UV: " << uvCoords[i].x << ", " << uvCoords[i].y << std::endl;
 	}
 	glEnd();
 }
