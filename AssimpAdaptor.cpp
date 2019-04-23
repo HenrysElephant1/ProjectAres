@@ -6,7 +6,7 @@ AssimpAdaptor::AssimpAdaptor(){
 bool AssimpAdaptor::openFile(std::string& filename)
 {
 	Assimp::Importer Importer;
-	const aiScene* scene = Importer.ReadFile(filename.c_str(), aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices);
+	const aiScene* scene = Importer.ReadFile(filename.c_str(), aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices);// | aiProcess_FlipUVs);
 
 	if(scene)
 	{
@@ -60,13 +60,15 @@ void AssimpAdaptor::createMesh(const aiMesh* m, std::string &name, const aiScene
 		const aiFace &face = m->mFaces[i];
 		for(int j = 0; j < 3; j++)
 		{
-			aiVector3D position = transform * (m->mVertices[face.mIndices[j]]);
-			aiVector3D uv = (m->mTextureCoords[0][face.mIndices[j]]);
-			aiVector3D normal = normalMatrix * (m->mNormals[face.mIndices[j]]);
+			int vertIndex = face.mIndices[j];
+			aiVector3D position = transform * (m->mVertices[vertIndex]);
+			aiVector3D uv = (m->mTextureCoords[0][vertIndex]);
+			aiVector3D normal = normalMatrix * (m->mNormals[vertIndex]);
 
 			meshes[index].vertices.push_back(glm::vec3(position.x, position.y, position.z));
 			meshes[index].normals.push_back(glm::vec3(normal.x, normal.y, normal.z));
 			meshes[index].uvCoords.push_back(glm::vec2(uv.x, uv.y));
+			//std::cout << "UV: " << uv.x << ", " << uv.y << std::endl;
 		}
 
 
@@ -180,6 +182,7 @@ void AssimpAdaptor::getMeshes(std::vector<Mesh> * returnList)
 		for(int j = 0; j < meshes[i].vertices.size(); j++)
 		{
 			returnList->at(index).addVertex(meshes[i].vertices[j], meshes[i].normals[j], meshes[i].uvCoords[j]);
+			returnList->at(index).setMaterial(materials[meshes[i].materialIndex].colorTexture,materials[meshes[i].materialIndex].shininess);
 		}
 	}
 }

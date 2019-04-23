@@ -19,7 +19,7 @@ private:
 
 public:
 	void addVertex(glm::vec3 &vertex, glm::vec3 &normal, glm::vec2 &uv);
-	void setMaterial(GLuint texture, float shininess);
+	void setMaterial(GLuint texture, float shininess_in);
 	Mesh(){}
 	~Mesh(){}
 	void display();
