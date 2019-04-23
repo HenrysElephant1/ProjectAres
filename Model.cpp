@@ -11,6 +11,7 @@ Model::~Model() {
 }
 
 void Model::display() {
+	//std::cout << "new model" << std::endl;
 	for(int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i].display();
@@ -34,6 +35,7 @@ void Mesh::display()
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, colorTexture);
+	//std::cout << "texture: " << colorTexture << std::endl; 
 	glBegin(GL_TRIANGLES);	
 	for(int i = 0; i < vertices.size(); i++)
 	{

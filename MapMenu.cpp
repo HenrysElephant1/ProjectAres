@@ -1,7 +1,8 @@
 #include "MapMenu.h"
 
 MapMenu::MapMenu( MainMenu* upMenu ) {
-	GLuint labelsTex = GLManager::loadTexture("textures/OtherMenuItems.png");
+	std::string filename = "textures/OtherMenuItems.png";
+	GLuint labelsTex = GLManager::loadTexture(filename);
 
 	backButton = new Button(0,.7,1,.25);
 	backButton->setTexture(labelsTex,0,1,.5,.75);

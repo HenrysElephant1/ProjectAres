@@ -1,7 +1,8 @@
 #include "PauseMenu.h"
 
 PauseMenu::PauseMenu( ActiveGame* g ) {
-	GLuint labelsTex = GLManager::loadTexture("textures/OtherMenuItems.png");
+	std::string filename = "textures/OtherMenuItems.png";
+	GLuint labelsTex = GLManager::loadTexture(filename);
 
 	// Game to return to
 	game = g;

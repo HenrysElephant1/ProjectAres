@@ -9,7 +9,7 @@ int GLManager::screenHeight = 1;
 int GLManager::fov = 55;
 float GLManager::asp = 1;
 bool GLManager::QUIT = false;
-std::map<const char*, GLuint> GLManager::textures;
+std::map<std::string, GLuint> GLManager::textures;
 
 void GLManager::setFOV( int newFOV ) {
 	fov = newFOV;
@@ -76,15 +76,17 @@ void GLManager::switchTo3D() {
 }
 
 // std::string & filename
-GLuint GLManager::loadTexture( const char* filename ) {
+GLuint GLManager::loadTexture( std::string & filename ) {
 	if(textures.count(filename) > 0)
 		return textures.at(filename);
+	// if(textures[filename] != textures.end())
+	// 	return textures.at(filename);
 	stbi_set_flip_vertically_on_load(true);
 
 	int width;
 	int height;
 	int numChannels;
-	unsigned char* image = stbi_load(filename, &width, &height, &numChannels, STBI_rgb_alpha); //filename.c_str()
+	unsigned char* image = stbi_load(filename.c_str(), &width, &height, &numChannels, STBI_rgb_alpha); //filename.c_str()
 	GLuint tex;
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
@@ -97,7 +99,7 @@ GLuint GLManager::loadTexture( const char* filename ) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(image);
-		textures.insert(std::pair<const char*, GLuint>(filename, tex));
+		textures.insert(std::pair<std::string, GLuint>(filename, tex));
 		return tex;
 	}
 	std::cout << "Failed to load texture: " << filename << std::endl;

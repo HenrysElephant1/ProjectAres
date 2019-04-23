@@ -149,7 +149,7 @@ void AssimpAdaptor::processMaterials(const aiScene* scene, std::string & filenam
 			{
 				std::string file_path = directory + "/" + texture_path.data;
 				std::cout << "Color Texture: " << file_path << std::endl;
-				materials[materialIndex].colorTexture = GLManager::loadTexture(file_path.c_str());
+				materials[materialIndex].colorTexture = GLManager::loadTexture(file_path);
 			}
 		}
 

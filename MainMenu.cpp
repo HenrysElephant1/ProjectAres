@@ -1,8 +1,10 @@
 #include "MainMenu.h"
 
 MainMenu::MainMenu() {
-	GLuint buttonsTex = GLManager::loadTexture("textures/MainMenuButtons.png");
-	GLuint labelsTex = GLManager::loadTexture("textures/OtherMenuItems.png");
+	std::string filename = "textures/MainMenuButtons.png";
+	GLuint buttonsTex = GLManager::loadTexture(filename);
+	filename = "textures/OtherMenuItems.png";
+	GLuint labelsTex = GLManager::loadTexture(filename);
 
 	// Project Ares top label
 	Button* mainLabel = new Button(0,.7,2,.5);
