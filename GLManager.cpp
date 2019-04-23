@@ -9,6 +9,8 @@ int GLManager::screenHeight = 1;
 int GLManager::fov = 55;
 float GLManager::asp = 1;
 bool GLManager::QUIT = false;
+
+GLuint GLManager::lightingShader = 0;
 std::map<const char*, GLuint> GLManager::textures;
 
 void GLManager::setFOV( int newFOV ) {

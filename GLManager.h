@@ -31,6 +31,7 @@ class GLManager {
 private:
 	static int screenWidth, screenHeight, fov;
 	static float asp;
+	static GLuint lightingShader;
 
 	static std::map<const char*, GLuint> textures; // uses map so it doesn't read a texture multiple time, just returns the GLuint
 
