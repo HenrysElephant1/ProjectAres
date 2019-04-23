@@ -50,13 +50,16 @@ void GLManager::beginRender() {
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glUseProgram(lightingShader);
 }
 
 void GLManager::endRender() {
 	glDisable(GL_DEPTH_TEST);
+	glUseProgram(0);
 }
 
 void GLManager::switchTo2D() {
+	glUseProgram(0);
 	// Save projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -75,6 +78,7 @@ void GLManager::switchTo3D() {
 	// Return to previously saved modelview matrix
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+	glUseProgram(lightingShader);
 }
 
 // std::string & filename
@@ -122,8 +126,7 @@ void GLManager::debug( std::string loc ) {
 }
 
 
-
-GLuint GLManager::createProgram(std::string & vertexShader, std::string & fragShader)
+GLuint GLManager::createProgram(const char* vertexShader, const char* fragShader)
 {
 	//create program
 	GLuint program = glCreateProgram();
@@ -149,10 +152,10 @@ GLuint GLManager::createProgram(std::string & vertexShader, std::string & fragSh
 	return program;
 }
 
-GLuint GLManager::loadShaderFromFile(GLenum type, std::string & filename)
+GLuint GLManager::loadShaderFromFile(GLenum type, const char* filename)
 {
 	GLuint shader = glCreateShader(type);
-	FILE* file = std::fopen(filename.c_str(), "r");
+	FILE* file = std::fopen(filename, "r");
 	if(file == NULL)
 	{
 		std::cout << "Could not open file: " << filename << std::endl;

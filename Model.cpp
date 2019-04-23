@@ -44,4 +44,6 @@ void Mesh::display()
 		//std::cout << "UV: " << uvCoords[i].x << ", " << uvCoords[i].y << std::endl;
 	}
 	glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
 }

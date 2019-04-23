@@ -31,18 +31,17 @@ class GLManager {
 private:
 	static int screenWidth, screenHeight, fov;
 	static float asp;
-	static GLuint lightingShader;
 
 	static std::map<const char*, GLuint> textures; // uses map so it doesn't read a texture multiple time, just returns the GLuint
 
 	static void project(); // Set GL projection matrices
 	GLManager();
 
-
-	GLuint loadShaderFromFile(GLenum type, std::string & filename);
+	static GLuint loadShaderFromFile(GLenum type, const char* filename);
 
 public:
 	static bool QUIT;
+	static GLuint lightingShader;
 
 	// GLManager( int sh, int sw, int f );
 	static void setFOV( int newFOV );
@@ -66,7 +65,7 @@ public:
 
 
 	static void debug( std::string loc ); // Print a basic GL error message
-	GLuint createProgram(std::string & vertexShader, std::string & fragShader);
+	static GLuint createProgram(const char* vertexShader, const char* fragShader);
 
 };
 
