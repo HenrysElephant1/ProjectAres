@@ -4,7 +4,7 @@ Player::Player() {
 	weapon1 = new BasicWeapon(glm::vec3(.3, 1, 1));
 	weapon2 = new ReboundWeapon(glm::vec3(-.3, 1, 1));
 	hitbox = new Hitbox(2,3.5);
-	model = new Model(std::string("models/TestTank.fbx"));
+	model = new Model(std::string("models/AresTankBase.fbx"));
 	moveSpeed = 20;
 	rotationSpeed = 180;
 }
