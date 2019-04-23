@@ -1,8 +1,10 @@
 #include "PlayerMenu.h"
 
 PlayerMenu::PlayerMenu( MainMenu* upMenu, Player* play1, Player* play2 ) {
-	labelsTex = GLManager::loadTexture("textures/OtherMenuItems.png");
-	pmItems = GLManager::loadTexture("textures/PlayerMenuItems.png");
+	std::string filename = "textures/OtherMenuItems.png";
+	labelsTex = GLManager::loadTexture(filename);
+	filename = "textures/PlayerMenuItems.png";
+	pmItems = GLManager::loadTexture(filename);
 
 	backButton = new Button(0,.7,1,.25);
 	backButton->setTexture(labelsTex,0,1,.5,.75);

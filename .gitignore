@@ -5,6 +5,7 @@
 
 !textures
 !textures/*.png
+!textures/*.jpg
 
 !maps
 !maps/*.txt

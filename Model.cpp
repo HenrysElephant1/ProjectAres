@@ -11,10 +11,12 @@ Model::~Model() {
 }
 
 void Model::display() {
+	glUseProgram(GLManager::lightingShader);
 	for(int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i].display();
 	}
+	glUseProgram(0);
 }
 
 void Mesh::addVertex(glm::vec3 &vertex, glm::vec3 &normal, glm::vec2 &uv)
@@ -34,6 +36,7 @@ void Mesh::display()
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, colorTexture);
+	//std::cout << "texture: " << colorTexture << std::endl; 
 	glBegin(GL_TRIANGLES);	
 	for(int i = 0; i < vertices.size(); i++)
 	{

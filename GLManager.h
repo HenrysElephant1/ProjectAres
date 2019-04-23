@@ -32,7 +32,7 @@ private:
 	static int screenWidth, screenHeight, fov;
 	static float asp;
 
-	static std::map<const char*, GLuint> textures; // uses map so it doesn't read a texture multiple time, just returns the GLuint
+	static std::map<std::string, GLuint> textures; // uses map so it doesn't read a texture multiple time, just returns the GLuint
 
 	static void project(); // Set GL projection matrices
 	GLManager();
@@ -58,7 +58,7 @@ public:
 	static void switchTo3D();
 
 	// Load a texture and return the gl texture index
-	static GLuint loadTexture( const char* filename ); //std::string & filename
+	static GLuint loadTexture( std::string & filename ); //std::string & filename
 
 	// Get coordinates in appropriate range for menu
 	static Loc getMenuCoords( int x, int y );
