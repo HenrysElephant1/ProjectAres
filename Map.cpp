@@ -32,6 +32,7 @@ Map* Map::loadMap(int mapNum) {
 	std::ifstream mapFile {mapFilePath, std::ifstream::in};
 
 	int x_size, y_size, p1StartRow, p1StartCol, p2StartRow, p2StartCol;
+	// parsing each token from the map file
 	mapFile >> x_size;
 	mapFile >> y_size;
 	mapFile >> p1StartRow;
@@ -48,7 +49,6 @@ Map* Map::loadMap(int mapNum) {
 			loadedMap->setTile(i++, Tile::createTile(col, row, tileType));
 		}
 	}
-	
 	return loadedMap;
 }
 

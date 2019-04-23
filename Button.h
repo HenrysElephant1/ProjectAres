@@ -5,13 +5,13 @@
 
 class Button {
 private:
-	float locx, locy, width, height; // -1 <= locy/height <= 1, -asp <= locx/width <= 1
+	float locx, locy, width, height; // -1 <= locy <= 1, -asp <= locx <= asp
 	float colr, colg, colb; // Button color values
 	GLuint texture = 0;
 	GLuint activeTexture = 0;
 	float u1, u2, v1, v2; // Lower and upper uv texture coordinates
 	float au1, au2, av1, av2; // Lower and upper active uv texture coordinates
-	bool active = false;
+	bool active = false; // Is the button currently being pressed?
 
 public:
 	Button( float x, float y, float w, float h, float r = 0.20, float g = 0.40, float b = 0.10 );

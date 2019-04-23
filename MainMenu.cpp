@@ -39,7 +39,7 @@ MainMenu::MainMenu() {
 	p2->setRGB(COLOR_OPTIONS[P2_DEFAULT_COLOR][0],COLOR_OPTIONS[P2_DEFAULT_COLOR][1],COLOR_OPTIONS[P2_DEFAULT_COLOR][2]);
 
 	//map = new Map();
-	map = Map::loadMap(1);
+	map = Map::loadMap(2);
 
 	// Create other menus with a reference back to self
 	pm = new PlayerMenu(this, p1, p2);
@@ -55,7 +55,7 @@ void MainMenu::render() {
 	GLManager::beginRender();
 
 	glPushMatrix();
-	gluLookAt(0,2,10, 0,0,0, 0,Cos(ph),0);
+	gluLookAt(0,2,10, 0,1,0, 0,Cos(ph),0);
 
 	p1->display();
 	p2->display();

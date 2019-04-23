@@ -39,7 +39,9 @@ FloorTile::FloorTile( int x, int y ) : Tile(x, y) {
 }
 
 void FloorTile::display() {
-
+	// for( int i=0; i<hitbox_count; i++ ) {
+	// 	hitboxes[i]->display();
+	// }
 }
 
 WallTile::WallTile( int x, int y ) : Tile(x, y) {

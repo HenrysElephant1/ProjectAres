@@ -50,6 +50,9 @@ bool Button::testClick( float x, float y, bool setActive ) {
 }
 
 void Button::setTexture( GLuint tex, float ulower, float uupper, float vlower, float vupper ) {
+	// uv coordinates range from 0 to 1 and represent the x and y coordinates of the texture edges where (0,0) is the bottom left corner
+	// Ex: ulower = 0, uupper = 1, vlower = .75, and vupper = 1 would texture the button using the top
+	// quarter of the texture passed in
 	texture = tex;
 	u1 = ulower;
 	u2 = uupper;
@@ -57,6 +60,7 @@ void Button::setTexture( GLuint tex, float ulower, float uupper, float vlower, f
 	v2 = vupper;
 }
 
+// Optional texture to display when button is being pressed (Not really used right now)
 void Button::setActiveTexture( GLuint tex, float ulower, float uupper, float vlower, float vupper ) {
 	activeTexture = tex;
 	au1 = ulower;

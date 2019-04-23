@@ -30,7 +30,7 @@ void PlayerMenu::render() {
 
 	glPushMatrix();
 
-	gluLookAt(0,2,10, 0,0,0, 0,Cos(ph),0);
+	gluLookAt(0,2,10, 0,1,0, 0,Cos(ph),0);
 
 	p1->display();
 	p2->display();
