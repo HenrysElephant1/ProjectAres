@@ -118,3 +118,81 @@ void GLManager::debug( std::string loc ) {
 	while((err = glGetError()) != GL_NO_ERROR)
 		std::cout << "Error #" << ++i << " at " << loc << ": " << err << std::endl;
 }
+
+
+
+GLuint GLManager::createProgram(std::string & vertexShader, std::string & fragShader)
+{
+	//create program
+	GLuint program = glCreateProgram();
+
+	//read shaders
+	GLuint vertex = loadShaderFromFile(GL_VERTEX_SHADER, vertexShader);
+	GLuint fragment = loadShaderFromFile(GL_FRAGMENT_SHADER, fragShader);
+
+	//attach shaders
+	glAttachShader(program,vertex);
+	glAttachShader(program,fragment);
+
+	//link program
+	glLinkProgram(program);
+
+	// print program log in case of errors
+
+	//add program to vector
+	// Shader* s = new Shader(program);
+	// int index = shaders.size();
+	// shaders.push_back(s);
+
+	return program;
+}
+
+GLuint GLManager::loadShaderFromFile(GLenum type, std::string & filename)
+{
+	GLuint shader = glCreateShader(type);
+	FILE* file = std::fopen(filename.c_str(), "r");
+	if(file == NULL)
+	{
+		std::cout << "Could not open file: " << filename << std::endl;
+		return 0;
+	}
+	std::fseek(file,0,SEEK_END);
+	int n = std::ftell(file);
+	std::fseek(file,0,SEEK_SET);
+	char * buffer = (char*)malloc(n+1);
+	if(buffer == NULL)
+	{
+		std::cout << "Unable to allocate number of bytes needed for " << filename << std::endl;
+		return 0; 
+	}
+	int read = std::fread(buffer, n, 1, file);
+	if(read != 1)
+	{
+		std::cout << "Problem reading file: " << filename << std::endl;
+	}
+	buffer[n] = 0;
+	std::fclose(file);
+
+	glShaderSource(shader,1,(const char**)&buffer, NULL);
+
+	free(buffer);
+	glCompileShader(shader);
+
+	int logLength = 0;
+	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
+	if(logLength > 1)
+	{
+		char * log = (char *)malloc(logLength+1);
+		if(log == NULL) 
+			{std::cout << "Unable to allocate memory to print log" << std::endl;}
+		else {
+			glGetShaderInfoLog(shader,logLength,NULL,log);
+			log[logLength] = 0;
+			std::cout << "Log for "<< filename <<":" << log << std::endl;
+		}
+	}
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &logLength);
+	if(logLength == 0) {std::cout << "Error Compiling " << filename << std::endl;}
+
+	return shader;
+}
