@@ -49,7 +49,6 @@ Map* Map::loadMap(int mapNum) {
 			loadedMap->setTile(i++, Tile::createTile(col, row, tileType));
 		}
 	}
-	loadedMap->exportMap(9);
 	return loadedMap;
 }
 
