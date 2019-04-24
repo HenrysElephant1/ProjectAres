@@ -40,6 +40,10 @@ FloorTile::FloorTile( int x, int y ) : Tile(x, y) {
 	hitbox_count = 0;
 }
 
+int FloorTile::getType() {
+	return FLOOR;
+}
+
 void FloorTile::display() {
 	GLuint tex = GLManager::loadTexture(floorTex);
 	glEnable(GL_TEXTURE_2D);
@@ -70,6 +74,10 @@ WallTile::WallTile( int x, int y ) : Tile(x, y) {
 	for( int i=0; i<hitbox_count; i++ ) {
 		hitboxes[i] = new Hitbox(TILE_SIZE, TILE_SIZE, glm::vec3(x*TILE_SIZE, 0, y*TILE_SIZE), 0);
 	}
+}
+
+int WallTile::getType() {
+	return WALL;
 }
 
 void WallTile::display() {

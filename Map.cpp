@@ -49,7 +49,25 @@ Map* Map::loadMap(int mapNum) {
 			loadedMap->setTile(i++, Tile::createTile(col, row, tileType));
 		}
 	}
+	loadedMap->exportMap(9);
 	return loadedMap;
+}
+
+void Map::exportMap(int mapNum) {
+	std::string mapFilePath = "maps/map" + std::to_string(mapNum) + ".txt";
+	std::ofstream mapFile(mapFilePath, std::ios_base::out);
+
+	mapFile << x_size << " " << y_size << std::endl;
+	mapFile << p1StartRow << " " << p1StartCol << std::endl;
+	mapFile << p2StartRow << " " << p2StartCol << std::endl;
+
+	int i = 0;
+	for( int row=0; row<y_size; row++ ) {
+		for( int col=0; col<x_size; col++ ) {
+			mapFile << tiles[i++]->getType() << " ";
+		}
+		mapFile << std::endl;
+	}
 }
 
 void Map::display() {
@@ -59,7 +77,7 @@ void Map::display() {
 }
 
 Tile* Map::getTile(int x, int y) {
-	return tiles[x*x_size + y*y_size];
+	return tiles[x + y*y_size];
 }
 
 void Map::setTile(int tilesInd, Tile* tile) {

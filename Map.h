@@ -16,6 +16,8 @@ public:
 	~Map();
 
 	static Map* loadMap(int mapNum);
+	void exportMap(int mapNum);
+	
 	void display();
 	Tile* getTile(int x, int y);
 	void setTile(int tilesInd, Tile* tile);
