@@ -9,7 +9,8 @@ int GLManager::screenHeight = 1;
 int GLManager::fov = 55;
 float GLManager::asp = 1;
 bool GLManager::QUIT = false;
-std::map<const char*, GLuint> GLManager::textures;
+GLuint GLManager::lightingShader = 0;
+std::map<std::string, GLuint> GLManager::textures;
 
 void GLManager::setFOV( int newFOV ) {
 	fov = newFOV;
@@ -48,13 +49,16 @@ void GLManager::beginRender() {
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	// glUseProgram(lightingShader);
 }
 
 void GLManager::endRender() {
 	glDisable(GL_DEPTH_TEST);
+	// glUseProgram(0);
 }
 
 void GLManager::switchTo2D() {
+	// glUseProgram(0);
 	// Save projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -73,18 +77,21 @@ void GLManager::switchTo3D() {
 	// Return to previously saved modelview matrix
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+	// glUseProgram(lightingShader);
 }
 
 // std::string & filename
-GLuint GLManager::loadTexture( const char* filename ) {
+GLuint GLManager::loadTexture( std::string & filename ) {
 	if(textures.count(filename) > 0)
 		return textures.at(filename);
+	// if(textures[filename] != textures.end())
+	// 	return textures.at(filename);
 	stbi_set_flip_vertically_on_load(true);
 
 	int width;
 	int height;
 	int numChannels;
-	unsigned char* image = stbi_load(filename, &width, &height, &numChannels, STBI_rgb_alpha); //filename.c_str()
+	unsigned char* image = stbi_load(filename.c_str(), &width, &height, &numChannels, STBI_rgb_alpha); //filename.c_str()
 	GLuint tex;
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
@@ -97,7 +104,7 @@ GLuint GLManager::loadTexture( const char* filename ) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(image);
-		textures.insert(std::pair<const char*, GLuint>(filename, tex));
+		textures.insert(std::pair<std::string, GLuint>(filename, tex));
 		return tex;
 	}
 	std::cout << "Failed to load texture: " << filename << std::endl;
@@ -117,4 +124,81 @@ void GLManager::debug( std::string loc ) {
 	int i = 0;
 	while((err = glGetError()) != GL_NO_ERROR)
 		std::cout << "Error #" << ++i << " at " << loc << ": " << err << std::endl;
+}
+
+
+GLuint GLManager::createProgram(const char* vertexShader, const char* fragShader)
+{
+	//create program
+	GLuint program = glCreateProgram();
+
+	//read shaders
+	GLuint vertex = loadShaderFromFile(GL_VERTEX_SHADER, vertexShader);
+	GLuint fragment = loadShaderFromFile(GL_FRAGMENT_SHADER, fragShader);
+
+	//attach shaders
+	glAttachShader(program,vertex);
+	glAttachShader(program,fragment);
+
+	//link program
+	glLinkProgram(program);
+
+	// print program log in case of errors
+
+	//add program to vector
+	// Shader* s = new Shader(program);
+	// int index = shaders.size();
+	// shaders.push_back(s);
+
+	return program;
+}
+
+GLuint GLManager::loadShaderFromFile(GLenum type, const char* filename)
+{
+	GLuint shader = glCreateShader(type);
+	FILE* file = std::fopen(filename, "r");
+	if(file == NULL)
+	{
+		std::cout << "Could not open file: " << filename << std::endl;
+		return 0;
+	}
+	std::fseek(file,0,SEEK_END);
+	int n = std::ftell(file);
+	std::fseek(file,0,SEEK_SET);
+	char * buffer = (char*)malloc(n+1);
+	if(buffer == NULL)
+	{
+		std::cout << "Unable to allocate number of bytes needed for " << filename << std::endl;
+		return 0; 
+	}
+	int read = std::fread(buffer, n, 1, file);
+	if(read != 1)
+	{
+		std::cout << "Problem reading file: " << filename << std::endl;
+	}
+	buffer[n] = 0;
+	std::fclose(file);
+
+	glShaderSource(shader,1,(const char**)&buffer, NULL);
+
+	free(buffer);
+	glCompileShader(shader);
+
+	int logLength = 0;
+	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
+	if(logLength > 1)
+	{
+		char * log = (char *)malloc(logLength+1);
+		if(log == NULL) 
+			{std::cout << "Unable to allocate memory to print log" << std::endl;}
+		else {
+			glGetShaderInfoLog(shader,logLength,NULL,log);
+			log[logLength] = 0;
+			std::cout << "Log for "<< filename <<":" << log << std::endl;
+		}
+	}
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &logLength);
+	if(logLength == 0) {std::cout << "Error Compiling " << filename << std::endl;}
+
+	return shader;
 }

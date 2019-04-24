@@ -2,6 +2,7 @@
 #define ASSIMPADAPTOR_H
 
 
+#include "GLManager.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -9,9 +10,8 @@
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
-#include <OpenGL/gl.h>
+//#include <OpenGL/gl.h>
 #include "Model.h"
-#include "GLManager.h"
 
 class Mesh; // forward declaration
 

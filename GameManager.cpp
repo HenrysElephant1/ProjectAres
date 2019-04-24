@@ -38,6 +38,7 @@ bool GameManager::init() {
 
 				GLManager::setFOV(55);
 				GLManager::reshape(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
+				GLManager::lightingShader = GLManager::createProgram("shaders/lighting.vert", "shaders/lighting.frag");
 				gs = new MainMenu();
 			}
 		}

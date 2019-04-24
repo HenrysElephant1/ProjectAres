@@ -1,8 +1,10 @@
 #include "MainMenu.h"
 
 MainMenu::MainMenu() {
-	GLuint buttonsTex = GLManager::loadTexture("textures/MainMenuButtons.png");
-	GLuint labelsTex = GLManager::loadTexture("textures/OtherMenuItems.png");
+	std::string filename = "textures/MainMenuButtons.png";
+	GLuint buttonsTex = GLManager::loadTexture(filename);
+	filename = "textures/OtherMenuItems.png";
+	GLuint labelsTex = GLManager::loadTexture(filename);
 
 	// Project Ares top label
 	Button* mainLabel = new Button(0,.7,2,.5);
@@ -29,14 +31,17 @@ MainMenu::MainMenu() {
 	quitButton->setTexture(buttonsTex,0,1,0,.25);
 	buttons.push_back(quitButton);
 
+	// Initialize players and map
 	p1 = new Player();
-	p1->reset(glm::vec3(-10,0,0),25);
-	p1->setRGB(0,1,0);
+	p1->reset(glm::vec3(-5,0,0),45);
+	p1->setRGB(COLOR_OPTIONS[P1_DEFAULT_COLOR][0],COLOR_OPTIONS[P1_DEFAULT_COLOR][1],COLOR_OPTIONS[P1_DEFAULT_COLOR][2]);
+
 	p2 = new Player();
-	p2->reset(glm::vec3(10,0,0),-25);
-	p2->setRGB(1,0,1);
+	p2->reset(glm::vec3(5,0,0),-45);
+	p2->setRGB(COLOR_OPTIONS[P2_DEFAULT_COLOR][0],COLOR_OPTIONS[P2_DEFAULT_COLOR][1],COLOR_OPTIONS[P2_DEFAULT_COLOR][2]);
+
 	//map = new Map();
-	map = Map::loadMap(1);
+	map = Map::loadMap(2);
 
 	// Create other menus with a reference back to self
 	pm = new PlayerMenu(this, p1, p2);
@@ -52,18 +57,7 @@ void MainMenu::render() {
 	GLManager::beginRender();
 
 	glPushMatrix();
-	double Ex = -10*Sin(th)*Cos(ph);
-	double Ey = +10*Sin(ph);
-	double Ez = +10*Cos(th)*Cos(ph);
-	gluLookAt(Ex,Ey,Ez, 0,0,0, 0,Cos(ph),0);
-
-	glColor3d(0,0,1);
-	glBegin(GL_QUADS);
-	glVertex3d(1,0,1);
-	glVertex3d(1,0,-1);
-	glVertex3d(-1,0,-1);
-	glVertex3d(-1,0,1);
-	glEnd();
+	gluLookAt(0,10,.01, 0,1,0, 0,Cos(ph),0);
 
 	p1->display();
 	p2->display();
@@ -76,7 +70,7 @@ void MainMenu::render() {
 }
 
 void MainMenu::update( float dt ) {
-	// th += dt*45;
+
 }
 
 
@@ -124,6 +118,8 @@ void MainMenu::mouseMoved( int dx, int dy ) {
 }
 
 void MainMenu::createGame() {
+	p1->reset(map->getP1StartPos(),0);
+	p2->reset(map->getP2StartPos(),180);
 	State* nextState = new ActiveGame( p1, p2, map );
 	setNextState( nextState, true );
 }

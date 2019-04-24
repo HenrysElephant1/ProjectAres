@@ -5,7 +5,7 @@ Hitbox::Hitbox( float w, float l, glm::vec3 initLoc, float d ) {
 	dir = d;
 	width = w;
 	length = l;
-	height = 1;
+	height = 2;
 	colliding = false;
 
 	calcVecs();

@@ -5,11 +5,9 @@ ActiveGame::ActiveGame( Player *play1, Player *play2, Map *m ) {
 	p2 = play2;
 	map = m;
 	camX = 0;
-	camY = 100;
+	camY = 50;
 	camZ = 0;
 	ph = 90;
-
-	testHitbox = new Hitbox(5,5);
 }
 
 ActiveGame::~ActiveGame() {
@@ -19,11 +17,17 @@ ActiveGame::~ActiveGame() {
 void ActiveGame::render() {
 	GLManager::beginRender();
 	
+	glm::vec3 mapLoc = map->getCenter();
+	glm::vec3 eyeLoc = mapLoc + glm::vec3(0,camY,0);
+
 	glPushMatrix();
-	double Ex = camY*Sin(th)*Cos(ph);
-	double Ey = camY*Sin(ph);
-	double Ez = camY*Cos(th)*Cos(ph);
-	gluLookAt(Ex,Ey,Ez, 0,0,0, 0,Cos(ph),0);
+	double Mx = mapLoc.x;
+	double My = mapLoc.y;
+	double Mz = mapLoc.z;
+	double Ex = Mx + eyeLoc.y*Sin(th)*Cos(ph);
+	double Ey = My + eyeLoc.y*Sin(ph);
+	double Ez = Mz + eyeLoc.y*Cos(th)*Cos(ph);
+	gluLookAt(Ex,Ey,Ez, Mx,My,Mz, 0,Cos(ph),0);
 	// gluLookAt(camX, camY, camZ, 0,0,0, 0,0,-1);
 
 	map->display();
@@ -32,7 +36,6 @@ void ActiveGame::render() {
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->display();
 	}
-	testHitbox->display();
 
 	glPopMatrix();
 
@@ -43,7 +46,13 @@ void ActiveGame::render() {
 void ActiveGame::update( float dt ) {
 	p1->update(dt);
 	p2->update(dt);
-	testHitbox->update( glm::vec3(0,0,0), 0 );
+
+	// Test player hitbox collision
+	// Must test both to prevent both from moving
+	p1->testWorldCollision( p2->getHitbox() );
+	p2->testWorldCollision( p1->getHitbox() );
+	map->testPlayerCollision( p1 );
+	map->testPlayerCollision( p2 );
 
 	// Get projectiles fired and add them to vector
 	std::vector<Projectile*> p1Proj = p1->getProjectiles();
@@ -53,8 +62,7 @@ void ActiveGame::update( float dt ) {
 
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->update(dt);
-
-		projectiles[i]->testMapHit( testHitbox );
+		map->testProjectileCollision( projectiles[i] );
 
 		// Only test a player hit if appropriate
 		if( projectiles[i]->shouldTestPlayerHit() ) {
@@ -68,9 +76,6 @@ void ActiveGame::update( float dt ) {
 			projectiles.erase(projectiles.begin() + i--);
 		}
 	}
-
-	// Test player hitbox collision
-	testHitboxCollision( p1->getHitbox(), p2->getHitbox() );
 }
 
 

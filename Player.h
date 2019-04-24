@@ -20,8 +20,8 @@ private:
 	bool alive = true;
 
 	// Player location and direction in degrees (0deg is vector j or {0,1})
-	glm::vec3 loc;
-	float dir;
+	glm::vec3 loc, prevloc;
+	float dir, prevdir;
 
 	// Player control booleans
 	bool forward = false, backward = false, left = false, right = false;
@@ -37,7 +37,8 @@ public:
 	// Game loop functions
 	void display();
 	void update( float dt );
-	bool testHit( Projectile* proj );
+	bool testHit( Projectile* proj ); // Test projectile hit and decrease health if necessary 
+	void testWorldCollision( Hitbox *toTest ); // Test collision with a world hitbox and don't move if collided
 	std::vector<Projectile*> getProjectiles();
 
 	// Contols

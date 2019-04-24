@@ -20,7 +20,11 @@ class MainMenu;
 class PlayerMenu: public MenuState {
 private:
 	Button* backButton;
+	Button* p1ColorButtons[N_COLORS];
+	Button* p2ColorButtons[N_COLORS];
 	MainMenu* mm;
+
+	GLuint labelsTex, pmItems;
 
 	Player *p1, *p2;
 

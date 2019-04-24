@@ -1,8 +1,12 @@
 #include "Map.h"
 
-Map::Map(int x, int y) {
+Map::Map(int x, int y, int sr1, int sc1, int sr2, int sc2) {
 	x_size=x;
 	y_size=y;
+	p1StartRow = sr1;
+	p1StartCol = sc1;
+	p2StartRow = sr2;
+	p2StartCol = sc2;
 	tiles = new Tile*[x_size*y_size];
 	// int i = 0;
 	// for( int row=-y_size/2; row<y_size/2; row++ ) {
@@ -27,23 +31,20 @@ Map* Map::loadMap(int mapNum) {
 	std::string mapFilePath = "maps/map" + std::to_string(mapNum) + ".txt";
 	std::ifstream mapFile {mapFilePath, std::ifstream::in};
 
-	int x_size, y_size;
-	int p1StartTileInd, p2StartTileInd;
-
+	int x_size, y_size, p1StartRow, p1StartCol, p2StartRow, p2StartCol;
 	// parsing each token from the map file
 	mapFile >> x_size;
 	mapFile >> y_size;
-	mapFile >> p1StartTileInd;
-	mapFile >> p2StartTileInd;
+	mapFile >> p1StartRow;
+	mapFile >> p1StartCol;
+	mapFile >> p2StartRow;
+	mapFile >> p2StartCol;
 
-	Map* loadedMap = new Map(x_size, y_size);
+	Map* loadedMap = new Map(x_size, y_size, p1StartRow, p1StartCol, p2StartRow, p2StartCol);
 	unsigned int tileType;
 	int i = 0;
-	
-	double yBound = y_size*1.0/2;
-	double xBound = x_size*1.0/2;
-	for( int row=-floor(yBound); row<ceil(yBound); row++ ) {
-		for( int col=-floor(xBound); col<ceil(xBound); col++ ) {
+	for( int row=0; row<y_size; row++ ) {
+		for( int col=0; col<x_size; col++ ) {
 			mapFile >> tileType;
 			loadedMap->setTile(i++, Tile::createTile(col, row, tileType));
 		}
@@ -63,4 +64,28 @@ Tile* Map::getTile(int x, int y) {
 
 void Map::setTile(int tilesInd, Tile* tile) {
 	tiles[tilesInd] = tile;
+}
+
+void Map::testPlayerCollision( Player *p ){
+	for( int i=0; i<x_size*y_size; i++ ) {
+		tiles[i]->testPlayerCollision( p );
+	}
+}
+
+void Map::testProjectileCollision( Projectile *p ){
+	for( int i=0; i<x_size*y_size; i++ ) {
+		tiles[i]->testProjectileCollision( p );
+	}
+}
+
+glm::vec3 Map::getP1StartPos() {
+	return glm::vec3(p1StartCol*TILE_SIZE, 0, p1StartRow*TILE_SIZE);
+}
+
+glm::vec3 Map::getP2StartPos() {
+	return glm::vec3(p2StartCol*TILE_SIZE, 0, p2StartRow*TILE_SIZE);
+}
+
+glm::vec3 Map::getCenter() {
+	return glm::vec3(((x_size-1)/2.0)*TILE_SIZE, 0, ((y_size-1)/2.0)*TILE_SIZE);
 }

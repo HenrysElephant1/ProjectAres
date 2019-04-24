@@ -1,7 +1,10 @@
 #include "PlayerMenu.h"
 
 PlayerMenu::PlayerMenu( MainMenu* upMenu, Player* play1, Player* play2 ) {
-	GLuint labelsTex = GLManager::loadTexture("textures/OtherMenuItems.png");
+	std::string filename = "textures/OtherMenuItems.png";
+	labelsTex = GLManager::loadTexture(filename);
+	filename = "textures/PlayerMenuItems.png";
+	pmItems = GLManager::loadTexture(filename);
 
 	backButton = new Button(0,.7,1,.25);
 	backButton->setTexture(labelsTex,0,1,.5,.75);
@@ -10,29 +13,26 @@ PlayerMenu::PlayerMenu( MainMenu* upMenu, Player* play1, Player* play2 ) {
 	mm = upMenu;
 	p1 = play1;
 	p2 = play2;
+
+	for( int i=0; i<N_COLORS; i++ ) {
+		float yloc = ((N_COLORS-2)/2-i)*.12;
+		p1ColorButtons[i] = new Button(-.15,yloc,.2,.1,COLOR_OPTIONS[i][0],COLOR_OPTIONS[i][1],COLOR_OPTIONS[i][2]);
+		p1ColorButtons[i]->setTexture(pmItems,(i==P1_DEFAULT_COLOR?.5:0),(i==P1_DEFAULT_COLOR?1:.5),.75,1);
+		buttons.push_back(p1ColorButtons[i]);
+		p2ColorButtons[i] = new Button(.15,yloc,.2,.1,COLOR_OPTIONS[i][0],COLOR_OPTIONS[i][1],COLOR_OPTIONS[i][2]);
+		p2ColorButtons[i]->setTexture(pmItems,(i==P2_DEFAULT_COLOR?.5:0),(i==P2_DEFAULT_COLOR?1:.5),.75,1);
+		buttons.push_back(p2ColorButtons[i]);
+	}
 }
 
-PlayerMenu::~PlayerMenu() {
-
-}
+PlayerMenu::~PlayerMenu() {}
 
 void PlayerMenu::render() {
 	GLManager::beginRender();
 
 	glPushMatrix();
 
-	double Ex = -10*Sin(th)*Cos(ph);
-	double Ey = +10*Sin(ph);
-	double Ez = +10*Cos(th)*Cos(ph);
-	gluLookAt(Ex,Ey,Ez, 0,0,0, 0,Cos(ph),0);
-
-	glColor3d(1,.5,0);
-	glBegin(GL_QUADS);
-	glVertex3d(1,0,1);
-	glVertex3d(1,0,-1);
-	glVertex3d(-1,0,-1);
-	glVertex3d(-1,0,1);
-	glEnd();
+	gluLookAt(0,2,10, 0,1,0, 0,Cos(ph),0);
 
 	p1->display();
 	p2->display();
@@ -77,6 +77,31 @@ void PlayerMenu::mouseReleased( int x, int y ) {
 	if( backButton->isActive() && backButton->testClick(mc.x, mc.y) ) {
 		setNextState(mm, false);
 	}
+	else {
+		for( int i=0; i<N_COLORS; i++ ) {
+			if( p1ColorButtons[i]->isActive() && p1ColorButtons[i]->testClick(mc.x, mc.y) ) {
+				p1->setRGB(COLOR_OPTIONS[i][0], COLOR_OPTIONS[i][1], COLOR_OPTIONS[i][2]);
+				for( int j=0; j<N_COLORS; j++ ) {
+					if( j == i ) p1ColorButtons[j]->setTexture(pmItems,.5,1,.75,1);
+					else p1ColorButtons[j]->setTexture(pmItems,0,.5,.75,1);
+				}
+				goto done;
+			}
+		}
+		for( int i=0; i<N_COLORS; i++ ) {
+			if( p2ColorButtons[i]->isActive() && p2ColorButtons[i]->testClick(mc.x, mc.y) ) {
+				p2->setRGB(COLOR_OPTIONS[i][0], COLOR_OPTIONS[i][1], COLOR_OPTIONS[i][2]);
+				for( int j=0; j<N_COLORS; j++ ) {
+					if( j == i ) p2ColorButtons[j]->setTexture(pmItems,.5,1,.75,1);
+					else p2ColorButtons[j]->setTexture(pmItems,0,.5,.75,1);
+				}
+				goto done;
+			}
+		}
+	}
+
+	done:
+	return;
 }
 
 void PlayerMenu::mouseMoved( int dx, int dy ) {

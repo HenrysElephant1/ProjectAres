@@ -3,18 +3,22 @@
 Weapon::Weapon( glm::vec3 base, glm::vec3 fire ) {
 	baseOffset = base;
 	fireOffset = fire;
+	triggered = false;
 }
 
 Weapon::~Weapon() {
 
 }
 
-// void Weapon::display() {
-// 	glPushMatrix();
-// 	glTranslatef(baseOffset.x,baseOffset.y,baseOffset.z);
-// 	model->display();
-// 	glPopMatrix();
-// }
+void Weapon::display() {
+	glPushMatrix();
+	glTranslatef(baseOffset.x,baseOffset.y,baseOffset.z);
+	glRotated(-90,0,1,0);
+	glScaled(.01,.01,.01);
+	glColor3d(0,0,1);
+	model->display();
+	glPopMatrix();
+}
 
 void Weapon::update( glm::vec3 newLoc, float newDir, float dt ) {
 	loc = newLoc;
@@ -40,23 +44,25 @@ std::vector<Projectile*> Weapon::getProjectiles() {
 
 
 
-BasicWeapon::BasicWeapon( glm::vec3 offset ): Weapon(offset,glm::vec3(0,0,4)) {}
+BasicWeapon::BasicWeapon( glm::vec3 offset ): Weapon(offset,glm::vec3(0,.2,1.5)) {
+	model = new Model(std::string("models/TestWeapon.fbx"));
+}
 BasicWeapon::~BasicWeapon() {}
 
-void BasicWeapon::display() {
-	glPushMatrix();
-	glTranslatef(baseOffset.x,baseOffset.y,baseOffset.z);
+// void BasicWeapon::display() {
+// 	glPushMatrix();
+// 	glTranslatef(baseOffset.x,baseOffset.y,baseOffset.z);
 
-	glBegin(GL_QUADS);
-	glNormal3f(  0,  1,  0);
-	glVertex3f(-.1, .5,  0);
-	glVertex3f( .1, .5,  0);
-	glVertex3f( .1, .5,  4);
-	glVertex3f(-.1, .5,  4);
-	glEnd();
+// 	glBegin(GL_QUADS);
+// 	glNormal3f(  0,  1,  0);
+// 	glVertex3f(-.1, .5,  0);
+// 	glVertex3f( .1, .5,  0);
+// 	glVertex3f( .1, .5,  4);
+// 	glVertex3f(-.1, .5,  4);
+// 	glEnd();
 
-	glPopMatrix();
-}
+// 	glPopMatrix();
+// }
 
 void BasicWeapon::trigger() {
 	if( !triggered ) justFired.push_back( new BasicProjectile( getFireCoords(), dir ) ); // Single fire behavior
@@ -69,22 +75,24 @@ void BasicWeapon::release() {
 
 
 
-ReboundWeapon::ReboundWeapon( glm::vec3 offset ): Weapon(offset,glm::vec3(0,0,4)) {}
+ReboundWeapon::ReboundWeapon( glm::vec3 offset ): Weapon(offset,glm::vec3(0,.2,1.5)) {
+	model = new Model(std::string("models/TestWeapon.fbx"));
+}
 ReboundWeapon::~ReboundWeapon() {}
 
-void ReboundWeapon::display() {
-	glPushMatrix();
-	glTranslatef(baseOffset.x,baseOffset.y,baseOffset.z);
+// void ReboundWeapon::display() {
+// 	glPushMatrix();
+// 	glTranslatef(baseOffset.x,baseOffset.y,baseOffset.z);
 
-	glBegin(GL_TRIANGLES);
-	glNormal3f(  0,  1,  0);
-	glVertex3f(-.1, .5,  0);
-	glVertex3f( .1, .5,  0);
-	glVertex3f(  0, .5,  4);
-	glEnd();
+// 	glBegin(GL_TRIANGLES);
+// 	glNormal3f(  0,  1,  0);
+// 	glVertex3f(-.1, .5,  0);
+// 	glVertex3f( .1, .5,  0);
+// 	glVertex3f(  0, .5,  4);
+// 	glEnd();
 
-	glPopMatrix();
-}
+// 	glPopMatrix();
+// }
 
 void ReboundWeapon::trigger() {
 	if( !triggered ) justFired.push_back( new ReboundProjectile( getFireCoords(), dir ) ); // Single fire behavior
