@@ -18,7 +18,7 @@ private:
 	Map *map;
 	std::vector<Projectile*> projectiles;
 
-	float camX, camY, camZ; // Camera coordinates - static for now
+	float viewHeight; // Camera coordinates - static for now
 
 	void pauseGame();
 

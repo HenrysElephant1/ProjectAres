@@ -24,7 +24,9 @@ public:
 
 	glm::vec3 getP1StartPos();
 	glm::vec3 getP2StartPos();
-	glm::vec3 getCenter();
+	glm::vec3 getCenter(); // Get center position of map
+	float getUnitWidth(); // Get width of map in GL units
+	float getUnitHeight(); // Get height of map in GL units
 };
 
 #endif

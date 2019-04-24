@@ -43,6 +43,7 @@ Map.o: Map.cpp Map.h
 Tile.o: Tile.cpp Tile.h
 AssimpAdaptor.o: AssimpAdaptor.cpp AssimpAdaptor.h
 Model.o: Model.cpp Model.h
+EndGameStates.o: EndGameStates.cpp EndGameStates.h
 
 
 .c.o:
@@ -51,7 +52,7 @@ Model.o: Model.cpp Model.h
 	g++ -std=c++11 -c $(CFLG) $<
 
 
-Ares: Main.o GameManager.o GLManager.o State.o ActiveGame.o MenuState.o MainMenu.o MapMenu.o PlayerMenu.o PauseMenu.o Button.o Player.o Hitbox.o Weapon.o Projectile.o Model.o Map.o Tile.o AssimpAdaptor.o Model.o
+Ares: Main.o GameManager.o GLManager.o State.o ActiveGame.o MenuState.o MainMenu.o MapMenu.o PlayerMenu.o PauseMenu.o Button.o Player.o Hitbox.o Weapon.o Projectile.o Model.o Map.o Tile.o AssimpAdaptor.o Model.o EndGameStates.o
 	g++ -O3 -o $@ $^ $(LIBS)
 
 clean:

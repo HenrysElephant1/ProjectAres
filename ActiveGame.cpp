@@ -4,9 +4,8 @@ ActiveGame::ActiveGame( Player *play1, Player *play2, Map *m ) {
 	p1 = play1;
 	p2 = play2;
 	map = m;
-	camX = 0;
-	camY = 50;
-	camZ = 0;
+	viewHeight = GLManager::getMapViewHeight( map->getUnitWidth(), map->getUnitHeight() );
+	// std::cout << "Got Height " << viewHeight << std::endl;
 	ph = 90;
 }
 
@@ -18,7 +17,7 @@ void ActiveGame::render() {
 	GLManager::beginRender();
 	
 	glm::vec3 mapLoc = map->getCenter();
-	glm::vec3 eyeLoc = mapLoc + glm::vec3(0,camY,0);
+	glm::vec3 eyeLoc = mapLoc + glm::vec3(0,viewHeight,0);
 
 	glPushMatrix();
 	double Mx = mapLoc.x;
@@ -28,7 +27,6 @@ void ActiveGame::render() {
 	double Ey = My + eyeLoc.y*Sin(ph);
 	double Ez = Mz + eyeLoc.y*Cos(th)*Cos(ph);
 	gluLookAt(Ex,Ey,Ez, Mx,My,Mz, 0,Cos(ph),0);
-	// gluLookAt(camX, camY, camZ, 0,0,0, 0,0,-1);
 
 	map->display();
 	p1->display();
@@ -98,11 +96,6 @@ void ActiveGame::keyPressed( SDL_Keycode key ) {
 		case SDLK_SEMICOLON: p2->setRight(true); break;
 		case SDLK_RIGHTBRACKET: p2->triggerWeapon1(); break;
 		case SDLK_BACKSLASH: p2->triggerWeapon2(); break;
-
-		case SDLK_UP:    camZ++; break;
-		case SDLK_DOWN:  camZ--; break;
-		case SDLK_LEFT:  camX--; break;
-		case SDLK_RIGHT: camX++; break;
 	}
 }
 

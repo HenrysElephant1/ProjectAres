@@ -41,11 +41,11 @@ MainMenu::MainMenu() {
 	p2->setRGB(COLOR_OPTIONS[P2_DEFAULT_COLOR][0],COLOR_OPTIONS[P2_DEFAULT_COLOR][1],COLOR_OPTIONS[P2_DEFAULT_COLOR][2]);
 
 	//map = new Map();
-	map = Map::loadMap(2);
+	map = Map::loadMap(0);
 
 	// Create other menus with a reference back to self
 	pm = new PlayerMenu(this, p1, p2);
-	mm = new MapMenu(this);
+	mm = new MapMenu(this, map);
 }
 
 MainMenu::~MainMenu() {

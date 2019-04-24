@@ -31,7 +31,7 @@ void GLManager::project() {
     // Undo previous transformations
     glLoadIdentity();
     // Perspective transformation
-    gluPerspective(fov,asp,1,500);
+    gluPerspective(fov,asp,NEAR_PLANE,FAR_PLANE);
     // Switch to manipulating the model matrix
     glMatrixMode(GL_MODELVIEW);
 }
@@ -201,4 +201,25 @@ GLuint GLManager::loadShaderFromFile(GLenum type, const char* filename)
 	if(logLength == 0) {std::cout << "Error Compiling " << filename << std::endl;}
 
 	return shader;
+}
+
+float GLManager::getMapViewHeight( float width, float height ) {
+	float mapAsp = width/height;
+	float useFOV = fov/2.0;
+	float useFar = width/2.0;
+	if( mapAsp < asp-.5 ) {
+		useFOV = Atan(Tan(useFOV) / asp);
+		// std::cout << "UseFOV: " << useFOV << std::endl;
+		useFar = height/2.0;
+	}
+	return useFar / Tan(useFOV);
+}
+
+glm::mat4 GLManager::getInvPerspMat() {
+	return glm::inverse( glm::perspective((float)(fov), asp, (float)NEAR_PLANE, (float)FAR_PLANE) );
+}
+
+glm::vec4 GLManager::getNDC( int mx, int my ) {
+	glm::vec4 retLoc = glm::vec4(2.0*mx/(float)screenWidth - 1.0, 2.0*my/(float)screenHeight - 1.0, -1, 1);
+	return retLoc;
 }

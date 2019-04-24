@@ -89,3 +89,11 @@ glm::vec3 Map::getP2StartPos() {
 glm::vec3 Map::getCenter() {
 	return glm::vec3(((x_size-1)/2.0)*TILE_SIZE, 0, ((y_size-1)/2.0)*TILE_SIZE);
 }
+
+float Map::getUnitWidth() {
+	return x_size * TILE_SIZE;
+}
+
+float Map::getUnitHeight() {
+	return y_size * TILE_SIZE;
+}
