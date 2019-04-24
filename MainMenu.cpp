@@ -40,8 +40,8 @@ MainMenu::MainMenu() {
 	p2->reset(glm::vec3(5,0,0),-45);
 	p2->setRGB(COLOR_OPTIONS[P2_DEFAULT_COLOR][0],COLOR_OPTIONS[P2_DEFAULT_COLOR][1],COLOR_OPTIONS[P2_DEFAULT_COLOR][2]);
 
-	//map = new Map();
-	map = Map::loadMap(2);
+	// default map - can be changed by player by going into Map Menu
+	mapNum = 0;
 
 	// Create other menus with a reference back to self
 	pm = new PlayerMenu(this, p1, p2);
@@ -117,7 +117,13 @@ void MainMenu::mouseMoved( int dx, int dy ) {
 	// if( mouseDown ) setView(dx, dy);
 }
 
+void MainMenu::setMap( int newMap ) {
+
+}
+
 void MainMenu::createGame() {
+	map = Map::loadMap(mapNum);
+	
 	p1->reset(map->getP1StartPos(),0);
 	p2->reset(map->getP2StartPos(),180);
 	State* nextState = new ActiveGame( p1, p2, map );

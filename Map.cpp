@@ -1,6 +1,7 @@
 #include "Map.h"
 
-Map::Map(int x, int y, int sr1, int sc1, int sr2, int sc2) {
+Map::Map(std::string mName, int x, int y, int sr1, int sc1, int sr2, int sc2) {
+	mapName = mName;
 	x_size=x;
 	y_size=y;
 	p1StartRow = sr1;
@@ -8,13 +9,6 @@ Map::Map(int x, int y, int sr1, int sc1, int sr2, int sc2) {
 	p2StartRow = sr2;
 	p2StartCol = sc2;
 	tiles = new Tile*[x_size*y_size];
-	// int i = 0;
-	// for( int row=-y_size/2; row<y_size/2; row++ ) {
-	// 	for( int col=-x_size/2; col<y_size/2; col++ ) {
-	// 		tiles[i++] = new Tile(col, row);
-	// 	}
-	// }
-	// std::cout << "count " << i << std::endl;
 }
 
 Map::~Map() {
@@ -28,11 +22,15 @@ Map::~Map() {
  * Returns a saved map
  * */
 Map* Map::loadMap(int mapNum) {
-	std::string mapFilePath = "maps/map" + std::to_string(mapNum) + ".txt";
+	std::string mapFilePath = mapFolder + "map" + std::to_string(mapNum) + ".txt";
+	std::cout << mapFilePath << std::endl;
 	std::ifstream mapFile {mapFilePath, std::ifstream::in};
 
+	std::string mapName;
 	int x_size, y_size, p1StartRow, p1StartCol, p2StartRow, p2StartCol;
 	// parsing each token from the map file
+	mapFile >> mapName;
+	std::cout << mapName << std::endl;
 	mapFile >> x_size;
 	mapFile >> y_size;
 	mapFile >> p1StartRow;
@@ -40,7 +38,7 @@ Map* Map::loadMap(int mapNum) {
 	mapFile >> p2StartRow;
 	mapFile >> p2StartCol;
 
-	Map* loadedMap = new Map(x_size, y_size, p1StartRow, p1StartCol, p2StartRow, p2StartCol);
+	Map* loadedMap = new Map(mapName, x_size, y_size, p1StartRow, p1StartCol, p2StartRow, p2StartCol);
 	unsigned int tileType;
 	int i = 0;
 	for( int row=0; row<y_size; row++ ) {
@@ -49,13 +47,17 @@ Map* Map::loadMap(int mapNum) {
 			loadedMap->setTile(i++, Tile::createTile(col, row, tileType));
 		}
 	}
+
 	return loadedMap;
 }
 
+
 void Map::exportMap(int mapNum) {
-	std::string mapFilePath = "maps/map" + std::to_string(mapNum) + ".txt";
+	std::string mapFilePath = mapFolder + "map" + std::to_string(mapNum) + ".txt";
+	// ios_base::out makes current map overwrite any pre-existing map in "map[mapNum].txt"
 	std::ofstream mapFile(mapFilePath, std::ios_base::out);
 
+	mapFile << mapName << std::endl;
 	mapFile << x_size << " " << y_size << std::endl;
 	mapFile << p1StartRow << " " << p1StartCol << std::endl;
 	mapFile << p2StartRow << " " << p2StartCol << std::endl;
@@ -73,6 +75,10 @@ void Map::display() {
 	for( int i=0; i<x_size*y_size; i++ ) {
 		tiles[i]->display();
 	}
+}
+
+std::string Map::getName() {
+	return mapName;
 }
 
 Tile* Map::getTile(int x, int y) {

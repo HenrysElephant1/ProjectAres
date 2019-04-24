@@ -6,7 +6,7 @@ MapMenu::MapMenu( MainMenu* upMenu ) {
 	filename = "textures/OtherMenuItems.png";
 	GLuint labelsTex = GLManager::loadTexture(filename);
 
-		// Project Ares top label
+	// Project Ares top label
 	Button* mainLabel = new Button(0,.7,2,.5);
 	mainLabel->setTexture(labelsTex,0,1,.75,1);
 	labels.push_back(mainLabel);
@@ -28,10 +28,16 @@ MapMenu::MapMenu( MainMenu* upMenu ) {
 	buttons.push_back(editMapButton);
 
 	mm = upMenu;
+	mb = new MapBuilder(this);
 }
 
 MapMenu::~MapMenu() {
-
+	// optional since this only gets called when user presses quit, and program ends anyways
+	delete mb;
+	delete backButton;
+	delete createMapButton;
+	delete loadMapButton;
+	delete editMapButton;
 }
 
 void MapMenu::render() {
@@ -87,7 +93,7 @@ void MapMenu::mouseReleased( int x, int y ) {
 		setNextState(mm, false);
 	}
 	else if( createMapButton->isActive() && createMapButton->testClick(mc.x, mc.y) ) {
-		
+		setNextState(mb, false);
 	}	
 	else if( loadMapButton->isActive() && loadMapButton->testClick(mc.x, mc.y) ) {
 		

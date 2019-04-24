@@ -1,21 +1,20 @@
-#ifndef MAPMENU_H
-#define MAPMENU_H
+#ifndef MAPBUILDER_H
+#define MAPBUILDER_H
 
 #include "MenuState.h"
-#include "MainMenu.h"
-#include "MapBuilder.h"
+#include "MapMenu.h"
+#include "Map.h"
 
-class MainMenu;
-class MapBuilder;
-class MapMenu: public MenuState {
+class MapMenu;
+class MapBuilder: public MenuState {
 private:
-	Button* backButton, *createMapButton, *loadMapButton, *editMapButton;
-	MainMenu* mm;
-	MapBuilder* mb;
+	Button* backButton;
+	MapMenu* mm;
+    Map* map;
 
 public:
-	MapMenu( MainMenu* upMenu );
-	~MapMenu();
+	MapBuilder( MapMenu* upMenu );
+	~MapBuilder();
 
 	// Functions inherited from State
 	void render();
