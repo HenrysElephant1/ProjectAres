@@ -11,6 +11,7 @@
 #include "Map.h"
 #include "Projectile.h"
 #include "Hitbox.h"
+#include "EndGameStates.h"
 
 class ActiveGame: public State {
 private:
@@ -19,6 +20,7 @@ private:
 	std::vector<Projectile*> projectiles;
 
 	float viewHeight; // Camera coordinates - static for now
+	float endGameTimer;
 
 	void pauseGame();
 
@@ -36,6 +38,9 @@ public:
 	void mousePressed( int x, int y );
 	void mouseReleased( int x, int y );
 	void mouseMoved( int dx, int dy );
+
+	// Reset game
+	void reset();
 };
 
 #endif

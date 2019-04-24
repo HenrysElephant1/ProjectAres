@@ -7,6 +7,7 @@ ActiveGame::ActiveGame( Player *play1, Player *play2, Map *m ) {
 	viewHeight = GLManager::getMapViewHeight( map->getUnitWidth(), map->getUnitHeight() );
 	// std::cout << "Got Height " << viewHeight << std::endl;
 	ph = 90;
+	endGameTimer = 3;
 }
 
 ActiveGame::~ActiveGame() {
@@ -47,8 +48,10 @@ void ActiveGame::update( float dt ) {
 
 	// Test player hitbox collision
 	// Must test both to prevent both from moving
-	p1->testWorldCollision( p2->getHitbox() );
-	p2->testWorldCollision( p1->getHitbox() );
+	if( p1->getHealth() > 0 && p2->getHealth() > 0 ) {
+		p1->testWorldCollision( p2->getHitbox() );
+		p2->testWorldCollision( p1->getHitbox() );
+	}
 	map->testPlayerCollision( p1 );
 	map->testPlayerCollision( p2 );
 
@@ -73,6 +76,18 @@ void ActiveGame::update( float dt ) {
 			delete projectiles[i];
 			projectiles.erase(projectiles.begin() + i--);
 		}
+	}
+
+	if( p1->getHealth() <= 0 || p2->getHealth() <= 0 )
+		endGameTimer -= dt;
+
+	if( endGameTimer <= 0 ) {
+		if( p1->getHealth() <= 0 && p2->getHealth() <= 0 )
+			setNextState( new TieState(this), false );
+		else if( p1->getHealth() <= 0 )
+			setNextState( new P2WinState(this), false );
+		else
+			setNextState( new P1WinState(this), false );
 	}
 }
 
@@ -134,4 +149,11 @@ void ActiveGame::mouseMoved( int dx, int dy ) {
 void ActiveGame::pauseGame() {
 	State* nextState = new PauseMenu(this);
 	setNextState(nextState, false); 
+}
+
+void ActiveGame::reset() {
+	p1->reset(map->getP1StartPos(),0);
+	p2->reset(map->getP2StartPos(),180);
+	projectiles.clear();
+	endGameTimer = 3;
 }
