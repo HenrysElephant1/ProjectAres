@@ -20,6 +20,7 @@ public:
 
 	static Map* loadMap(int mapNum);
 	void exportMap(int mapNum);
+	void exportMapScreenshot(int mapNum);
 
 	void display();
 	std::string getName();

@@ -8,13 +8,6 @@ Tile::Tile( int xPos, int yPos ) {
 	y = yPos;
 }
 
-Tile::~Tile() {
-	for( int i=0; i<hitbox_count; i++ ) {
-		delete hitboxes[i];
-	}
-	delete[] hitboxes;
-}
-
 void Tile::testPlayerCollision( Player *p ){
 	for( int i=0; i<hitbox_count; i++ ) {
 		p->testWorldCollision( hitboxes[i] );
@@ -40,6 +33,13 @@ Tile* Tile::createTile(int x, int y, int tileType) {
 FloorTile::FloorTile( int x, int y ) : Tile(x, y) {
 	hitbox_count = 0;
 }
+
+FloorTile::~FloorTile() {
+	for( int i=0; i<hitbox_count; i++ ) {
+		delete hitboxes[i];
+	}
+}
+
 
 int FloorTile::getType() {
 	return FLOOR;
@@ -79,6 +79,12 @@ WallTile::WallTile( int x, int y ) : Tile(x, y) {
 	hitboxes = new Hitbox*[hitbox_count];
 	for( int i=0; i<hitbox_count; i++ ) {
 		hitboxes[i] = new Hitbox(TILE_SIZE, TILE_SIZE, glm::vec3(x*TILE_SIZE, 0, y*TILE_SIZE), 0);
+	}
+}
+
+WallTile::~WallTile() {
+	for( int i=0; i<hitbox_count; i++ ) {
+		delete hitboxes[i];
 	}
 }
 

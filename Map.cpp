@@ -9,10 +9,15 @@ Map::Map(std::string mName, int x, int y, int sr1, int sc1, int sr2, int sc2) {
 	p2StartRow = sr2;
 	p2StartCol = sc2;
 	tiles = new Tile*[x_size*y_size];
+
+	for( int i=0; i<x_size*y_size; i++ ) {
+		tiles[i] = NULL;
+	}
 }
 
 Map::~Map() {
 	for( int i=0; i<x_size*y_size; i++ ) {
+		std::cout << "deleting tilenum " << i << std::endl;
 		delete tiles[i];
 	}
 	delete[] tiles;
@@ -69,6 +74,28 @@ void Map::exportMap(int mapNum) {
 		}
 		mapFile << std::endl;
 	}
+
+	// for Load Map, wanted grid-buttons with screenshots of the saved map
+	exportMapScreenshot(mapNum);
+}
+
+void Map::exportMapScreenshot(int mapNum)
+{
+	int glWidth = this->getUnitWidth();
+	int glHeight = this->getUnitHeight();
+	
+	// trying to save screenshot of map
+	// BYTE* pixels = new BYTE[3 * width * height];
+
+	// glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+	// // Convert to FreeImage format & save to file
+	// FIBITMAP* image = FreeImage_ConvertFromRawBits(pixels, width, height, 3 * width, 24, 0x0000FF, 0xFF0000, 0x00FF00, false);
+	// FreeImage_Save(FIF_BMP, image, "maps/test.png", 0);
+
+	// // Free resources
+	// FreeImage_Unload(image);
+	// delete [] pixels;
 }
 
 void Map::display() {
@@ -85,8 +112,11 @@ Tile* Map::getTile(int x, int y) {
 	return tiles[x + y*y_size];
 }
 
-void Map::setTile(int tilesInd, Tile* tile) {
-	tiles[tilesInd] = tile;
+void Map::setTile(int tileInd, Tile* tile) {
+	// std::cout << "trying to delete " << tiles[tileInd]->getType() << std::endl;
+	delete tiles[tileInd];
+	
+	tiles[tileInd] = tile;
 }
 
 void Map::testPlayerCollision( Player *p ){

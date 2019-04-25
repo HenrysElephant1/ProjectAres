@@ -10,10 +10,6 @@
 
 class Tile {
 protected:
-	enum Type {
-		FLOOR,
-		WALL
-	};
 
 	int x, y;
 	int hitbox_count;
@@ -24,8 +20,13 @@ protected:
 	static std::string wallTex;
 
 public:
+	enum Type {
+		FLOOR,
+		WALL
+	};
+
 	Tile( int x, int y );
-	virtual ~Tile();
+	virtual ~Tile() {};
 	
 	virtual void display() = 0;
 	virtual int getType() = 0;
@@ -37,6 +38,7 @@ public:
 class FloorTile : public Tile {
 public:
 	FloorTile( int x, int y );
+	~FloorTile();
 	int getType();
 	void display();
 };
@@ -44,6 +46,7 @@ public:
 class WallTile : public Tile {
 public:
 	WallTile( int x, int y );
+	virtual ~WallTile();
 	int getType();
 	void display();
 };
