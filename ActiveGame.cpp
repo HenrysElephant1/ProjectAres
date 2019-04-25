@@ -29,6 +29,8 @@ void ActiveGame::render() {
 	double Ez = Mz + eyeLoc.y*Cos(th)*Cos(ph);
 	gluLookAt(Ex,Ey,Ez, Mx,My,Mz, 0,Cos(ph),0);
 
+	GLManager::doLighting();
+
 	map->display();
 	p1->display();
 	p2->display();

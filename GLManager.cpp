@@ -49,16 +49,21 @@ void GLManager::beginRender() {
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	// glUseProgram(lightingShader);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+	glEnable(GL_COLOR_MATERIAL);
 }
 
 void GLManager::endRender() {
 	glDisable(GL_DEPTH_TEST);
-	// glUseProgram(0);
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_LIGHT0);
+	glDisable(GL_LIGHTING);
 }
 
 void GLManager::switchTo2D() {
-	// glUseProgram(0);
+	glDisable(GL_LIGHTING);
 	// Save projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -77,7 +82,7 @@ void GLManager::switchTo3D() {
 	// Return to previously saved modelview matrix
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
-	// glUseProgram(lightingShader);
+	glEnable(GL_LIGHTING);
 }
 
 // std::string & filename
@@ -222,4 +227,16 @@ glm::mat4 GLManager::getInvPerspMat() {
 glm::vec4 GLManager::getNDC( int mx, int my ) {
 	glm::vec4 retLoc = glm::vec4(2.0*mx/(float)screenWidth - 1.0, 2.0*my/(float)screenHeight - 1.0, -1, 1);
 	return retLoc;
+}
+
+void GLManager::doLighting( float posx, float posy, float posz ) {
+	// Light color properties
+	float Ambient[] = {0.2,0.2,0.2,1.0};
+	float Diffuse[] = {0.8,0.8,0.8,1.0};
+	float Specular[] = {1.0,1.0,1.0,1.0};
+	float Position[] = {posx, posy, posz};
+	glLightfv( GL_LIGHT0, GL_AMBIENT, Ambient );
+	glLightfv( GL_LIGHT0, GL_DIFFUSE, Diffuse );
+	glLightfv( GL_LIGHT0, GL_SPECULAR, Specular );
+	glLightfv( GL_LIGHT0, GL_POSITION, Position );
 }

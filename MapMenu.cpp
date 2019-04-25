@@ -45,6 +45,8 @@ void MapMenu::render() {
 	double Ez = eyeLoc.z;
 	gluLookAt(Ex,Ey,Ez, Mx,My,Mz, 0,0,-1);
 
+	GLManager::doLighting();
+
 	map->display();
 
 	glPopMatrix();

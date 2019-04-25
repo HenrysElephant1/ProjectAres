@@ -19,7 +19,13 @@ Player::~Player() {
 
 void Player::display() {
 	if( health > 0 ) {
-		glColor3d(colr, colg, colb);
+		float shininess[] = {32.0f};
+		float spec_color[] = {1.0,1.0,1.0,1.0};
+		glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, shininess );
+		glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, spec_color );
+
+		if( hitTimer > 0 ) { glColor3d(1.0,0.4,0.4); glUseProgram(0); }
+		else glColor3d(colr, colg, colb);
 		glPushMatrix();
 		glTranslatef(loc.x,loc.y,loc.z);
 		glRotatef(dir,0,1,0);
@@ -34,7 +40,7 @@ void Player::display() {
 
 		glPopMatrix();
 
-		// hitbox->display();
+		if( hitTimer > 0 ) { glUseProgram(GLManager::lightingShader); }
 	}
 }
 
@@ -48,6 +54,8 @@ void Player::update( float dt ) {
 		weapon1->release();
 		weapon2->release();
 	}
+	hitTimer -= dt;
+	if( hitTimer < 0 ) hitTimer = 0;
 }
 
 void Player::testHit( Projectile* proj ) {
@@ -55,6 +63,8 @@ void Player::testHit( Projectile* proj ) {
 		bool contact = proj->testHitboxIntersection( hitbox, true );
 		float damageDone = proj->getDamage( contact, loc );
 		health -= damageDone;
+		if( damageDone > 0 )
+			hitTimer = 0.1;
 	}
 }
 
@@ -118,6 +128,7 @@ void Player::reset( glm::vec3 newLoc, float newDir ){
 	backward = false;
 	left = false;
 	right = false;
+	hitTimer = 0;
 }
 
 Hitbox* Player::getHitbox() { return hitbox; }

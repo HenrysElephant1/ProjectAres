@@ -74,6 +74,8 @@ public:
 	static float getMapViewHeight( float width, float height ); // Return a view height based on map and window dimensions
 	static glm::mat4 getInvPerspMat(); // Return inverse of perspective matrix
 	static glm::vec4 getNDC( int mx, int my ); // Return Normalized Device Coordinates from mouse position
+
+	static void doLighting( float posx = 100.0, float posy = 100.0, float posz = 0.0 );
 };
 
 #endif

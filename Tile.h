@@ -19,8 +19,9 @@ protected:
 	int hitbox_count;
 	Hitbox** hitboxes; // Tile may have multiple hitboxes
 	int texture;
-	
+
 	static std::string floorTex;
+	static std::string wallTex;
 
 public:
 	Tile( int x, int y );

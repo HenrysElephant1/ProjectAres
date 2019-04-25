@@ -24,6 +24,9 @@ private:
 
 	// Player control booleans
 	bool forward = false, backward = false, left = false, right = false;
+
+	// For flashing red on hit
+	float hitTimer;
 	
 	// Called in update
 	void turn( float dt );

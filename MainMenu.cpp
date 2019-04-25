@@ -33,11 +33,11 @@ MainMenu::MainMenu() {
 
 	// Initialize players and map
 	p1 = new Player();
-	p1->reset(glm::vec3(-5,0,0),45);
+	p1->reset(glm::vec3(-3.8,0,0),45);
 	p1->setRGB(COLOR_OPTIONS[P1_DEFAULT_COLOR][0],COLOR_OPTIONS[P1_DEFAULT_COLOR][1],COLOR_OPTIONS[P1_DEFAULT_COLOR][2]);
 
 	p2 = new Player();
-	p2->reset(glm::vec3(5,0,0),-45);
+	p2->reset(glm::vec3(3.8,0,0),-45);
 	p2->setRGB(COLOR_OPTIONS[P2_DEFAULT_COLOR][0],COLOR_OPTIONS[P2_DEFAULT_COLOR][1],COLOR_OPTIONS[P2_DEFAULT_COLOR][2]);
 
 	//map = new Map();
@@ -57,7 +57,9 @@ void MainMenu::render() {
 	GLManager::beginRender();
 
 	glPushMatrix();
-	gluLookAt(0,10,.01, 0,1,0, 0,Cos(ph),0);
+	gluLookAt(0,1,7, 0,1,0, 0,Cos(ph),0);
+
+	GLManager::doLighting(50,100,100);
 
 	p1->display();
 	p2->display();

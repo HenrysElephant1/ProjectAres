@@ -31,14 +31,14 @@ void PlayerMenu::render() {
 	GLManager::beginRender();
 
 	glPushMatrix();
-
 	gluLookAt(0,2,10, 0,1,0, 0,Cos(ph),0);
+
+	GLManager::doLighting();
 
 	p1->display();
 	p2->display();
 
 	glPopMatrix();
-
 	displayOverlay();
 
 	GLManager::endRender();
