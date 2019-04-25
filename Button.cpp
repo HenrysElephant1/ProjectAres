@@ -29,7 +29,6 @@ void Button::display() {
 		useTex = texture; lu = u1; uu = u2; lv = v1; uv = v2;
 	}
 
-	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, useTex);
 	glBegin(GL_QUADS);
 	glTexCoord2f(lu, lv); glVertex2f(locx-width/2.0,locy-height/2.0);
@@ -37,6 +36,7 @@ void Button::display() {
 	glTexCoord2f(uu, uv); glVertex2f(locx+width/2.0,locy+height/2.0);
 	glTexCoord2f(uu, lv); glVertex2f(locx+width/2.0,locy-height/2.0);
 	glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);

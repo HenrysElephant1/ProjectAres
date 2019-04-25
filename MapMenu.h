@@ -14,7 +14,7 @@ private:
 	MapBuilder* mb;
 
 public:
-	MapMenu( MainMenu* upMenu );
+	MapMenu( MainMenu *upMenu );
 	~MapMenu();
 
 	// Functions inherited from State
@@ -27,6 +27,8 @@ public:
 	void mousePressed( int x, int y );
 	void mouseReleased( int x, int y );
 	void mouseMoved( int dx, int dy );
+
+	//void getTileClicked( int mx, int my, int &retTileX, int &retTileY );
 };
 
 #endif

@@ -13,17 +13,22 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include <cmath>
 
 #include <glm/vec3.hpp>
 #include <glm/mat3x3.hpp> 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#define GLM_SWIZZLE
+#include <glm/vec4.hpp>
 
 // Trig functions for degrees
 #define Cos(x) cos(3.1415926535/180*(x))
 #define Sin(x) sin(3.1415926535/180*(x))
+#define Tan(x) tan(3.1415926535/180*(x))
+#define Atan(x) (atan(x)*180/3.1415926535)
+
+#define NEAR_PLANE 1
+#define FAR_PLANE 500
 
 typedef struct location_struct { float x; float y; } Loc;
 
@@ -63,10 +68,12 @@ public:
 	// Get coordinates in appropriate range for menu
 	static Loc getMenuCoords( int x, int y );
 
-
 	static void debug( std::string loc ); // Print a basic GL error message
 	static GLuint createProgram(const char* vertexShader, const char* fragShader);
 
+	static float getMapViewHeight( float width, float height ); // Return a view height based on map and window dimensions
+	static glm::mat4 getInvPerspMat(); // Return inverse of perspective matrix
+	static glm::vec4 getNDC( int mx, int my ); // Return Normalized Device Coordinates from mouse position
 };
 
 #endif

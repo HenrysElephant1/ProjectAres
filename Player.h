@@ -11,13 +11,12 @@
 class Player {
 private:
 	// Player attributes
-	int health;
+	float health;
 	float moveSpeed, rotationSpeed;
 	float colr, colg, colb;
 	Weapon *weapon1, *weapon2;
 	Hitbox *hitbox;
 	Model *model;
-	bool alive = true;
 
 	// Player location and direction in degrees (0deg is vector j or {0,1})
 	glm::vec3 loc, prevloc;
@@ -37,7 +36,7 @@ public:
 	// Game loop functions
 	void display();
 	void update( float dt );
-	bool testHit( Projectile* proj ); // Test projectile hit and decrease health if necessary 
+	void testHit( Projectile* proj ); // Test projectile hit and decrease health if necessary 
 	void testWorldCollision( Hitbox *toTest ); // Test collision with a world hitbox and don't move if collided
 	std::vector<Projectile*> getProjectiles();
 
@@ -61,6 +60,7 @@ public:
 
 	// Accessors
 	Hitbox* getHitbox();
+	float getHealth();
 };
 
 #endif

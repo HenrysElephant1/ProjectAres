@@ -10,7 +10,9 @@ class MapBuilder: public MenuState {
 private:
 	Button* backButton;
 	MapMenu* mm;
+
     Map* map;
+    float viewHeight;
 
 public:
 	MapBuilder( MapMenu* upMenu );
@@ -26,6 +28,8 @@ public:
 	void mousePressed( int x, int y );
 	void mouseReleased( int x, int y );
 	void mouseMoved( int dx, int dy );
+
+    void getTileClicked( int mx, int my, int &retTileX, int &retTileY );
 };
 
 #endif
