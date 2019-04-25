@@ -15,13 +15,13 @@ MapMenu::MapMenu( MainMenu* upMenu ) {
 	backButton->setTexture(labelsTex,0,1,.5,.75);
 	buttons.push_back(backButton);
 
-	createMapButton = new Button(0,0,1,.25);
-	createMapButton->setTexture(buttonsTex,0,1,.75,1);
-	buttons.push_back(createMapButton);
-
-	loadMapButton = new Button(0,-.3,1,.25);
+	loadMapButton = new Button(0,0,1,.25);
 	loadMapButton->setTexture(buttonsTex,0,1,.5,.75);
 	buttons.push_back(loadMapButton);
+
+	createMapButton = new Button(0,-.3,1,.25);
+	createMapButton->setTexture(buttonsTex,0,1,.75,1);
+	buttons.push_back(createMapButton);
 
 	editMapButton = new Button(0,-.6,1,.25);
 	editMapButton->setTexture(buttonsTex,0,1,.25,.5);
@@ -42,15 +42,9 @@ MapMenu::~MapMenu() {
 
 void MapMenu::render() {
 	GLManager::beginRender();
-	// glDisable(GL_TEXTURE_2D);
-	// glUseProgram(0);
 
 	glPushMatrix();
-
-	double Ex = -10*Sin(th)*Cos(ph);
-	double Ey = +10*Sin(ph);
-	double Ez = +10*Cos(th)*Cos(ph);
-	gluLookAt(Ex,Ey,Ez, 0,0,0, 0,Cos(ph),0);
+	gluLookAt(0,10,.01, 0,1,0, 0,Cos(ph),0);
 
 	glPopMatrix();
 
@@ -62,7 +56,6 @@ void MapMenu::render() {
 void MapMenu::update( float dt ) {
 	// th += dt*45;
 }
-
 
 void MapMenu::keyPressed( SDL_Keycode key ) {
 	switch( key ) {

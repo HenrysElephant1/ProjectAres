@@ -7,7 +7,7 @@ MainMenu::MainMenu() {
 	GLuint labelsTex = GLManager::loadTexture(filename);
 
 	// Project Ares top label
-	Button* mainLabel = new Button(0,.7,2,.5);
+	Button* mainLabel = new Button(0,.7,3,.75);
 	mainLabel->setTexture(labelsTex,0,1,.75,1);
 	labels.push_back(mainLabel);
 

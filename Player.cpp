@@ -1,6 +1,7 @@
 #include "Player.h"
 
 Player::Player() {
+	health = 100.0;
 	weapon1 = new BasicWeapon(glm::vec3(.3, 1, 1));
 	weapon2 = new ReboundWeapon(glm::vec3(-.3, 1, 1));
 	hitbox = new Hitbox(2,3.5);
@@ -17,22 +18,24 @@ Player::~Player() {
 }
 
 void Player::display() {
-	glColor3d(colr, colg, colb);
-	glPushMatrix();
-	glTranslatef(loc.x,loc.y,loc.z);
-	glRotatef(dir,0,1,0);
-	glPushMatrix();
-	glScaled(.01,.01,.01);
-	glRotated(90,0,1,0);
-	model->display();
-	glPopMatrix();
+	if( health > 0 ) {
+		glColor3d(colr, colg, colb);
+		glPushMatrix();
+		glTranslatef(loc.x,loc.y,loc.z);
+		glRotatef(dir,0,1,0);
+		glPushMatrix();
+		glScaled(.01,.01,.01);
+		glRotated(90,0,1,0);
+		model->display();
+		glPopMatrix();
 
-	weapon1->display();
-	weapon2->display();
+		weapon1->display();
+		weapon2->display();
 
-	glPopMatrix();
+		glPopMatrix();
 
-	hitbox->display();
+		// hitbox->display();
+	}
 }
 
 void Player::update( float dt ) {
@@ -41,12 +44,18 @@ void Player::update( float dt ) {
 	hitbox->update(loc, dir);
 	weapon1->update(loc, dir, dt);
 	weapon2->update(loc, dir, dt);
+	if( health <= 0 ) {
+		weapon1->release();
+		weapon2->release();
+	}
 }
 
-bool Player::testHit( Projectile* proj ) {
-	bool contact = proj->testHitboxIntersection( hitbox, true );
-	float damageDone = proj->getDamage( contact, loc );
-	return contact;
+void Player::testHit( Projectile* proj ) {
+	if( health > 0 ) {
+		bool contact = proj->testHitboxIntersection( hitbox, true );
+		float damageDone = proj->getDamage( contact, loc );
+		health -= damageDone;
+	}
 }
 
 void Player::testWorldCollision( Hitbox* toTest ) {
@@ -59,10 +68,12 @@ void Player::testWorldCollision( Hitbox* toTest ) {
 
 std::vector<Projectile*> Player::getProjectiles() {
 	std::vector<Projectile*> toReturn;
-	std::vector<Projectile*> w1Proj = weapon1->getProjectiles();
-	std::vector<Projectile*> w2Proj = weapon2->getProjectiles();
-	toReturn.insert( toReturn.begin(), w1Proj.begin(), w1Proj.end() );
-	toReturn.insert( toReturn.begin(), w2Proj.begin(), w2Proj.end() );
+	if( health > 0 ) {
+		std::vector<Projectile*> w1Proj = weapon1->getProjectiles();
+		std::vector<Projectile*> w2Proj = weapon2->getProjectiles();
+		toReturn.insert( toReturn.begin(), w1Proj.begin(), w1Proj.end() );
+		toReturn.insert( toReturn.begin(), w2Proj.begin(), w2Proj.end() );
+	}
 	return toReturn;
 }
 
@@ -70,8 +81,8 @@ void Player::setForward( bool newVal ) { forward = newVal; }
 void Player::setBackward( bool newVal ) { backward = newVal; }
 void Player::setLeft( bool newVal ) { left = newVal; }
 void Player::setRight( bool newVal ) { right = newVal; }
-void Player::triggerWeapon1() { weapon1->trigger(); }
-void Player::triggerWeapon2() { weapon2->trigger(); }
+void Player::triggerWeapon1() { if(health > 0) weapon1->trigger(); }
+void Player::triggerWeapon2() { if(health > 0) weapon2->trigger(); }
 void Player::releaseWeapon1() { weapon1->release(); }
 void Player::releaseWeapon2() { weapon2->release(); }
 
@@ -95,6 +106,7 @@ void Player::move( float dt ) {
 }
 
 void Player::reset( glm::vec3 newLoc, float newDir ){ 
+	health = 100;
 	loc = newLoc; 
 	prevloc = newLoc;
 	dir = newDir;
@@ -102,7 +114,11 @@ void Player::reset( glm::vec3 newLoc, float newDir ){
 	hitbox->update(loc, dir);
 	weapon1->update(loc, dir, 0);
 	weapon2->update(loc, dir, 0);
-	alive = true;
+	forward = false;
+	backward = false;
+	left = false;
+	right = false;
 }
 
 Hitbox* Player::getHitbox() { return hitbox; }
+float Player::getHealth() { return health; }
