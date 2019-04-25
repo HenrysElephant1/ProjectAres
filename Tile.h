@@ -28,6 +28,7 @@ public:
 	virtual ~Tile();
 	
 	virtual void display() = 0;
+	virtual int getType() = 0;
 	static Tile* createTile(int x, int y, int tileType);
 	void testPlayerCollision( Player *p );
 	void testProjectileCollision( Projectile *p );
@@ -36,12 +37,14 @@ public:
 class FloorTile : public Tile {
 public:
 	FloorTile( int x, int y );
+	int getType();
 	void display();
 };
 
 class WallTile : public Tile {
 public:
 	WallTile( int x, int y );
+	int getType();
 	void display();
 };
 

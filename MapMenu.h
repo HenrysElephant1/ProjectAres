@@ -3,19 +3,18 @@
 
 #include "MenuState.h"
 #include "MainMenu.h"
-#include "Map.h"
+#include "MapBuilder.h"
 
 class MainMenu;
+class MapBuilder;
 class MapMenu: public MenuState {
 private:
-	Button *backButton, *createMapButton, *loadMapButton, *editMapButton;
-	MainMenu *mm;
-
-	Map *map;
-	float viewHeight;
+	Button* backButton, *createMapButton, *loadMapButton, *editMapButton;
+	MainMenu* mm;
+	MapBuilder* mb;
 
 public:
-	MapMenu( MainMenu *upMenu, Map *m );
+	MapMenu( MainMenu *upMenu );
 	~MapMenu();
 
 	// Functions inherited from State
@@ -29,7 +28,7 @@ public:
 	void mouseReleased( int x, int y );
 	void mouseMoved( int dx, int dy );
 
-	void getTileClicked( int mx, int my, int &retTileX, int &retTileY );
+	//void getTileClicked( int mx, int my, int &retTileX, int &retTileY );
 };
 
 #endif

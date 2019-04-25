@@ -19,6 +19,7 @@ private:
 	PlayerMenu *pm;
 	MapMenu *mm;
 
+	int mapNum;
 	Map *map;
 
 	Player *p1, *p2;

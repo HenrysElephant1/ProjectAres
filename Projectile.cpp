@@ -62,7 +62,7 @@ void BasicProjectile::testMapHit( Hitbox *toTest ) {
 ReboundProjectile::ReboundProjectile( glm::vec3 initLoc, float dir ): Projectile(initLoc) {
 	vel = glm::vec3( Sin(dir) * REBOUND_PROJECTILE_SPEED, 0, Cos(dir) * REBOUND_PROJECTILE_SPEED );
 	timer = 2;
-}  
+}
 
 ReboundProjectile::~ReboundProjectile() {}
 
@@ -93,12 +93,10 @@ bool ReboundProjectile::shouldTestPlayerHit() { return true; }
 void ReboundProjectile::testMapHit( Hitbox *toTest ) {
 	glm::vec3 contactPos, contactVec;
 	bool collision = testHitboxIntersection( toTest, false, &contactPos, &contactVec );
-	int i=0;
-	while( collision && i<2 ) {
+	while( collision ) {
 		prev = contactPos + contactVec * (float).01;
 		loc = contactPos + contactVec;
 		vel = glm::normalize( contactVec ) * (float)REBOUND_PROJECTILE_SPEED;
 		collision = testHitboxIntersection( toTest, false, &contactPos, &contactVec );
-		i++;
 	}
 }

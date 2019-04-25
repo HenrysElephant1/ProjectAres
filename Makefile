@@ -31,6 +31,7 @@ ActiveGame.o: ActiveGame.cpp ActiveGame.h
 MenuState.o: MenuState.cpp MenuState.h
 MainMenu.o: MainMenu.cpp MainMenu.h
 MapMenu.o: MapMenu.cpp MapMenu.h
+MapBuilder.o: MapBuilder.cpp MapBuilder.h
 PlayerMenu.o: PlayerMenu.cpp PlayerMenu.h
 PauseMenu.o: PauseMenu.cpp PauseMenu.h
 Button.o: Button.cpp Button.h
@@ -52,7 +53,7 @@ EndGameStates.o: EndGameStates.cpp EndGameStates.h
 	g++ -std=c++11 -c $(CFLG) $<
 
 
-Ares: Main.o GameManager.o GLManager.o State.o ActiveGame.o MenuState.o MainMenu.o MapMenu.o PlayerMenu.o PauseMenu.o Button.o Player.o Hitbox.o Weapon.o Projectile.o Model.o Map.o Tile.o AssimpAdaptor.o Model.o EndGameStates.o
+Ares: Main.o GameManager.o GLManager.o State.o ActiveGame.o MenuState.o MainMenu.o MapMenu.o MapBuilder.o PlayerMenu.o PauseMenu.o Button.o Player.o Hitbox.o Weapon.o Projectile.o Model.o Map.o Tile.o AssimpAdaptor.o Model.o EndGameStates.o
 	g++ -O3 -o $@ $^ $(LIBS)
 
 clean:
