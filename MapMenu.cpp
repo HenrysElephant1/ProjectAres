@@ -44,17 +44,20 @@ void MapMenu::render() {
 	GLManager::beginRender();
 
 	glPushMatrix();
-	double Mx = mapLoc.x;
-	double My = mapLoc.y;
-	double Mz = mapLoc.z;
-	double Ex = eyeLoc.x;
-	double Ey = eyeLoc.y;
-	double Ez = eyeLoc.z;
-	gluLookAt(Ex,Ey,Ez, Mx,My,Mz, 0,0,-1);
+	// double Mx = mapLoc.x;
+	// double My = mapLoc.y;
+	// double Mz = mapLoc.z;
+	// double Ex = eyeLoc.x;
+	// double Ey = eyeLoc.y;
+	// double Ez = eyeLoc.z;
+	// gluLookAt(Ex,Ey,Ez, Mx,My,Mz, 0,0,-1);
+
+	gluLookAt(0,2,7, 0,1,0, 0,0,-1);
+
 
 	GLManager::doLighting();
 
-	map->display();
+	// map->display();
 
 	glPopMatrix();
 
