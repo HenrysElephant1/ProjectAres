@@ -40,6 +40,9 @@ void ActiveGame::render() {
 
 	glPopMatrix();
 
+	p1->displayHealthBar(true);
+	p2->displayHealthBar(false);
+
 	GLManager::endRender();
 	GLManager::debug("Game Render");
 }

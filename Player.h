@@ -8,6 +8,10 @@
 #include "Weapon.h"
 #include "Projectile.h"
 
+#define MAX_HEALTH 100.0
+
+static std::string healthBarTexName = "textures/oil.png";
+
 class Player {
 private:
 	// Player attributes
@@ -32,12 +36,15 @@ private:
 	void turn( float dt );
 	void move( float dt );
 
+	static GLuint healthBarTex;
+
 public:
 	Player();
 	~Player();
 
 	// Game loop functions
 	void display();
+	void displayHealthBar( bool flipHorizontal );
 	void update( float dt );
 	void testHit( Projectile* proj ); // Test projectile hit and decrease health if necessary 
 	void testWorldCollision( Hitbox *toTest ); // Test collision with a world hitbox and don't move if collided

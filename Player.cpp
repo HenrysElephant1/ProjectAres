@@ -1,5 +1,7 @@
 #include "Player.h"
 
+GLuint Player::healthBarTex = 0;
+
 Player::Player() {
 	health = 100.0;
 	weapon1 = new BasicWeapon(glm::vec3(.3, 1, 1));
@@ -8,6 +10,7 @@ Player::Player() {
 	model = new Model(std::string("models/AresTankBase.fbx"));
 	moveSpeed = 20;
 	rotationSpeed = 180;
+	healthBarTex = GLManager::loadTexture(healthBarTexName);
 }
 
 Player::~Player() {
@@ -24,7 +27,7 @@ void Player::display() {
 		glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, shininess );
 		glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, spec_color );
 
-		if( hitTimer > 0 ) { glColor3d(1.0,0.4,0.4); glUseProgram(0); }
+		if( hitTimer > 0 ) { glColor3d(1.0,0.4,0.4); /*glUseProgram(0);*/ }
 		else glColor3d(colr, colg, colb);
 		glPushMatrix();
 		glTranslatef(loc.x,loc.y,loc.z);
@@ -40,8 +43,50 @@ void Player::display() {
 
 		glPopMatrix();
 
-		if( hitTimer > 0 ) { glUseProgram(GLManager::lightingShader); }
+		// if( hitTimer > 0 ) { glUseProgram(GLManager::lightingShader); }
+
 	}
+}
+
+void Player::displayHealthBar( bool flipHorizontal ) {
+	GLManager::switchTo2D();
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, healthBarTex);
+	glPushMatrix();
+	if( flipHorizontal ) glScaled(-1,1,1);
+	float healthBarCoord = health / MAX_HEALTH * .8 + .05;
+	glColor3d(colr,colg,colb);
+	glBegin(GL_QUADS);
+	glTexCoord2f(health/MAX_HEALTH,1); glVertex2d(healthBarCoord,.95);
+	glTexCoord2f(0,1); glVertex2d(.05,.95);
+	glTexCoord2f(0,0); glVertex2d(.05,.85);
+	glTexCoord2f(health/MAX_HEALTH,0); glVertex2d(healthBarCoord,.85);
+	glEnd();
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	GLManager::switchTo3D();
+
+	glUseProgram(0);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	gluLookAt(0,10,10, 0,0,0, 0,1,0);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	if( flipHorizontal ) glScaled(-1,1,1);
+
+	GLManager::doLighting(5.2,10,0);
+	glTranslatef(5.1,6.2,0);
+	glRotatef(35,0,1,0);
+	glScalef(.003,.003,.003);
+	model->display();
+
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+
+	//Now display Tank
 }
 
 void Player::update( float dt ) {
@@ -116,7 +161,7 @@ void Player::move( float dt ) {
 }
 
 void Player::reset( glm::vec3 newLoc, float newDir ){ 
-	health = 100;
+	health = MAX_HEALTH;
 	loc = newLoc; 
 	prevloc = newLoc;
 	dir = newDir;
