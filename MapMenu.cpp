@@ -18,7 +18,7 @@ MapMenu::MapMenu( MainMenu* upMenu ) {
         buttons.push_back(mapBtns[i]);
 	}
 
-    mapNum = 1;
+    mapNum = 0;
 
 	mm = upMenu;
 }
@@ -79,13 +79,13 @@ void MapMenu::mouseReleased( int x, int y ) {
 		setNextState(mm, false);
 	}
     else {
-		// resetting selected map back to default 1
+		// external click - resetting map back to default 1
 		mapBtns[mapNum]->setTexture(mlItems,.5,1,.75,1);
-		mapNum = 1;
+		mapNum = 0;
 
         for( int i=0; i<N_MAPS; i++ ) {
 			if( mapBtns[i]->isActive() && mapBtns[i]->testClick(mc.x, mc.y) ) {
-				mapNum = i+1;
+				mapNum = i;
                 mapBtns[i]->setTexture(mlItems,0,.5,.75,1);
                 
 				mb = new MapBuilder(this, mapNum);
