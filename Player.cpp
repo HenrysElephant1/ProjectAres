@@ -4,8 +4,8 @@ GLuint Player::healthBarTex = 0;
 
 Player::Player() {
 	health = 100.0;
-	weapon1 = new BasicWeapon(glm::vec3(.3, .5, 1));
-	weapon2 = new ReboundWeapon(glm::vec3(-.3, .5, 1));
+	weapon1 = new BasicWeapon(glm::vec3(.3, .8, 1));
+	weapon2 = new ReboundWeapon(glm::vec3(-.3, .8, 1));
 	hitbox = new Hitbox(2,3.5);
 	model = new Model(std::string("models/AresTankBase.fbx"));
 	moveSpeed = 20;
@@ -146,21 +146,21 @@ void Player::setSpeeds( float ms, float rs ) { moveSpeed = ms; rotationSpeed = r
 void Player::setWeapon1( int weapon ) {
 	delete weapon1;
 	if( weapon == 0 )
-		weapon1 = new BasicWeapon(glm::vec3(.3, .5, 1));
+		weapon1 = new BasicWeapon(glm::vec3(.3, .8, 1));
 	else if( weapon == 1 )
-		weapon1 = new ReboundWeapon(glm::vec3(.3, .5, 1));
+		weapon1 = new ReboundWeapon(glm::vec3(.3, .8, 1));
 	else
-		weapon1 = new RapidFireWeapon(glm::vec3(.3, .5, 1));
+		weapon1 = new RapidFireWeapon(glm::vec3(.3, .8, 1));
 }
 
 void Player::setWeapon2( int weapon ) {
 	delete weapon2;
 	if( weapon == 0 )
-		weapon2 = new BasicWeapon(glm::vec3(-.3, .5, 1));
+		weapon2 = new BasicWeapon(glm::vec3(-.3, .8, 1));
 	else if( weapon == 1 )
-		weapon2 = new ReboundWeapon(glm::vec3(-.3, .5, 1));
+		weapon2 = new ReboundWeapon(glm::vec3(-.3, .8, 1));
 	else
-		weapon2 = new RapidFireWeapon(glm::vec3(-.3, .5, 1));
+		weapon2 = new RapidFireWeapon(glm::vec3(-.3, .8, 1));
 }
 
 void Player::turn( float dt ) {
