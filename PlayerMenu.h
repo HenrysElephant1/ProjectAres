@@ -22,6 +22,10 @@ private:
 	Button* backButton;
 	Button* p1ColorButtons[N_COLORS];
 	Button* p2ColorButtons[N_COLORS];
+	Button* p1Weapon1Buttons[3];
+	Button* p2Weapon1Buttons[3];
+	Button* p1Weapon2Buttons[3];
+	Button* p2Weapon2Buttons[3];
 	MainMenu* mm;
 
 	GLuint labelsTex, pmItems;

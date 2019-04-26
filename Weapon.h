@@ -7,6 +7,8 @@
 #include "Model.h"
 #include "GLManager.h"
 
+#define RAPIDFIRE_RATE 20
+
 class Weapon {
 protected:
 	Model* model;
@@ -32,6 +34,7 @@ public:
 
 	// virtual void display() = 0;
 	void display();
+	virtual void updateSub( float dt ) = 0; // Handle more specific behavior needed
 	virtual void trigger() = 0; // Handle behavior when fire key is pressed
 	virtual void release() = 0; // Handle behavior when fire key is released
 };
@@ -44,7 +47,7 @@ public:
 	BasicWeapon( glm::vec3 base );
 	~BasicWeapon();
 
-	// void display(); // Temporary - will just display model from superclass in future
+	void updateSub( float dt );
 	void trigger();
 	void release();
 };
@@ -57,7 +60,21 @@ public:
 	ReboundWeapon( glm::vec3 base );
 	~ReboundWeapon();
 
-	// void display(); // Temporary - will just display model from superclass in future
+	void updateSub( float dt );
+	void trigger();
+	void release();
+};
+
+// Machine-gun style weapon
+class RapidFireWeapon: public Weapon {
+private:
+	float lastFireTime = 0;
+	bool overheated = false;
+public:
+	RapidFireWeapon( glm::vec3 base );
+	~RapidFireWeapon();
+
+	void updateSub( float dt );
 	void trigger();
 	void release();
 };

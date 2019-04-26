@@ -4,8 +4,8 @@ GLuint Player::healthBarTex = 0;
 
 Player::Player() {
 	health = 100.0;
-	weapon1 = new BasicWeapon(glm::vec3(.3, 1, 1));
-	weapon2 = new ReboundWeapon(glm::vec3(-.3, 1, 1));
+	weapon1 = new BasicWeapon(glm::vec3(.3, .5, 1));
+	weapon2 = new ReboundWeapon(glm::vec3(-.3, .5, 1));
 	hitbox = new Hitbox(2,3.5);
 	model = new Model(std::string("models/AresTankBase.fbx"));
 	moveSpeed = 20;
@@ -54,7 +54,7 @@ void Player::displayHealthBar( bool flipHorizontal ) {
 	glBindTexture(GL_TEXTURE_2D, healthBarTex);
 	glPushMatrix();
 	if( flipHorizontal ) glScaled(-1,1,1);
-	float healthBarCoord = health / MAX_HEALTH * .8 + .05;
+	float healthBarCoord = fmax(health,0.0f) / MAX_HEALTH * .8 + .05;
 	glColor3d(colr,colg,colb);
 	glBegin(GL_QUADS);
 	glTexCoord2f(health/MAX_HEALTH,1); glVertex2d(healthBarCoord,.95);
@@ -66,7 +66,7 @@ void Player::displayHealthBar( bool flipHorizontal ) {
 	glDisable(GL_TEXTURE_2D);
 	GLManager::switchTo3D();
 
-	glUseProgram(0);
+	// Display tank next to health bar
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	gluLookAt(0,10,10, 0,0,0, 0,1,0);
@@ -85,8 +85,6 @@ void Player::displayHealthBar( bool flipHorizontal ) {
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
-
-	//Now display Tank
 }
 
 void Player::update( float dt ) {
@@ -145,6 +143,26 @@ void Player::setRGB( float r, float g, float b ) { colr = r; colg = g; colb = b;
 void Player::setHealth( int h ) { health = h; }
 void Player::setSpeeds( float ms, float rs ) { moveSpeed = ms; rotationSpeed = rs; }
 
+void Player::setWeapon1( int weapon ) {
+	delete weapon1;
+	if( weapon == 0 )
+		weapon1 = new BasicWeapon(glm::vec3(.3, .5, 1));
+	else if( weapon == 1 )
+		weapon1 = new ReboundWeapon(glm::vec3(.3, .5, 1));
+	else
+		weapon1 = new RapidFireWeapon(glm::vec3(.3, .5, 1));
+}
+
+void Player::setWeapon2( int weapon ) {
+	delete weapon2;
+	if( weapon == 0 )
+		weapon2 = new BasicWeapon(glm::vec3(-.3, .5, 1));
+	else if( weapon == 1 )
+		weapon2 = new ReboundWeapon(glm::vec3(-.3, .5, 1));
+	else
+		weapon2 = new RapidFireWeapon(glm::vec3(-.3, .5, 1));
+}
+
 void Player::turn( float dt ) {
 	prevdir = dir;
 	int rotVal = left - right;
@@ -174,6 +192,11 @@ void Player::reset( glm::vec3 newLoc, float newDir ){
 	left = false;
 	right = false;
 	hitTimer = 0;
+	weapon1->release();
+	weapon2->release();
+	// Clear recently fired projectiles
+	weapon1->getProjectiles();
+	weapon2->getProjectiles();
 }
 
 Hitbox* Player::getHitbox() { return hitbox; }

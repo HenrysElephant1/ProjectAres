@@ -34,6 +34,8 @@ void ActiveGame::render() {
 	map->display();
 	p1->display();
 	p2->display();
+	glUseProgram(0);
+	glDisable(GL_LIGHTING);
 	for( int i=0; i<projectiles.size(); i++ ) {
 		projectiles[i]->display();
 	}
@@ -102,40 +104,40 @@ void ActiveGame::keyPressed( SDL_Keycode key ) {
 		case SDLK_ESCAPE: pauseGame(); break;
 
 		// P1 controls
-		case SDLK_r: p1->setForward(true); break;
-		case SDLK_f: p1->setBackward(true); break;
-		case SDLK_d: p1->setLeft(true); break;
-		case SDLK_g: p1->setRight(true); break;
+		case SDLK_w: p1->setForward(true); break;
+		case SDLK_s: p1->setBackward(true); break;
+		case SDLK_a: p1->setLeft(true); break;
+		case SDLK_d: p1->setRight(true); break;
 		case SDLK_q: p1->triggerWeapon1(); break;
-		case SDLK_w: p1->triggerWeapon2(); break;
+		case SDLK_e: p1->triggerWeapon2(); break;
 
 		// P2 controls
-		case SDLK_o: p2->setForward(true); break;
-		case SDLK_l: p2->setBackward(true); break;
-		case SDLK_k: p2->setLeft(true); break;
-		case SDLK_SEMICOLON: p2->setRight(true); break;
-		case SDLK_RIGHTBRACKET: p2->triggerWeapon1(); break;
-		case SDLK_BACKSLASH: p2->triggerWeapon2(); break;
+		case SDLK_i: p2->setForward(true); break;
+		case SDLK_k: p2->setBackward(true); break;
+		case SDLK_j: p2->setLeft(true); break;
+		case SDLK_l: p2->setRight(true); break;
+		case SDLK_u: p2->triggerWeapon1(); break;
+		case SDLK_o: p2->triggerWeapon2(); break;
 	}
 }
 
 void ActiveGame::keyReleased( SDL_Keycode key ) {
 	switch( key ) {
 		// P1 controls
-		case SDLK_r: p1->setForward(false); break;
-		case SDLK_f: p1->setBackward(false); break;
-		case SDLK_d: p1->setLeft(false); break;
-		case SDLK_g: p1->setRight(false); break;
+		case SDLK_w: p1->setForward(false); break;
+		case SDLK_s: p1->setBackward(false); break;
+		case SDLK_a: p1->setLeft(false); break;
+		case SDLK_d: p1->setRight(false); break;
 		case SDLK_q: p1->releaseWeapon1(); break;
-		case SDLK_w: p1->releaseWeapon2(); break;
+		case SDLK_e: p1->releaseWeapon2(); break;
 
 		// P2 controls
-		case SDLK_o: p2->setForward(false); break;
-		case SDLK_l: p2->setBackward(false); break;
-		case SDLK_k: p2->setLeft(false); break;
-		case SDLK_SEMICOLON: p2->setRight(false); break;
-		case SDLK_RIGHTBRACKET: p2->releaseWeapon1(); break;
-		case SDLK_BACKSLASH: p2->releaseWeapon2(); break;
+		case SDLK_i: p2->setForward(false); break;
+		case SDLK_k: p2->setBackward(false); break;
+		case SDLK_j: p2->setLeft(false); break;
+		case SDLK_l: p2->setRight(false); break;
+		case SDLK_u: p2->releaseWeapon1(); break;
+		case SDLK_o: p2->releaseWeapon2(); break;
 	}
 }
 

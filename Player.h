@@ -64,6 +64,8 @@ public:
 	void setRGB( float r, float g, float b );
 	void setHealth( int h );
 	void setSpeeds( float ms, float rs );
+	void setWeapon1( int weapon );
+	void setWeapon2( int weapon );
 
 	// Reset on new game
 	void reset( glm::vec3 newLoc, float newDir );
