@@ -16,4 +16,4 @@ P1: WASD to move, Q and E to fire weapons <br>
 P2: IJKL; to move, U and O to fire weapons <br>
 
 ## NOTE:
-This program uses SDL2, assimp, and glm, which may need to be installed on your computer. All can be installed from the command line
+This program uses SDL2, assimp, and glm, which may need to be installed on your computer. All can be installed from the command line. Please note however that we never got the chance to test this on a Windows or a Linux machine. All three of us use Mac and OpenGL often doesn't behave between platforms so it's very possible that this will not run other OS's.
