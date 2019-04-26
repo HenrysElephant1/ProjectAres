@@ -16,11 +16,13 @@ MapBuilder::MapBuilder( MapMenu* upMenu, int mNum ) {
     saveButton->setTexture(buttonsTex,0,1,0,.25);
     buttons.push_back(saveButton);
 
-    p1Button = new Button(1.4,.4,.5,.5);
-    p1Button->setTexture(playersTex,0,1,.5,.75);
+    p1Button = new Button(1.4,.4,.15,.15);
+    p1Button->setTexture(playersTex,0,.35,.5,.75);
+    buttons.push_back(p1Button);
 
-    p2Button = new Button(1.4,.2,.5,.5);
-    p2Button->setTexture(playersTex,0,1,.25,.5);
+    p2Button = new Button(1.4,.2,.15,.15);
+    p2Button->setTexture(playersTex,0,.35,.25,.5);
+    buttons.push_back(p2Button);
 
 	ml = upMenu;    // reference to MapMenu
     mapNum = mNum;  // number of the map that's being edited
@@ -111,6 +113,12 @@ void MapBuilder::mouseReleased( int x, int y ) {
 
         setNextState(ml, true);
     }
+    else if( p1Button->isActive() && p1Button->testClick(mc.x,mc.y) ) {
+        mode = Mode::P1;
+    }
+    else if( p2Button->isActive() && p2Button->testClick(mc.x,mc.y) ) {
+        mode = Mode::P2;
+    }
     else {
         int tx, ty;
         getTileClicked(x,y,tx,ty);
@@ -120,14 +128,7 @@ void MapBuilder::mouseReleased( int x, int y ) {
         {
             case Mode::TILE:
             default: {
-                int clickedTileType = map->getTileType(tx, ty);
-
-                // checking if clicked tile is actually on the map
-                if(clickedTileType != -1) {
-                    // toggling between Wall-tile and Floor-tile
-                    int oppositeTile = 1 - clickedTileType;
-                    map->setTile(tx, ty, oppositeTile);
-                }
+                map->reverseTile(tx,ty);
                 break;
             }
             case Mode::P1:

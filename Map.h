@@ -21,13 +21,18 @@ public:
 	void exportMap(int mapNum);
 
 	void display();
+
 	int getTileType(int x, int y);
 	bool isValidTile(int x, int y);
 	bool isValidSet(int x, int y, int tileType);
+
+	void reverseTile(int x, int y);
 	void setTile(int tilesInd, Tile* tile);
 	bool setTile(int x, int y, int tileType);
+
 	void setP1StartPosition(int x, int y);
 	void setP2StartPosition(int x, int y);
+	
 	void testPlayerCollision( Player *p );
 	void testProjectileCollision( Projectile *p );
 	

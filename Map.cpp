@@ -101,13 +101,14 @@ bool Map::isValidTile(int x, int y) {
 bool Map::isValidSet(int x, int y, int tileType) {
 	bool wallInPlayer = tileType == Tile::WALL && ( (x == p1StartCol && y == p1StartRow) || (x == p2StartCol && y == p2StartRow) );
 
-	return isValidTile(x, y) || !wallInPlayer;
+	return isValidTile(x, y) && !wallInPlayer;
 }
 
 int Map::getTileType(int x, int y) {
 	if( !isValidTile(x, y) ) {
 		return -1;
 	}
+	
 	return tiles[x + y*x_size]->getType();
 }
 
@@ -127,6 +128,16 @@ bool Map::setTile(int x, int y, int tileType) {
 
 	setTile(tileInd, Tile::createTile(x, y, tileType));
 	return true;
+}
+
+void Map::reverseTile(int x, int y) {
+	int clickedTileType = getTileType(x, y);
+	// checking if clicked tile is actually on the map
+	if(clickedTileType != -1) {
+		// toggling between Wall-tile and Floor-tile
+		int oppositeTile = 1 - clickedTileType;
+		setTile(x, y, oppositeTile);
+	}
 }
 
 void Map::setP1StartPosition(int x, int y) {
