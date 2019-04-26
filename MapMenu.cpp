@@ -90,6 +90,7 @@ void MapMenu::mouseReleased( int x, int y ) {
                 
 				mb = new MapBuilder(this, mapNum);
                 setNextState(mb, false);
+				break;
 			}
 		}
     }

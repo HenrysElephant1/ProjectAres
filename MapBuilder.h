@@ -8,8 +8,18 @@
 class MapMenu;
 class MapBuilder: public MenuState {
 private:
+    enum Mode {
+        TILE,
+        P1,
+        P2
+    };
+    int mode = Mode::TILE;
+
 	Button* backButton, *saveButton;
+    Button* p1Button, *p2Button;
 	MapMenu* ml;
+
+    GLuint playersTex;
 
     int mapNum;
     Map* map;

@@ -5,6 +5,8 @@ MapBuilder::MapBuilder( MapMenu* upMenu, int mNum ) {
 	GLuint labelsTex = GLManager::loadTexture(filename);
     filename = "textures/MapMenuButtons.png";
     GLuint buttonsTex = GLManager::loadTexture(filename);
+    filename = "textures/WinScreenItems.png";
+    playersTex = GLManager::loadTexture(filename);
 
 	backButton = new Button(1.4,.8,.5,.12);
 	backButton->setTexture(labelsTex,0,1,.5,.75);
@@ -14,22 +16,34 @@ MapBuilder::MapBuilder( MapMenu* upMenu, int mNum ) {
     saveButton->setTexture(buttonsTex,0,1,0,.25);
     buttons.push_back(saveButton);
 
-	ml = upMenu;
-    mapNum = mNum;
+    p1Button = new Button(1.4,.4,.5,.5);
+    p1Button->setTexture(playersTex,0,1,.5,.75);
+
+    p2Button = new Button(1.4,.2,.5,.5);
+    p2Button->setTexture(playersTex,0,1,.25,.5);
+
+	ml = upMenu;    // reference to MapMenu
+    mapNum = mNum;  // number of the map that's being edited
 
     map = Map::loadMap(mNum);
+    // setting appropriate view height based on map dimensions
     viewHeight = GLManager::getMapViewHeight( map->getUnitWidth(), map->getUnitHeight() );
 }
 
 MapBuilder::~MapBuilder() {
     delete backButton;
     delete saveButton;
+    delete p1Button,
+    delete p2Button;
     delete map;
 }
 
+
+/**
+ * Renders map and buttons
+ */
 void MapBuilder::render() {
 	GLManager::beginRender();
-
 	glm::vec3 mapLoc = map->getCenter();
 	glm::vec3 eyeLoc = mapLoc + glm::vec3(0,viewHeight,0);
 
@@ -58,6 +72,7 @@ void MapBuilder::update( float dt ) {
 
 void MapBuilder::keyPressed( SDL_Keycode key ) {
 	switch( key ) {
+        // same as pressing Back button
 		case SDLK_ESCAPE: setNextState(ml, true); break;
 	}
 }
@@ -77,6 +92,12 @@ void MapBuilder::mousePressed( int x, int y ) {
 	}
 }
 
+/**
+ * Mouse-click handler
+ * Back button click: returns to MapMenu view
+ * Save button click: saves map to text file, and then returns to MapMenu view
+ * Else: Calculates clicked Tile coordinates, and changes that Tile to Wall/Floor (if within bounds)
+ */
 void MapBuilder::mouseReleased( int x, int y ) {
 	mouseDown = false;
 	Loc mc = GLManager::getMenuCoords(x,y);
@@ -95,9 +116,30 @@ void MapBuilder::mouseReleased( int x, int y ) {
         getTileClicked(x,y,tx,ty);
         std::cout << "Got Tile: " << tx << ", " << ty << std::endl;
 
-        // toggling between Wall-tile and Floor-tile
-        int oppositeTile = 1 - map->getTile(tx, ty)->getType();
-        map->setTile(tx, ty, oppositeTile);
+        switch (mode)
+        {
+            case Mode::TILE:
+            default: {
+                int clickedTileType = map->getTileType(tx, ty);
+
+                // checking if clicked tile is actually on the map
+                if(clickedTileType != -1) {
+                    // toggling between Wall-tile and Floor-tile
+                    int oppositeTile = 1 - clickedTileType;
+                    map->setTile(tx, ty, oppositeTile);
+                }
+                break;
+            }
+            case Mode::P1:
+                map->setP1StartPosition(tx,ty);
+                break;
+            case Mode::P2:
+                map->setP2StartPosition(tx,ty);
+                break;
+        }
+
+        // defaulting back to tile mode
+        mode = Mode::TILE;
     }
 }
 
@@ -105,7 +147,10 @@ void MapBuilder::mouseMoved( int dx, int dy ) {
 	// if( mouseDown ) setView(dx, dy);
 }
 
-
+/**
+ * Loads retTileX and retTileY with approximate coordinate of Tile clicked on the screen
+ * Is not limited to the dimensions of the map
+ */
 void MapBuilder::getTileClicked( int mx, int my, int &retTileX, int &retTileY ) {
 	glm::vec3 mapLoc = map->getCenter();
 	glm::vec3 eyeLoc = mapLoc + glm::vec3(0,viewHeight,0);

@@ -88,21 +88,27 @@ void Map::display() {
 }
 
 /**
- * Returns true if coordinates are outside map, including the outer walls
- * or if a wall tile is about to be placed in a player's starting position
+ * Returns true if coordinates are inside map, excluding the outer walls
  * */
-bool Map::invalidSet(int x, int y, int tileType) {
-	bool outsideRange = x <= 0 || x >= x_size -1 || y <= 0 || y >= y_size - 1;
-	bool wallInPlayer = tileType == Tile::WALL && ( (x == p1StartCol && y == p1StartRow) || (x == p2StartCol && y == p2StartRow) );
-
-	return outsideRange || wallInPlayer;
+bool Map::isValidTile(int x, int y) {
+	return (x > 0 && x < x_size -1) && (y > 0 && y < y_size - 1);
 }
 
-Tile* Map::getTile(int x, int y) {
-	if( x < 0 || x >= x_size || y < 0 || y >= y_size ) {
-		return NULL;
+/**
+ * Returns true if coordinates are inside map, excluding the outer walls
+ * or if a wall tile is about to be placed in a player's starting position
+ * */
+bool Map::isValidSet(int x, int y, int tileType) {
+	bool wallInPlayer = tileType == Tile::WALL && ( (x == p1StartCol && y == p1StartRow) || (x == p2StartCol && y == p2StartRow) );
+
+	return isValidTile(x, y) || !wallInPlayer;
+}
+
+int Map::getTileType(int x, int y) {
+	if( !isValidTile(x, y) ) {
+		return -1;
 	}
-	return tiles[x + y*x_size];
+	return tiles[x + y*x_size]->getType();
 }
 
 void Map::setTile(int tileInd, Tile* tile) {
@@ -113,7 +119,7 @@ void Map::setTile(int tileInd, Tile* tile) {
 
 bool Map::setTile(int x, int y, int tileType) {
 	// Checking bounds and restricting changing tile-borders, which should remain walls
-	if( invalidSet(x, y, tileType) ) {
+	if( !isValidSet(x, y, tileType) ) {
 		return false;
 	}
 
