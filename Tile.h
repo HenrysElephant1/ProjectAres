@@ -38,7 +38,7 @@ public:
 class FloorTile : public Tile {
 public:
 	FloorTile( int x, int y );
-	~FloorTile();
+	virtual ~FloorTile();
 	int getType();
 	void display();
 };
