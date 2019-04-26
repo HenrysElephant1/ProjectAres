@@ -15,7 +15,7 @@ void Weapon::display() {
 	glTranslatef(baseOffset.x,baseOffset.y,baseOffset.z);
 	glRotated(-90,0,1,0);
 	glScaled(.01,.01,.01);
-	glColor3d(0,0,1);
+	// glColor3d(0,0,1);
 	model->display();
 	glPopMatrix();
 }
