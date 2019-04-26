@@ -85,7 +85,9 @@ void MapBuilder::mouseReleased( int x, int y ) {
 		setNextState(ml, true);
 	}
     else if( saveButton->isActive() && saveButton->testClick(mc.x, mc.y) ) {
+        // storing changes to map file in disk
         map->exportMap(mapNum);
+
         setNextState(ml, true);
     }
     else {

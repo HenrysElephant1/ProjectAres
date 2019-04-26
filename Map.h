@@ -22,7 +22,7 @@ public:
 
 	void display();
 	Tile* getTile(int x, int y);
-	bool isOutOfBounds(int x, int y);
+	bool invalidSet(int x, int y, int tileType);
 	void setTile(int tilesInd, Tile* tile);
 	bool setTile(int x, int y, int tileType);
 	void setP1StartPosition(int x, int y);

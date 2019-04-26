@@ -89,9 +89,13 @@ void Map::display() {
 
 /**
  * Returns true if coordinates are outside map, including the outer walls
+ * or if a wall tile is about to be placed in a player's starting position
  * */
-bool Map::isOutOfBounds(int x, int y) {
-	return x <= 0 || x >= x_size -1 || y <= 0 || y >= y_size - 1;
+bool Map::invalidSet(int x, int y, int tileType) {
+	bool outsideRange = x <= 0 || x >= x_size -1 || y <= 0 || y >= y_size - 1;
+	bool wallInPlayer = tileType == Tile::WALL && ( (x == p1StartCol && y == p1StartRow) || (x == p2StartCol && y == p2StartRow) );
+
+	return outsideRange || wallInPlayer;
 }
 
 Tile* Map::getTile(int x, int y) {
@@ -109,7 +113,7 @@ void Map::setTile(int tileInd, Tile* tile) {
 
 bool Map::setTile(int x, int y, int tileType) {
 	// Checking bounds and restricting changing tile-borders, which should remain walls
-	if( isOutOfBounds(x, y) ) {
+	if( invalidSet(x, y, tileType) ) {
 		return false;
 	}
 
