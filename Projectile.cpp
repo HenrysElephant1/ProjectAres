@@ -100,3 +100,41 @@ void ReboundProjectile::testMapHit( Hitbox *toTest ) {
 		collision = testHitboxIntersection( toTest, false, &contactPos, &contactVec );
 	}
 }
+
+
+
+
+RapidFireProjectile::RapidFireProjectile( glm::vec3 initLoc, float dir ): Projectile(initLoc) {
+	vel = glm::vec3( Sin(dir) * RAPIDFIRE_PROJECTILE_SPEED, 0, Cos(dir) * RAPIDFIRE_PROJECTILE_SPEED );
+	timer = 2;
+}
+
+RapidFireProjectile::~RapidFireProjectile() {}
+
+void RapidFireProjectile::display() {
+	glPushMatrix();
+	glTranslatef(loc.x, loc.y, loc.z);
+	glColor3d(0,1,0);
+	glBegin(GL_QUADS);
+	glVertex3d( .2, .5, .2);
+	glVertex3d( .2, .5,-.2);
+	glVertex3d(-.2, .5,-.2);
+	glVertex3d(-.2, .5, .2);
+	glEnd();
+	// model->display();
+	glPopMatrix();
+}
+
+void RapidFireProjectile::update( float dt ) {
+	timer -= dt;
+	destroy = timer <= 0;
+	prev = loc;
+	loc += vel * dt;
+}
+
+float RapidFireProjectile::getDamage( bool contact, glm::vec3 pLoc ) { return (contact?4:0); }
+bool RapidFireProjectile::shouldTestPlayerHit() { return true; }
+
+void RapidFireProjectile::testMapHit( Hitbox *toTest ) {
+	testHitboxIntersection( toTest, true );
+}

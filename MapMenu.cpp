@@ -7,13 +7,13 @@ MapMenu::MapMenu( MainMenu* upMenu ) {
 	filename = "textures/PlayerMenuItems.png";
 	mlItems = GLManager::loadTexture(filename);
 
-	backButton = new Button(1.4,.8,.5,.12);
+	backButton = new Button(0,.8,.5,.12);
 	backButton->setTexture(labelsTex,0,1,.5,.75);
 	buttons.push_back(backButton);
 
     for( int i=0; i<N_MAPS; i++ ) {
 		float yloc = ((N_MAPS-2)/2-i)*.22;
-        mapBtns[i] = new Button(-.15,yloc,.4,.2,COLOR_OPTIONS[i][0],COLOR_OPTIONS[i][1],COLOR_OPTIONS[i][2]);
+        mapBtns[i] = new Button(0,yloc,.4,.2,COLOR_OPTIONS[i][0],COLOR_OPTIONS[i][1],COLOR_OPTIONS[i][2]);
         mapBtns[i]->setTexture(mlItems,.5,1,.75,1);
         buttons.push_back(mapBtns[i]);
 	}
@@ -86,7 +86,7 @@ void MapMenu::mouseReleased( int x, int y ) {
         for( int i=0; i<N_MAPS; i++ ) {
 			if( mapBtns[i]->isActive() && mapBtns[i]->testClick(mc.x, mc.y) ) {
 				mapNum = i;
-                mapBtns[i]->setTexture(mlItems,0,.5,.75,1);
+                // mapBtns[i]->setTexture(mlItems,0,.5,.75,1);
                 
 				mb = new MapBuilder(this, mapNum);
                 setNextState(mb, false);

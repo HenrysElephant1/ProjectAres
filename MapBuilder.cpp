@@ -8,19 +8,19 @@ MapBuilder::MapBuilder( MapMenu* upMenu, int mNum ) {
     filename = "textures/WinScreenItems.png";
     playersTex = GLManager::loadTexture(filename);
 
-	backButton = new Button(1.4,.8,.5,.12);
+	backButton = new Button(1.2,.8,.5,.12);
 	backButton->setTexture(labelsTex,0,1,.5,.75);
 	buttons.push_back(backButton);
 
-    saveButton = new Button(1.4,.6,.5,.12);
+    saveButton = new Button(1.2,.6,.5,.12);
     saveButton->setTexture(buttonsTex,0,1,0,.25);
     buttons.push_back(saveButton);
 
-    p1Button = new Button(1.4,.4,.15,.15);
+    p1Button = new Button(1.2,.4,.15,.15);
     p1Button->setTexture(playersTex,0,.35,.5,.75);
     buttons.push_back(p1Button);
 
-    p2Button = new Button(1.4,.2,.15,.15);
+    p2Button = new Button(1.2,.2,.15,.15);
     p2Button->setTexture(playersTex,0,.35,.25,.5);
     buttons.push_back(p2Button);
 

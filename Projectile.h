@@ -6,7 +6,8 @@
 #include "Hitbox.h"
 
 #define BASIC_PROJECTILE_SPEED 40.0
-#define REBOUND_PROJECTILE_SPEED 40.0
+#define REBOUND_PROJECTILE_SPEED 30.0
+#define RAPIDFIRE_PROJECTILE_SPEED 60.0
 
 class Projectile {
 protected:
@@ -55,6 +56,23 @@ private:
 public:
 	ReboundProjectile( glm::vec3 initLoc, float dir );
 	~ReboundProjectile();
+
+	// Inherited methods
+	void display();
+	void update( float dt );
+	float getDamage( bool contact, glm::vec3 pLoc );
+	bool shouldTestPlayerHit();
+	void testMapHit( Hitbox* toTest );
+};
+
+
+class RapidFireProjectile: public Projectile {
+private:
+	glm::vec3 vel; // Velocity of projectile
+
+public:
+	RapidFireProjectile( glm::vec3 initLoc, float dir );
+	~RapidFireProjectile();
 
 	// Inherited methods
 	void display();
