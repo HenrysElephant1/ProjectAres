@@ -190,3 +190,53 @@ void Hitbox::display() {
 	glPopMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
+
+void Hitbox::displayWithTexture( GLuint tex ) {
+	glPushMatrix();
+	glTranslatef(loc.x,loc.y,loc.z);
+	glRotatef(dir,0,1,0);
+	glBegin(GL_QUADS);
+	glNormal3f(-1,0,0);
+	glTexCoord2f(0,0); glVertex3f( -width/2,      0,  length/2);
+	glTexCoord2f(0,1); glVertex3f( -width/2, height,  length/2);
+	glTexCoord2f(1,1); glVertex3f( -width/2, height, -length/2);
+	glTexCoord2f(1,0); glVertex3f( -width/2,      0, -length/2);
+
+	glNormal3f(1,0,0);
+	glTexCoord2f(0,0); glVertex3f(  width/2,      0,  length/2);
+	glTexCoord2f(0,1); glVertex3f(  width/2, height,  length/2);
+	glTexCoord2f(1,1); glVertex3f(  width/2, height, -length/2);
+	glTexCoord2f(1,0); glVertex3f(  width/2,      0, -length/2);
+
+	glNormal3f(0,0,1);
+	glTexCoord2f(0,0); glVertex3f(  width/2,      0,  length/2);
+	glTexCoord2f(0,1); glVertex3f(  width/2, height,  length/2);
+	glTexCoord2f(1,1); glVertex3f( -width/2, height,  length/2);
+	glTexCoord2f(1,0); glVertex3f( -width/2,      0,  length/2);
+
+	glNormal3f(0,0,-1);
+	glTexCoord2f(0,0); glVertex3f(  width/2,      0, -length/2);
+	glTexCoord2f(0,1); glVertex3f(  width/2, height, -length/2);
+	glTexCoord2f(1,1); glVertex3f( -width/2, height, -length/2);
+	glTexCoord2f(1,0); glVertex3f( -width/2,      0, -length/2);
+
+	glNormal3f(0,1,0);
+	glTexCoord2f(0,0); glVertex3f(  width/2, height,  length/2);
+	glTexCoord2f(0,1); glVertex3f(  width/2, height, -length/2);
+	glTexCoord2f(1,1); glVertex3f( -width/2, height, -length/2);
+	glTexCoord2f(1,0); glVertex3f( -width/2, height,  length/2);
+
+	glNormal3f(0,1,0);
+	glTexCoord2f(0,0); glVertex3f(  width/2, height,  length/2);
+	glTexCoord2f(0,1); glVertex3f(  width/2, height, -length/2);
+	glTexCoord2f(1,1); glVertex3f( -width/2, height, -length/2);
+	glTexCoord2f(1,0); glVertex3f( -width/2, height,  length/2);
+
+	glNormal3f(0,-1,0);
+	glTexCoord2f(0,0); glVertex3f(  width/2,      0,  length/2);
+	glTexCoord2f(0,1); glVertex3f(  width/2,      0, -length/2);
+	glTexCoord2f(1,1); glVertex3f( -width/2,      0, -length/2);
+	glTexCoord2f(1,0); glVertex3f( -width/2,      0,  length/2);
+	glEnd();
+	glPopMatrix();
+}

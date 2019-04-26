@@ -42,6 +42,7 @@ public:
 	bool testPointHit( glm::vec3 pos ); // Test if point is in the hitbox
 	bool testVectorHit( glm::vec3 pos, glm::vec3 vec, glm::vec3 *contactPos = NULL, glm::vec3 *contactVec = NULL ); // Test collision with a vector vec originating from point pos
 	void display();
+	void displayWithTexture( GLuint tex );
 
 	friend bool testHitboxCollision( Hitbox *h1, Hitbox *h2 ); // Test collision with another hitbox
 };

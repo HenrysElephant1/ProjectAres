@@ -150,7 +150,7 @@ void ActiveGame::mouseReleased( int x, int y ) {
 }
 
 void ActiveGame::mouseMoved( int dx, int dy ) {
-	// if( mouseDown ) setView(dx, dy);
+	if( mouseDown ) setView(dx, dy);
 }
 
 void ActiveGame::pauseGame() {
