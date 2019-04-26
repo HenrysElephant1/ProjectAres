@@ -9,9 +9,11 @@ The files in this repository contain:
 * Tile-Maps stored in .txt format
 * Models, Shaders, and Textures for graphics
 
-
 To run, type "make" and "./Ares"
 
 ### Current Controls:
 P1: WASD to move, Q and E to fire weapons <br>
 P2: IJKL; to move, U and O to fire weapons <br>
+
+## NOTE:
+This program uses SDL2, assimp, and glm, which may need to be installed on your computer. All can be installed from the command line
