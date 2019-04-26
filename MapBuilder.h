@@ -8,14 +8,15 @@
 class MapMenu;
 class MapBuilder: public MenuState {
 private:
-	Button* backButton;
-	MapMenu* mm;
+	Button* backButton, *saveButton;
+	MapMenu* ml;
 
+    int mapNum;
     Map* map;
     float viewHeight;
 
 public:
-	MapBuilder( MapMenu* upMenu );
+	MapBuilder( MapMenu* upMenu, int mNum );
 	~MapBuilder();
 
 	// Functions inherited from State

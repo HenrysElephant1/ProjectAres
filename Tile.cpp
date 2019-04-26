@@ -40,7 +40,6 @@ FloorTile::~FloorTile() {
 	}
 }
 
-
 int FloorTile::getType() {
 	return FLOOR;
 }

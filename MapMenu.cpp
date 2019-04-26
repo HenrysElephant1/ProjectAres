@@ -1,63 +1,43 @@
 #include "MapMenu.h"
 
 MapMenu::MapMenu( MainMenu* upMenu ) {
-	std::string filename = "textures/MapMenuButtons.png";
-	GLuint buttonsTex = GLManager::loadTexture(filename);
-	filename = "textures/OtherMenuItems.png";
-	GLuint labelsTex = GLManager::loadTexture(filename);
+	std::string filename = "textures/OtherMenuItems.png";
+	labelsTex = GLManager::loadTexture(filename);
 
-	// Project Ares top label
-	Button* mainLabel = new Button(0,.7,2,.5);
-	mainLabel->setTexture(labelsTex,0,1,.75,1);
-	labels.push_back(mainLabel);
+	filename = "textures/PlayerMenuItems.png";
+	mlItems = GLManager::loadTexture(filename);
 
-	backButton = new Button(0,.3,1,.25);
+	backButton = new Button(1.4,.8,.5,.12);
 	backButton->setTexture(labelsTex,0,1,.5,.75);
 	buttons.push_back(backButton);
 
-	loadMapButton = new Button(0,0,1,.25);
-	loadMapButton->setTexture(buttonsTex,0,1,.5,.75);
-	buttons.push_back(loadMapButton);
+    for( int i=0; i<N_MAPS; i++ ) {
+		float yloc = ((N_MAPS-2)/2-i)*.22;
+        mapBtns[i] = new Button(-.15,yloc,.4,.2);
+        mapBtns[i]->setTexture(mlItems,.5,1,.75,1);
+        buttons.push_back(mapBtns[i]);
+	}
 
-	createMapButton = new Button(0,-.3,1,.25);
-	createMapButton->setTexture(buttonsTex,0,1,.75,1);
-	buttons.push_back(createMapButton);
-
-	editMapButton = new Button(0,-.6,1,.25);
-	editMapButton->setTexture(buttonsTex,0,1,.25,.5);
-	buttons.push_back(editMapButton);
+    mapNum = 1;
 
 	mm = upMenu;
-	mb = new MapBuilder(this);
 }
 
 MapMenu::~MapMenu() {
-	// optional since this only gets called when user presses quit, and program ends anyways
-	delete mb;
-	delete backButton;
-	delete createMapButton;
-	delete loadMapButton;
-	delete editMapButton;
+    delete backButton;
+    for( int i=0; i<N_MAPS; i++ ) {
+        delete mapBtns[i];
+    }
 }
 
 void MapMenu::render() {
 	GLManager::beginRender();
 
 	glPushMatrix();
-	// double Mx = mapLoc.x;
-	// double My = mapLoc.y;
-	// double Mz = mapLoc.z;
-	// double Ex = eyeLoc.x;
-	// double Ey = eyeLoc.y;
-	// double Ez = eyeLoc.z;
-	// gluLookAt(Ex,Ey,Ez, Mx,My,Mz, 0,0,-1);
 
 	gluLookAt(0,2,7, 0,1,0, 0,0,-1);
 
-
 	GLManager::doLighting();
-
-	// map->display();
 
 	glPopMatrix();
 
@@ -66,9 +46,7 @@ void MapMenu::render() {
 	GLManager::endRender();
 }
 
-void MapMenu::update( float dt ) {
-	// th += dt*45;
-}
+void MapMenu::update( float dt ) {}
 
 void MapMenu::keyPressed( SDL_Keycode key ) {
 	switch( key ) {
@@ -96,17 +74,24 @@ void MapMenu::mouseReleased( int x, int y ) {
 	Loc mc = GLManager::getMenuCoords(x,y);
 
 	if( backButton->isActive() && backButton->testClick(mc.x, mc.y) ) {
+		// Passing back user-selected map to MainMenu
+		mm->setMap(mapNum);
 		setNextState(mm, false);
 	}
-	else if( createMapButton->isActive() && createMapButton->testClick(mc.x, mc.y) ) {
-		setNextState(mb, false);
-	}	
-	else if( loadMapButton->isActive() && loadMapButton->testClick(mc.x, mc.y) ) {
-		
-	}	
-	else if( editMapButton->isActive() && editMapButton->testClick(mc.x, mc.y) ) {
-		
-	}	
+    else {
+		mapBtns[mapNum]->setTexture(mlItems,.5,1,.75,1);
+		mapNum = 1;
+
+        for( int i=0; i<N_MAPS; i++ ) {
+			if( mapBtns[i]->isActive() && mapBtns[i]->testClick(mc.x, mc.y) ) {
+				mapNum = i+1;
+                mapBtns[i]->setTexture(mlItems,0,.5,.75,1);
+                
+				mb = new MapBuilder(this, mapNum);
+                setNextState(mb, false);
+			}
+		}
+    }
 }
 
 void MapMenu::mouseMoved( int dx, int dy ) {

@@ -17,7 +17,8 @@ class MainMenu: public MenuState {
 private:
 	Button *playButton, *mapMenuButton, *playerMenuButton, *quitButton;
 	PlayerMenu *pm;
-	MapMenu *mm;
+	//MapMenu *mm;
+	MapMenu *ml;
 
 	int mapNum;
 	Map *map;

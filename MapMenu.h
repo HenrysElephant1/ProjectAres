@@ -5,13 +5,20 @@
 #include "MainMenu.h"
 #include "MapBuilder.h"
 
+const int N_MAPS = 6;
+
 class MainMenu;
 class MapBuilder;
 class MapMenu: public MenuState {
 private:
-	Button* backButton, *createMapButton, *loadMapButton, *editMapButton;
+	Button* backButton;
+    Button* mapBtns[N_MAPS];
 	MainMenu* mm;
-	MapBuilder* mb;
+
+    GLuint labelsTex, mlItems;
+
+    int mapNum;
+    MapBuilder* mb;
 
 public:
 	MapMenu( MainMenu *upMenu );
@@ -27,8 +34,6 @@ public:
 	void mousePressed( int x, int y );
 	void mouseReleased( int x, int y );
 	void mouseMoved( int dx, int dy );
-
-	//void getTileClicked( int mx, int my, int &retTileX, int &retTileY );
 };
 
 #endif

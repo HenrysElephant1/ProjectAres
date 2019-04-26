@@ -1,25 +1,30 @@
 #include "MapBuilder.h"
 
-MapBuilder::MapBuilder( MapMenu* upMenu ) {
+MapBuilder::MapBuilder( MapMenu* upMenu, int mNum ) {
 	std::string filename = "textures/OtherMenuItems.png";
 	GLuint labelsTex = GLManager::loadTexture(filename);
+    filename = "textures/MapMenuButtons.png";
+    GLuint buttonsTex = GLManager::loadTexture(filename);
 
-	backButton = new Button(1.4,.6,.5,.12);
+	backButton = new Button(1.4,.8,.5,.12);
 	backButton->setTexture(labelsTex,0,1,.5,.75);
 	buttons.push_back(backButton);
 
-	mm = upMenu;
-    map = Map::loadMap(0);
+    saveButton = new Button(1.4,.6,.5,.12);
+    saveButton->setTexture(buttonsTex,0,1,0,.25);
+    buttons.push_back(saveButton);
 
+	ml = upMenu;
+    mapNum = mNum;
+
+    map = Map::loadMap(mNum);
     viewHeight = GLManager::getMapViewHeight( map->getUnitWidth(), map->getUnitHeight() );
 }
 
 MapBuilder::~MapBuilder() {
-
-}
-
-Map* getMap() {
-    return new Map("test", 5, 5, 0, 0, 1, 1);
+    delete backButton;
+    delete saveButton;
+    delete map;
 }
 
 void MapBuilder::render() {
@@ -53,7 +58,7 @@ void MapBuilder::update( float dt ) {
 
 void MapBuilder::keyPressed( SDL_Keycode key ) {
 	switch( key ) {
-		case SDLK_ESCAPE: setNextState(mm, false); break;
+		case SDLK_ESCAPE: setNextState(ml, true); break;
 	}
 }
 
@@ -70,10 +75,6 @@ void MapBuilder::mousePressed( int x, int y ) {
 	for( int i=0; i<buttons.size(); i++ ) {
 		buttons[i]->testClick(mc.x, mc.y, true);
 	}
-
-	int tx, ty;
-	getTileClicked(x,y,tx,ty);
-	std::cout << "Got Tile: " << tx << ", " << ty << std::endl;
 }
 
 void MapBuilder::mouseReleased( int x, int y ) {
@@ -81,8 +82,21 @@ void MapBuilder::mouseReleased( int x, int y ) {
 	Loc mc = GLManager::getMenuCoords(x,y);
 
 	if( backButton->isActive() && backButton->testClick(mc.x, mc.y) ) {
-		setNextState(mm, false);
+		setNextState(ml, true);
 	}
+    else if( saveButton->isActive() && saveButton->testClick(mc.x, mc.y) ) {
+        map->exportMap(mapNum);
+        setNextState(ml, true);
+    }
+    else {
+        int tx, ty;
+        getTileClicked(x,y,tx,ty);
+        std::cout << "Got Tile: " << tx << ", " << ty << std::endl;
+
+        // toggling between Wall-tile and Floor-tile
+        int oppositeTile = 1 - map->getTile(tx, ty)->getType();
+        map->setTile(tx, ty, oppositeTile);
+    }
 }
 
 void MapBuilder::mouseMoved( int dx, int dy ) {

@@ -41,16 +41,17 @@ MainMenu::MainMenu() {
 	p2->setRGB(COLOR_OPTIONS[P2_DEFAULT_COLOR][0],COLOR_OPTIONS[P2_DEFAULT_COLOR][1],COLOR_OPTIONS[P2_DEFAULT_COLOR][2]);
 
 	// default map - can be changed by player by going into Map Menu
-	mapNum = 0;
+	mapNum = 1;
 
 	// Create other menus with a reference back to self
 	pm = new PlayerMenu(this, p1, p2);
-	mm = new MapMenu(this);
+	//mm = new MapMenu(this);
+	ml = new MapMenu(this);
 }
 
 MainMenu::~MainMenu() {
 	delete pm;
-	delete mm;
+	delete ml;
 }
 
 void MainMenu::render() {
@@ -105,7 +106,7 @@ void MainMenu::mouseReleased( int x, int y ) {
 		createGame();
 	}
 	else if( mapMenuButton->isActive() && mapMenuButton->testClick(mc.x, mc.y) ) {
-		setNextState(mm, false);
+		setNextState(ml, false);
 	}
 	else if( playerMenuButton->isActive() && playerMenuButton->testClick(mc.x, mc.y) ) {
 		setNextState(pm, false);
@@ -120,7 +121,7 @@ void MainMenu::mouseMoved( int dx, int dy ) {
 }
 
 void MainMenu::setMap( int newMap ) {
-
+	mapNum = newMap;
 }
 
 void MainMenu::createGame() {
@@ -128,6 +129,7 @@ void MainMenu::createGame() {
 	
 	p1->reset(map->getP1StartPos(),0);
 	p2->reset(map->getP2StartPos(),180);
+
 	State* nextState = new ActiveGame( p1, p2, map );
 	setNextState( nextState, true );
 }

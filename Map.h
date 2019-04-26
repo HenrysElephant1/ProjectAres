@@ -11,21 +11,22 @@ class Map {
 private:
 	int x_size, y_size;
 	int p1StartRow, p1StartCol, p2StartRow, p2StartCol;
-	std::string mapName;	// For Map Identification when choosing map
 	Tile** tiles;
 
 public:
-	Map(std::string mapName, int x, int y, int sr1, int sc1, int sr2, int sc2);
+	Map(int x, int y, int sr1, int sc1, int sr2, int sc2);
 	~Map();
 
 	static Map* loadMap(int mapNum);
 	void exportMap(int mapNum);
-	void exportMapScreenshot(int mapNum);
 
 	void display();
-	std::string getName();
 	Tile* getTile(int x, int y);
+	bool isOutOfBounds(int x, int y);
 	void setTile(int tilesInd, Tile* tile);
+	bool setTile(int x, int y, int tileType);
+	void setP1StartPosition(int x, int y);
+	void setP2StartPosition(int x, int y);
 	void testPlayerCollision( Player *p );
 	void testProjectileCollision( Projectile *p );
 	
