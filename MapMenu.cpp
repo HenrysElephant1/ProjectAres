@@ -13,7 +13,7 @@ MapMenu::MapMenu( MainMenu* upMenu ) {
 
     for( int i=0; i<N_MAPS; i++ ) {
 		float yloc = ((N_MAPS-2)/2-i)*.22;
-        mapBtns[i] = new Button(-.15,yloc,.4,.2);
+        mapBtns[i] = new Button(-.15,yloc,.4,.2,COLOR_OPTIONS[i][0],COLOR_OPTIONS[i][1],COLOR_OPTIONS[i][2]);
         mapBtns[i]->setTexture(mlItems,.5,1,.75,1);
         buttons.push_back(mapBtns[i]);
 	}
@@ -79,6 +79,7 @@ void MapMenu::mouseReleased( int x, int y ) {
 		setNextState(mm, false);
 	}
     else {
+		// resetting selected map back to default 1
 		mapBtns[mapNum]->setTexture(mlItems,.5,1,.75,1);
 		mapNum = 1;
 
