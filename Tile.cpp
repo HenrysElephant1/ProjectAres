@@ -3,18 +3,19 @@
 std::string Tile::floorTex = "textures/gravel.png";
 std::string Tile::wallTex = "textures/wall.png";
 
+
 Tile::Tile( int xPos, int yPos ) {
 	x = xPos;
 	y = yPos;
 }
 
-void Tile::testPlayerCollision( Player *p ){
+void FloorTile::testPlayerCollision( Player *p ){
 	for( int i=0; i<hitbox_count; i++ ) {
 		p->testWorldCollision( hitboxes[i] );
 	}
 }
 
-void Tile::testProjectileCollision( Projectile *p ){
+void FloorTile::testProjectileCollision( Projectile *p ){
 	for( int i=0; i<hitbox_count; i++ ) {
 		p->testMapHit( hitboxes[i] );
 	}
@@ -26,7 +27,7 @@ Tile* Tile::createTile(int x, int y, int tileType) {
 		default:
 			return new FloorTile(x, y);
 		case WALL:
-			return new WallTile(x, y);
+			return new WallTile(x,y, WallTile::CENTER, new FloorTile(x, y));
 	}
 }
 
@@ -73,11 +74,33 @@ void FloorTile::display() {
 	glDisable(GL_TEXTURE_2D);
 }
 
-WallTile::WallTile( int x, int y ) : Tile(x, y) {
+WallTile::WallTile( int x, int y, int wallType, Tile *p) : TileDecorator(x, y, p) {
 	hitbox_count=1;
 	hitboxes = new Hitbox*[hitbox_count];
 	for( int i=0; i<hitbox_count; i++ ) {
-		hitboxes[i] = new Hitbox(TILE_SIZE, TILE_SIZE, glm::vec3(x*TILE_SIZE, 0, y*TILE_SIZE), 0);
+		
+		switch(wallType)
+		{
+			case RIGHT:
+				xOffset = TILE_SIZE/3;
+				yOffset = 0;
+				break;
+			case TOP:
+				xOffset = 0;
+				yOffset = TILE_SIZE/3;
+				break;
+			case BOTTOM:
+				xOffset = 0;
+				yOffset = -TILE_SIZE/3;
+				break;
+			case LEFT:
+				xOffset = -TILE_SIZE/3;
+				yOffset = 0;
+				break;
+			default:
+				break;
+		}
+		hitboxes[i] = new Hitbox(TILE_SIZE/2, TILE_SIZE/2, glm::vec3(x*TILE_SIZE + xOffset, 0, y*TILE_SIZE + yOffset), 0);
 	}
 }
 
@@ -85,6 +108,7 @@ WallTile::~WallTile() {
 	for( int i=0; i<hitbox_count; i++ ) {
 		delete hitboxes[i];
 	}
+	//delete parent;
 }
 
 int WallTile::getType() {
@@ -128,8 +152,38 @@ void WallTile::display() {
 	glUseProgram(GLManager::lightingShader);
 
 	glColor3f(1.0,1.0,1.0);
-	hitbox->displayWithTexture( tex );
+	glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, shininess );
+	glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, spec_color );
+	for( int i=0; i<hitbox_count; i++ )
+		hitboxes[i]->displayWithTexture( tex );
 	glUseProgram(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
+
+	parent->display();
+}
+
+TileDecorator::TileDecorator(int x, int y, Tile * t) : Tile(x,y)
+{
+	parent = t;
+}
+
+TileDecorator::~TileDecorator()
+{
+	delete parent;
+}
+
+void TileDecorator::testPlayerCollision( Player *p ){
+	for( int i=0; i<hitbox_count; i++ ) {
+		p->testWorldCollision( hitboxes[i] );
+	}
+	parent->testPlayerCollision(p);
+
+}
+
+void TileDecorator::testProjectileCollision( Projectile *p ){
+	for( int i=0; i<hitbox_count; i++ ) {
+		p->testMapHit( hitboxes[i] );
+	}
+	parent->testProjectileCollision(p);
 }

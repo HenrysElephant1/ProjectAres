@@ -22,9 +22,10 @@ public:
 
 	void display();
 
-	int getTileType(int x, int y);
+	int getTileType(int x, int y, bool selection = false);
 	bool isValidTile(int x, int y);
 	bool isValidSet(int x, int y, int tileType);
+	bool isValidSelection(int x, int y);
 
 	void reverseTile(int x, int y);
 	void setTile(int tilesInd, Tile* tile);

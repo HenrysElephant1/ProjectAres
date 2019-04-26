@@ -55,7 +55,8 @@ Map* Map::loadMap(int mapNum) {
 	for( int row=0; row<y_size; row++ ) {
 		for( int col=0; col<x_size; col++ ) {
 			mapFile >> tileType;
-			loadedMap->setTile(i++, Tile::createTile(col, row, tileType));
+			loadedMap->setTile(col,row, tileType);
+			//loadedMap->setTile(i++, Tile::createTile(col, row, tileType));
 		}
 	}
 	
@@ -91,7 +92,7 @@ void Map::display() {
  * Returns true if coordinates are inside map, excluding the outer walls
  * */
 bool Map::isValidTile(int x, int y) {
-	return (x > 0 && x < x_size -1) && (y > 0 && y < y_size - 1);
+	return (x >= 0 && x < x_size ) && (y >= 0 && y < y_size );
 }
 
 /**
@@ -104,7 +105,17 @@ bool Map::isValidSet(int x, int y, int tileType) {
 	return isValidTile(x, y) && !wallInPlayer;
 }
 
-int Map::getTileType(int x, int y) {
+bool Map::isValidSelection(int x, int y)
+{
+	return (x > 0 && x < x_size -1) && (y > 0 && y < y_size - 1);
+}
+
+
+
+int Map::getTileType(int x, int y, bool selection) {
+	if(selection)
+		if(!isValidSelection(x,y))
+			return -1;
 	if( !isValidTile(x, y) ) {
 		return -1;
 	}
@@ -116,6 +127,7 @@ void Map::setTile(int tileInd, Tile* tile) {
 	delete tiles[tileInd];
 	
 	tiles[tileInd] = tile;
+
 }
 
 bool Map::setTile(int x, int y, int tileType) {
@@ -124,14 +136,62 @@ bool Map::setTile(int x, int y, int tileType) {
 		return false;
 	}
 
+	Tile * base = Tile::createTile(x, y, tileType);
+
+	if(tileType == Tile::WALL)
+	{
+		if(getTileType(x-1,y) == Tile::WALL)
+		{
+			base = new WallTile(x,y,WallTile::LEFT,base);
+			tiles[x-1 + y*x_size] = new WallTile(x-1,y,WallTile::RIGHT,tiles[x-1 + y*x_size]);
+		}
+		if(getTileType(x+1,y) == Tile::WALL)
+		{
+			base = new WallTile(x,y,WallTile::RIGHT,base);
+			tiles[x+1 + y*x_size] = new WallTile(x+1,y,WallTile::LEFT,tiles[x+1 + y*x_size]);
+		}
+		if(getTileType(x,y+1) == Tile::WALL)
+		{
+			base = new WallTile(x,y,WallTile::TOP,base);
+			tiles[x + (y+1)*x_size] = new WallTile(x,(y+1),WallTile::BOTTOM,tiles[x + (y+1)*x_size]);
+		}
+		if(getTileType(x,y-1) == Tile::WALL)
+		{
+			base = new WallTile(x,y,WallTile::BOTTOM,base);
+			tiles[x + (y-1)*x_size] = new WallTile(x,(y-1),WallTile::TOP,tiles[x + (y-1)*x_size]);
+		}
+	}
+
 	int tileInd = y*x_size + x;
 
-	setTile(tileInd, Tile::createTile(x, y, tileType));
+	setTile(tileInd, base);
+
+	if(tileType == Tile::FLOOR) {
+		if(getTileType(x-1,y) == Tile::WALL)
+		{
+			setTile(x-1,y, Tile::WALL);
+		}
+		if(getTileType(x+1,y) == Tile::WALL)
+		{
+			setTile(x+1,y, Tile::WALL);
+		}
+		if(getTileType(x,y+1) == Tile::WALL)
+		{
+			setTile(x,y+1, Tile::WALL);
+		}
+		if(getTileType(x,y-1) == Tile::WALL)
+		{
+			setTile(x,y-1, Tile::WALL);
+		}
+	}
+
 	return true;
 }
 
+
+
 void Map::reverseTile(int x, int y) {
-	int clickedTileType = getTileType(x, y);
+	int clickedTileType = getTileType(x, y,true);
 	// checking if clicked tile is actually on the map
 	if(clickedTileType != -1) {
 		// toggling between Wall-tile and Floor-tile
