@@ -92,9 +92,33 @@ int WallTile::getType() {
 }
 
 void WallTile::display() {
-	for( int i=0; i<hitbox_count; i++ ) {
-		// hitboxes[i]->display();
-	}
+	// float shininess[] = {0.0f};
+	// float spec_color[] = {0.0,0.0,0.0,1.0};
+
+	// GLuint tex = GLManager::loadTexture(wallTex);
+	// glEnable(GL_TEXTURE_2D);
+	// glBindTexture(GL_TEXTURE_2D, tex);
+	// glUseProgram(GLManager::lightingShader);
+
+	// glColor3f(1.0,1.0,1.0);
+	// glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, shininess );
+	// glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, spec_color );
+	// glPushMatrix();
+	// glTranslated(x*TILE_SIZE,0,y*TILE_SIZE);
+	// glScaled(TILE_SIZE,1,TILE_SIZE);
+	// glBegin(GL_QUADS);
+	// glNormal3f(0.0,1.0,0.0);
+	// glTexCoord2f(0,1); glVertex3f(-.5, 0,-.5);
+	// glTexCoord2f(0,0); glVertex3f(-.5, 0, .5);
+	// glTexCoord2f(1,0); glVertex3f( .5, 0, .5);
+	// glTexCoord2f(1,1); glVertex3f( .5, 0,-.5);
+	// glEnd();
+	// glPopMatrix();
+
+	// glUseProgram(0);
+	// glBindTexture(GL_TEXTURE_2D, 0);
+	// glDisable(GL_TEXTURE_2D);
+	
 	float shininess[] = {0.0f};
 	float spec_color[] = {0.0,0.0,0.0,1.0};
 
@@ -104,20 +128,7 @@ void WallTile::display() {
 	glUseProgram(GLManager::lightingShader);
 
 	glColor3f(1.0,1.0,1.0);
-	glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, shininess );
-	glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, spec_color );
-	glPushMatrix();
-	glTranslated(x*TILE_SIZE,0,y*TILE_SIZE);
-	glScaled(TILE_SIZE,1,TILE_SIZE);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0,1.0,0.0);
-	glTexCoord2f(0,1); glVertex3f(-.5, 0,-.5);
-	glTexCoord2f(0,0); glVertex3f(-.5, 0, .5);
-	glTexCoord2f(1,0); glVertex3f( .5, 0, .5);
-	glTexCoord2f(1,1); glVertex3f( .5, 0,-.5);
-	glEnd();
-	glPopMatrix();
-
+	hitbox->displayWithTexture( tex );
 	glUseProgram(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
